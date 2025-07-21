@@ -1,0 +1,56 @@
+{
+  "progi_podatkowe": {
+    "skala": [
+      { "dochod": 120000, "stawka": 0.12 },
+      { "dochod": "powyzej", "stawka": 0.32 }
+    ],
+    "kwota_wolna": 30000,
+    "liniowy": 0.19,
+    "ryczalt_IT": 0.12,
+    "ip_box": 0.05
+  },
+  "zus_2025": {
+    "ulga_na_start": {
+      "emerytalna": 0.0,
+      "rentowa": 0.0,
+      "wypadkowa": 0.0,
+      "chorobowa": 0.0,
+      "zdrowotna": 418.86
+    },
+    "preferencyjny": {
+      "emerytalna": 314.09,
+      "rentowa": 129.45,
+      "wypadkowa": 31.53,
+      "chorobowa": 87.05,
+      "zdrowotna": 418.86
+    },
+    "pelny": {
+      "emerytalna": 1202.40,
+      "rentowa": 492.54,
+      "wypadkowa": 103.77,
+      "chorobowa": 146.03,
+      "fundusz_pracy": 146.03,
+      "zdrowotna": 418.86
+    }
+  },
+  "benefity": {
+    "opieka_medyczna": 2400,
+    "karta_sportowa": 1800,
+    "budzet_szkoleniowy": 3000,
+    "ppk": 0.02,
+    "sprzet": 4000
+  },
+  "dni_wolne_uop": {
+    "urlop_wypoczynkowy": { "dni": 26, "procent_platnosci": 1.0 },
+    "chorobowe": { "dni": 33, "procent_platnosci": 0.8 },
+    "macierzynski": { "dni": 140, "procent_platnosci": 1.0 },
+    "ojcowski": { "dni": 14, "procent_platnosci": 1.0 },
+    "opieka_nad_dzieckiem": { "dni": 2, "procent_platnosci": 1.0 },
+    "oddanie_krwi": { "dni": 2, "procent_platnosci": 1.0 },
+    "opieka_krotkoterminowa": { "dni": 5, "procent_platnosci": 1.0 }
+  },
+  "dane_ogolne": {
+    "dni_robocze_rocznie": 252,
+    "dni_robocze_miesiecznie": 21
+  }
+}
