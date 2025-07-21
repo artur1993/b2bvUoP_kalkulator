@@ -17,4 +17,13 @@
 - [x] **Task 7: Documentation**
 - [x] **Task 8: Final Review**
 
+## Phase 4: Comprehensive Testing
+
+- [x] **Task 9: Implement Advanced Test Scenarios**
+  - [x] Refactor existing tests into a new structure.
+  - [x] Create `tests/integration/test_scenarios.py`.
+  - [x] Implement the 20 specified test scenarios.
+  - [x] Add detailed assertions for all key calculation components in each test.
+  - [x] Ensure all tests are runnable via `pytest`.
+
 **All tasks have been successfully completed.**
