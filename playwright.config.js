@@ -10,5 +10,11 @@ module.exports = defineConfig({
   },
   use: {
     baseURL: 'http://127.0.0.1:5001',
+    // Collect coverage for JavaScript files
+    coverage: {
+      enabled: true,
+      outputDir: 'coverage/frontend',
+      all: true,
+    },
   },
 });
