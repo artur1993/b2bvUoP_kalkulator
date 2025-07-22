@@ -1,29 +1,31 @@
-document.getElementById('calculator-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+function formatPLN(value) {
+    return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
+}
 
+function getFormValues() {
     const b2b_benefits = Array.from(document.querySelectorAll('#calculator-form [id^="b2b_benefit_"]:checked')).map(el => el.value);
     const uop_benefits = Array.from(document.querySelectorAll('#calculator-form [id^="uop_benefit_"]:checked')).map(el => el.value);
 
-    const requestPayload = {
+    return {
         b2b: {
-            faktura_miesieczna: parseFloat(document.getElementById('b2b_faktura').value),
+            faktura_miesieczna: parseFloat(document.getElementById('b2b_faktura').value) || 0,
             forma_opodatkowania: document.getElementById('b2b_opodatkowanie').value,
             zus_rodzaj: document.getElementById('b2b_zus').value,
             zus_chorobowe: document.getElementById('b2b_chorobowe').checked,
             vat: true,
-            koszty_firmowe_miesieczne: parseFloat(document.getElementById('b2b_koszty').value),
+            koszty_firmowe_miesieczne: parseFloat(document.getElementById('b2b_koszty').value) || 0,
             wybrane_benefity: b2b_benefits,
-            przestoje_miesiace: parseFloat(document.getElementById('b2b_przestoje').value),
-            urlop_dni: parseInt(document.getElementById('b2b_urlop').value),
-            wiek: parseInt(document.getElementById('wiek').value),
+            przestoje_miesiace: parseFloat(document.getElementById('b2b_przestoje').value) || 0,
+            urlop_dni: parseInt(document.getElementById('b2b_urlop').value) || 0,
+            wiek: parseInt(document.getElementById('wiek').value) || 0,
             dzieci: 0,
             ulga_dla_mlodych: document.getElementById('ulga_dla_mlodych').checked
         },
         uop: {
-            wynagrodzenie_brutto: parseFloat(document.getElementById('uop_brutto').value),
-            koszty_uzyskania_przychodu: parseFloat(document.getElementById('uop_koszty_przychodu').value),
+            wynagrodzenie_brutto: parseFloat(document.getElementById('uop_brutto').value) || 0,
+            koszty_uzyskania_przychodu: parseFloat(document.getElementById('uop_koszty_przychodu').value) || 0,
             wybrane_benefity: uop_benefits,
-            wiek: parseInt(document.getElementById('wiek').value),
+            wiek: parseInt(document.getElementById('wiek').value) || 0,
             dzieci: 0,
             ulga_dla_mlodych: document.getElementById('ulga_dla_mlodych').checked
         },
@@ -32,30 +34,11 @@ document.getElementById('calculator-form').addEventListener('submit', function(e
             analiza_zdolnosci_kredytowej: false
         }
     };
-
-    fetch('/calculate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestPayload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        renderResults(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.style.display = 'block';
-        resultsDiv.innerHTML = `<div class="alert alert-danger">Wystąpił błąd: ${error}</div>`;
-    });
-});
-
-function formatPLN(value) {
-    return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
 }
 
 function renderResults(data) {
     const resultsDiv = document.getElementById('results');
+    if (!resultsDiv) return;
     resultsDiv.style.display = 'block';
 
     const { b2b_results, uop_results, break_even_faktura } = data;
@@ -146,4 +129,52 @@ function renderResults(data) {
             <p>Minimalna miesięczna faktura na B2B, aby zrównać całkowitą roczną wartość z UoP, to około: <strong>${formatPLN(break_even_faktura)}</strong></p>
         </div>
     `;
+}
+
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    const payload = getFormValues();
+
+    try {
+        const response = await fetch('/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        renderResults(data);
+    } catch (error) {
+        console.error('Error:', error);
+        const resultsDiv = document.getElementById('results');
+        if (resultsDiv) {
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `<div class="alert alert-danger">Wystąpił błąd: ${error.message}</div>`;
+        }
+    }
+}
+
+function initialize() {
+    const form = document.getElementById('calculator-form');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
+}
+
+// Initialize the form when the DOM is ready
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initialize);
+}
+
+// Export functions for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        formatPLN,
+        getFormValues,
+        renderResults,
+        handleFormSubmit,
+        initialize
+    };
 }
