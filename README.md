@@ -13,11 +13,15 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     git clone <repository_url>
     cd b2v_UoP_kalkulator
     ```
-2.  **Create a virtual environment and install dependencies:**
+2.  **Create a virtual environment and install Python dependencies:**
     ```bash
     python -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
+    ```
+3.  **Install Node.js dependencies (for frontend and E2E tests):**
+    ```bash
+    npm install
     ```
 
 ## Usage
@@ -26,16 +30,21 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     ```bash
     python src/app.py
     ```
-2.  **Open your web browser** and navigate to `http://127.0.0.1:5000`.
+2.  **Open your web browser** and navigate to `http://127.0.0.1:5001`.
 3.  Fill in the form with your data and click "Calculate" to see the comparison.
 
 ## Development
 
 ### Running Tests
 
-To run the unit tests, execute the following command from the project root:
+To run the backend unit and integration tests (Python):
 ```bash
-python -m unittest discover tests/unit
+pytest
+```
+
+To run the end-to-end (E2E) tests (JavaScript/Playwright):
+```bash
+npm run test:e2e
 ```
 
 ### Project Structure
@@ -45,5 +54,10 @@ The project follows a standard Flask application structure:
   - `app.py`: The Flask backend with all calculation logic.
   - `templates/`: HTML templates.
   - `static/`: CSS and JavaScript files.
-- `tests/`: Unit and integration tests.
+- `tests/`: Unit, integration, and end-to-end tests.
+  - `unit/`: Backend unit tests.
+  - `integration/`: Backend integration tests.
+  - `e2e/`: Frontend end-to-end tests.
 - `dane_wejsciowe_kalkulator.json`: Data file with all constants and parameters for calculations.
+- `package.json`: Node.js project configuration and scripts.
+- `playwright.config.js`: Playwright E2E test configuration.
