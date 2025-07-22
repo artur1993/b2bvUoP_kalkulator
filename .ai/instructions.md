@@ -78,7 +78,8 @@ docs(api): update endpoint documentation
 ### Integration with Different Tools:- **Gemini CLI**: Focus on analysis and complex problem-solving- **Claude Code**: Emphasize code review and optimization  - **GitHub Copilot**: Use for code completion and suggestions- **Others**: Adapt as needed while following core workflow
 ---
 ## Quality Assurance
-### Before Any Commit:- [ ] All tests passing- [ ] Code follows project standards- [ ] Documentation updated- [ ] No debug code or comments left- [ ] Proper error handling implemented- [ ] Performance impact considered
+### Before Any Commit:- [ ] All tests passing- [ ] Code follows project standards- [ ] Documentation (README, etc.) updated to reflect changes
+- [ ] Dependency files (requirements.txt, package.json, etc.) updated- [ ] No debug code or comments left- [ ] Proper error handling implemented- [ ] Performance impact considered
 ### Before Finishing Session:- [ ] All files saved- [ ] Progress marked in `.ai/tasks.md`- [ ] Session state updated in `.ai/session-state.md`- [ ] Any temporary files cleaned up- [ ] Next steps documented
 ### Project Health Checks:- Regular dependency updates- Security vulnerability scans- Performance monitoring- Code quality metrics- Test coverage reporting
 ---

@@ -47,6 +47,22 @@ To run the end-to-end (E2E) tests (JavaScript/Playwright):
 npm run test:e2e
 ```
 
+### Code Coverage
+
+To generate code coverage reports:
+
+For Python backend:
+```bash
+pytest --cov=src tests/unit tests/integration
+```
+This will display a summary in the console.
+
+For JavaScript frontend:
+```bash
+npm run test:e2e
+```
+After running E2E tests, open `coverage/frontend/index.html` in your browser to view the detailed report.
+
 ### Project Structure
 The project follows a standard Flask application structure:
 - `.ai/`: Contains AI-related instructions and session state.
