@@ -6,6 +6,15 @@ A simple web application to compare the net income between B2B and Standard Empl
 
 This tool provides a detailed and accurate financial comparison, taking into account taxes, social security (ZUS), benefits, and paid time off, based on the regulations for 2025.
 
+### Key Features
+- **Advanced B2B Options**: Customize your B2B calculation with company-provided benefits (paid leave, healthcare, training budget) and your own custom tax-deductible benefits.
+- **Multiple Tax Forms**: Supports all common tax forms for B2B in Poland: Ryczałt 12% (IT), Liniowy 19%, Skala Podatkowa, and IP Box 5%.
+- **Comprehensive Visualizations**: 
+  - A grouped bar chart to compare the total annual value of UoP, standard B2B, and B2B with benefits.
+  - A pie chart showing the distribution of your B2B revenue (net income, taxes, ZUS, etc.).
+- **Export Results**: Export the detailed comparison to PDF or Excel for your records.
+- **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
+
 ## Installation
 
 1.  **Clone the repository:**

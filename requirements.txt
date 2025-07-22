@@ -1,2 +1,4 @@
 Flask
 pytest-cov
+openpyxl
+fpdf2

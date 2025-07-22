@@ -44,27 +44,13 @@
                         <label for="b2b_koszty" class="form-label">Miesięczne koszty stałe firmy (PLN)</label>
                         <input type="number" class="form-control" id="b2b_koszty" value="600">
                     </div>
-                     <div class="mb-3">
-                        <label class="form-label">Wybierz benefity do samodzielnego zakupu</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="opieka_medyczna" id="b2b_benefit_med" checked>
-                            <label class="form-check-label" for="b2b_benefit_med">Opieka medyczna</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="karta_sportowa" id="b2b_benefit_sport" checked>
-                            <label class="form-check-label" for="b2b_benefit_sport">Karta sportowa</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="sprzet" id="b2b_benefit_sprzet" checked>
-                            <label class="form-check-label" for="b2b_benefit_sprzet">Sprzęt</label>
-                        </div>
-                    </div>
+
                     <div class="mb-3">
                         <label for="b2b_przestoje" class="form-label">Przewidywane miesiące przestoju rocznie</label>
                         <input type="number" class="form-control" id="b2b_przestoje" value="1.5" step="0.1">
                     </div>
                     <div class="mb-3">
-                        <label for="b2b_urlop" class="form-label">Planowane dni "urlopu" rocznie</label>
+                        <label for="b2b_urlop" class="form-label">Planowane dni bezpłatnego urlopu / zwolnienia rocznie</label>
                         <input type="number" class="form-control" id="b2b_urlop" value="24">
                     </div>
                 </div>
@@ -113,15 +99,65 @@
                 </div>
             </div>
 
+            
+
+            
+
+            
+
+            <!-- Advanced B2B Options -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="accordion" id="advanced-b2b-options">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingAdvanced">
+                                <button class="accordion-button collapsed bg-light text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvanced" aria-expanded="false" aria-controls="collapseAdvanced">
+                                    <strong>Zaawansowane Opcje B2B</strong> &nbsp; (dodatkowe korzyści, benefity od firmy - kliknij, aby rozwinąć)
+                                </button>
+                            </h2>
+                            <div id="collapseAdvanced" class="accordion-collapse collapse" aria-labelledby="headingAdvanced" data-bs-parent="#advanced-b2b-options">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Własne korzyści podatkowe B2B (roczne)</h5>
+                                            <div class="mb-3">
+                                                <label for="customBenefits" class="form-label">Dodatkowe korzyści finansowe (PLN)</label>
+                                                <input type="number" class="form-control" id="customBenefits" value="0" min="0" max="100000" data-bs-toggle="tooltip" title="Wprowadź dodatkowe, niestandardowe korzyści finansowe wynikające z prowadzenia B2B, które nie są standardowo uwzględniane.">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Benefity od firmy (B2B)</h5>
+                                            <div id="company-benefits-container">
+                                                <!-- Benefits will be dynamically inserted here by JS -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary w-100 mt-4">Oblicz</button>
         </form>
 
         <div id="results" class="mt-5" style="display: none;">
             <h2>Wyniki</h2>
-            <pre id="json-output" class="bg-light p-3 rounded"></pre>
+            <div class="row">
+                <div class="col-md-8">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <canvas id="b2bDistributionChart"></canvas>
+                </div>
+            </div>
+            <pre id="json-output" class="bg-light p-3 rounded mt-4"></pre>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/static/js/main.js"></script>
 </body>
 </html>
