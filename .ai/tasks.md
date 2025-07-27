@@ -33,4 +33,22 @@
   - [x] Added detailed assertions for all key calculation components in each test.
   - [x] Ensured all tests are runnable via `pytest`.
 
+## Phase 5: UI Modernization with React (Initial Attempt - React Source Missing)
+
+- [x] **Task 10: Integrate React SPA**
+  - [x] Update `.ai/context.md` to describe the new Flask + React architecture.
+  - [x] Refactor `src/app.py` to serve the React SPA.
+  - [x] Update `README.md` to reflect the new architecture.
+  - [x] Remove unused Jinja2/Bootstrap files.
+  *Note: This phase completed the integration of the pre-built React SPA, but the source code for the React application was later found to be missing, necessitating a rebuild.* 
+
+## Phase 6: Rebuild React Frontend from Scratch
+
+- [ ] -> CURRENT **Task 11: Scaffold New React Application**
+  - [ ] Cleanup: Remove the existing `src/dashboard/dist` directory.
+  - [ ] Scaffold New React App: Create new directory structure for React source code inside `src/dashboard/`.
+  - [ ] Create Core Files: Generate initial files for the React application (`package.json`, `vite.config.js`, `tailwind.config.js`, `postcss.config.js`, `index.html`, `src/main.jsx`, `src/App.jsx`, `src/index.css`, placeholder components, `api.js`).
+  - [ ] Update `.gitignore`: Add `src/dashboard/node_modules/` and `src/dashboard/dist/`.
+  - [ ] Update `README.md`: Modify installation and usage instructions.
+
 **All tasks have been successfully completed.**

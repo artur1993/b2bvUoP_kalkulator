@@ -1,16 +1,16 @@
 import json
-from flask import Flask, request, jsonify, render_template, send_file
+from flask import Flask, request, jsonify, send_from_directory, send_file
 from openpyxl import Workbook
 from fpdf import FPDF
 import io
 import os
 
-# Initialize Flask app
-app = Flask(__name__)
-
 # --- Determine the absolute path to the project root ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE_PATH = os.path.join(BASE_DIR, 'dane_wejsciowe_kalkulator.json')
+
+# Initialize Flask app
+app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'src/dashboard/dist'))
 
 # Load data from JSON file at startup
 with open(DATA_FILE_PATH, 'r', encoding='utf-8') as f:
@@ -187,12 +187,7 @@ def calculate_break_even(uop_total_value, b2b_base_data):
             return faktura_miesieczna_test
     return -1 # Indicates break-even point not found in range
 
-@app.route('/')
-def index():
-    """Serve the main HTML page."""
-    return render_template('index.html')
-
-@app.route('/calculate', methods=['POST'])
+@app.route('/api/calculate', methods=['POST'])
 def calculate():
     """Main endpoint to calculate and compare B2B vs. UoP earnings."""
     try:
@@ -221,10 +216,7 @@ def calculate():
         # Basic error handling
         return jsonify({"error": str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5001)
-
-@app.route('/export/excel', methods=['POST'])
+@app.route('/api/export/excel', methods=['POST'])
 def export_to_excel():
     """Exports the calculation results to an Excel file."""
     data = request.get_json()
@@ -251,7 +243,7 @@ def export_to_excel():
     return send_file(buffer, as_attachment=True, download_name="kalkulator_wyniki.xlsx", 
                      mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-@app.route('/export/pdf', methods=['POST'])
+@app.route('/api/export/pdf', methods=['POST'])
 def export_to_pdf():
     """Exports the calculation results to a PDF file."""
     data = request.get_json()
@@ -271,3 +263,14 @@ def export_to_pdf():
     buffer.seek(0)
 
     return send_file(buffer, as_attachment=True, download_name="kalkulator_wyniki.pdf", mimetype='application/pdf')
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)

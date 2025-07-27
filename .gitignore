@@ -5,3 +5,5 @@ venv
 __pycache__/
 node_modules/
 test-results/
+src/dashboard/node_modules/
+src/dashboard/dist/
