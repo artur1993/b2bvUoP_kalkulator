@@ -44,11 +44,26 @@
 
 ## Phase 6: Rebuild React Frontend from Scratch
 
-- [ ] -> CURRENT **Task 11: Scaffold New React Application**
-  - [ ] Cleanup: Remove the existing `src/dashboard/dist` directory.
-  - [ ] Scaffold New React App: Create new directory structure for React source code inside `src/dashboard/`.
-  - [ ] Create Core Files: Generate initial files for the React application (`package.json`, `vite.config.js`, `tailwind.config.js`, `postcss.config.js`, `index.html`, `src/main.jsx`, `src/App.jsx`, `src/index.css`, placeholder components, `api.js`).
-  - [ ] Update `.gitignore`: Add `src/dashboard/node_modules/` and `src/dashboard/dist/`.
-  - [ ] Update `README.md`: Modify installation and usage instructions.
+- [x] **Task 11: Scaffold New React Application**
+  - [x] Cleanup: Remove the existing `src/dashboard/dist` directory.
+  - [x] Scaffold New React App: Create new directory structure for React source code inside `src/dashboard/`.
+  - [x] Create Core Files: Generate initial files for the React application (`package.json`, `vite.config.js`, `tailwind.config.js`, `postcss.config.js`, `index.html`, `src/main.jsx`, `src/App.jsx`, `src/index.css`, placeholder components, `api.js`).
+  - [x] Update `.gitignore`: Add `src/dashboard/node_modules/` and `src/dashboard/dist/`.
+  - [x] Update `README.md`: Modify installation and usage instructions.
+
+- [x] **Task 12: Implement Core UI Components (Form & State)**
+  - [x] Refactor `App.jsx` to manage application state and handle calculations.
+  - [x] Implement `CalculatorForm.jsx` with all necessary input fields and styling.
+  - [x] Create reusable `Input.jsx`, `Select.jsx`, and `Checkbox.jsx` components.
+
+- [x] **Task 13: Implement Results Display and Charts**
+  - [x] Implement `ResultsDisplay.jsx` to show detailed results and export options.
+  - [x] Implement `ComparisonChart.jsx` for visual data representation.
+  - [x] Refactor `App.jsx` to handle export functions.
+  - [x] Update dependencies to include `file-saver`.
 
 **All tasks have been successfully completed.**
+
+## Phase 7: End-to-End Testing
+
+- [ ] **Task 14: Implement E2E Tests with Playwright** → CURRENT
