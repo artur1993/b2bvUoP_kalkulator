@@ -132,3 +132,11 @@
   - [x] Created `src/components/Header.test.jsx` for i18n component testing.
   - [x] Fixed `CalculatorForm.test.jsx` to use translated texts in assertions.
   - [x] Fixed `App.test.jsx` to use translated texts in assertions.
+
+## Phase 11: Application Debugging and Stability
+
+- [x] **Task 28: Resolve 500 Internal Server Error and CORS Issue**
+  - [x] Configured Flask logging to always capture errors.
+  - [x] Changed Flask backend port to 5001 to avoid conflicts.
+  - [x] Updated frontend API base URL to point to the new backend port.
+  - [x] Implemented Flask-CORS to resolve cross-origin issues.

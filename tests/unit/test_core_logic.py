@@ -17,6 +17,7 @@ class CalculatorTestCase(unittest.TestCase):
         """Set up a test client and load test data."""
         self.app = app.test_client()
         self.app.testing = True
+        app.debug = True
         
         # Updated sample request with new benefit structure
         self.sample_request = {

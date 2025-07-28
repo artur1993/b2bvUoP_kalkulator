@@ -40,17 +40,16 @@ This tool provides a detailed and accurate financial comparison, taking into acc
 
 ## Usage
 
-1.  **Run the Flask application:**
+1.  **Start the application (both backend and frontend):**
     ```bash
-    python src/app.py
+    ./run_app.sh
     ```
-2.  **Start the React development server:**
+    The Flask backend will run on `http://127.0.0.1:5001` and the React frontend will typically open in your browser at `http://localhost:5173`.
+2.  Fill in the form with your data and click "Calculate" to see the comparison.
+3.  **To stop the application:**
     ```bash
-    cd src/dashboard
-    npm run dev
+    ./stop_app.sh
     ```
-    This will typically open the application in your browser at `http://localhost:5173` (or another port).
-3.  Fill in the form with your data and click "Calculate" to see the comparison.
 
 ## Development
 
@@ -88,11 +87,13 @@ This script will display coverage for unit tests, integration tests, and combine
 
 For JavaScript frontend:
 ```bash
-cd src/dashboard
-npm test -- --coverage # Assuming a test setup that generates coverage
-cd ../..
+./scripts/frontend_cov.sh
 ```
-After running E2E tests, open `coverage/frontend/index.html` in your browser to view the detailed report.
+After running frontend tests, open `src/dashboard/coverage/index.html` in your browser to view the detailed report.
+
+### CORS Configuration
+
+The Flask backend is configured to handle Cross-Origin Resource Sharing (CORS) requests from the frontend. This is managed by the `Flask-Cors` extension, allowing the frontend (typically running on a different port) to communicate with the backend API.
 
 ### Project Structure
 The project follows a standard Flask application structure:

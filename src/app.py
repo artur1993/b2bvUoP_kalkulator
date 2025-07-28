@@ -1,5 +1,6 @@
 import json
 from flask import Flask, request, jsonify, send_from_directory, send_file
+from flask_cors import CORS
 from openpyxl import Workbook
 from fpdf import FPDF, XPos, YPos
 import io
@@ -19,7 +20,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE_PATH = os.path.join(BASE_DIR, 'dane_wejsciowe_kalkulator.json')
 
 # Initialize Flask app
+import logging
+from logging.handlers import RotatingFileHandler
+
 app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'src/dashboard/dist'))
+CORS(app)
+
+# Configure logging
+file_handler = RotatingFileHandler('flask.log', maxBytes=1024 * 1024 * 10, backupCount=10)
+file_handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+file_handler.setLevel(logging.DEBUG) # Set to DEBUG to capture more details
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.DEBUG) # Set to DEBUG to capture more details
 
 # Define font path for PDF generation and add to app config
 app.config['FONT_DIR'] = os.path.join(BASE_DIR, 'src', 'fonts')
@@ -236,9 +249,8 @@ def calculate():
         }
         return jsonify(response_data)
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+        app.logger.exception("Error during calculation:")
+        return jsonify({"error": str(e) if app.debug else "An internal server error occurred."}), 500
 
 @app.route('/api/export/excel', methods=['POST'])
 def export_to_excel():
