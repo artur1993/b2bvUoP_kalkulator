@@ -3,6 +3,9 @@ import { test, expect } from '@playwright/test';
 test.describe('Visual and UI/UX Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/'); // Use the correct port
+    // Switch to English for consistent testing
+    await page.locator('button:has-text("PL")').click();
+    await page.locator('button:has-text("EN")').click();
   });
 
   test('Zadanie 1: Should apply global styles, font, and header correctly', async ({ page }) => {
@@ -16,7 +19,7 @@ test.describe('Visual and UI/UX Tests', () => {
 
     // Sprawdzenie widoczności i treści nagłówka
     await expect(headerTitle).toBeVisible();
-    const subheader = page.locator('p:has-text("Porównaj swoje zarobki i wybierz najlepszą opcję")');
+    const subheader = page.locator('p:has-text("Compare your earnings and choose the best option")');
     await expect(subheader).toBeVisible();
   });
 
@@ -42,7 +45,7 @@ test.describe('Visual and UI/UX Tests', () => {
     await page.locator('button:has-text("Calculate Comparison")').click();
     await page.waitForSelector('h2:has-text("Calculation Results")');
 
-    const resultsSection = page.locator('#results-section');
+    const resultsSection = page.locator('.bg-surface > div > .mt-8'); // More specific selector
     await expect(resultsSection).toHaveScreenshot();
   });
 

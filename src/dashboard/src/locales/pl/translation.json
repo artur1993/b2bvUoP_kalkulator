@@ -41,7 +41,10 @@
     "benefit_life": "Ubezpieczenie na Życie",
     "benefit_training": "Szkolenia",
     "benefit_ppk": "PPK",
-    "calculate_button": "Porównaj"
+    "calculate_button": "Porównaj",
+    "calculation_mode_title": "Tryb Kalkulacji",
+    "uop_to_b2b_mode": "UoP do B2B (Oblicz fakturę B2B, aby zrównać się z UoP)",
+    "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)"
   },
   "results": {
     "title": "Wyniki Kalkulacji",
@@ -61,6 +64,10 @@
     "total_uop_value": "Całkowita Roczna Wartość UoP",
     "break_even_title": "Miesięczna Faktura B2B do Wyrównania",
     "break_even_subtitle": "(Jest to kwota miesięcznej faktury B2B potrzebna do zrównania się z całkowitą roczną wartością umowy o pracę)",
+    "break_even_b2b_title": "Miesięczna Faktura B2B do Wyrównania",
+    "break_even_b2b_subtitle": "(Jest to kwota miesięcznej faktury B2B potrzebna do zrównania się z całkowitą roczną wartością umowy o pracę)",
+    "break_even_uop_title": "Miesięczne Wynagrodzenie Brutto UoP do Wyrównania",
+    "break_even_uop_subtitle": "(Jest to kwota miesięcznego wynagrodzenia brutto UoP potrzebna do zrównania się z całkowitą roczną wartością umowy B2B)",
     "export_pdf": "Eksportuj do PDF",
     "export_excel": "Eksportuj do Excel"
   },
@@ -77,5 +84,37 @@
     "custom_benefits": "Własne Korzyści",
     "benefits": "Benefity",
     "paid_days_off": "Płatne Dni Wolne"
+  },
+  "report": {
+    "input_summary_title": "Podsumowanie Parametrów Wejściowych",
+    "financial_comparison_title": "Porównanie Finansowe (Roczne)",
+    "visual_analysis_title": "Analiza Wizualna",
+    "category": "Kategoria",
+    "footer_generated_on": "Raport wygenerowano dnia"
+  },
+  "methodology": {
+    "title": "Jak to policzyliśmy?",
+    "steps": {
+      "b2b": {
+        "Przychód roczny": "Przychód roczny",
+        "Koszty firmowe roczne": "Koszty firmowe roczne",
+        "Dochód (przed ZUS)": "Dochód (przed ZUS)",
+        "Składki społeczne ZUS": "Składki społeczne ZUS",
+        "Podstawa do opodatkowania": "Podstawa do opodatkowania",
+        "Roczny podatek": "Roczny podatek",
+        "Składka zdrowotna ZUS": "Składka zdrowotna ZUS",
+        "Utracony przychód": "Utracony przychód"
+      },
+      "uop": {
+        "Roczne wynagrodzenie brutto": "Roczne wynagrodzenie brutto",
+        "Składki społeczne ZUS": "Składki społeczne ZUS",
+        "Składka zdrowotna ZUS": "Składka zdrowotna ZUS",
+        "Koszty uzyskania przychodu": "Koszty uzyskania przychodu",
+        "Podstawa do opodatkowania": "Podstawa do opodatkowania",
+        "Roczny podatek": "Roczny podatek",
+        "Wartość benefitów": "Wartość benefitów",
+        "Wartość płatnych dni wolnych": "Wartość płatnych dni wolnych"
+      }
+    }
   }
 }

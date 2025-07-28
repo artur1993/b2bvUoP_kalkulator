@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>168/168</span>
+                <span class='fraction'>170/170</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>168/168</span>
+                <span class='fraction'>170/170</span>
             </div>
         
             
@@ -255,7 +255,10 @@
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -267,18 +270,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -459,6 +465,7 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
+import { useTranslation } from 'react-i18next';
 &nbsp;
 ChartJS.register(
   CategoryScale,
@@ -471,21 +478,23 @@ ChartJS.register(
 );
 &nbsp;
 const ComparisonChart = ({ results }) =&gt; {
+  const { t } = useTranslation();
+&nbsp;
   if (!results) return null;
 &nbsp;
   const { b2b_results, uop_results } = results;
 &nbsp;
   // Bar Chart Data
   const barChartData = {
-    labels: ['Total Annual Value'],
+    labels: [t('charts.total_comparison_title')],
     datasets: [
       {
-        label: 'UoP',
+        label: t('form.uop_title'),
         data: [uop_results.calkowita_roczna_wartosc],
         backgroundColor: '#4fd1c5', // secondary
       },
       {
-        label: 'B2B',
+        label: t('form.b2b_title'),
         data: [b2b_results.calkowita_roczna_wartosc],
         backgroundColor: '#2c5282', // primary
       },
@@ -500,47 +509,47 @@ const ComparisonChart = ({ results }) =&gt; {
       },
       title: {
         display: true,
-        text: 'Total Annual Value Comparison',
+        text: t('charts.total_comparison_title'),
       },
     },
   };
 &nbsp;
   // Stacked Bar Chart Data for B2B Breakdown
   const b2bStackedBarData = {
-    labels: ['B2B Breakdown'],
+    labels: [t('charts.b2b_breakdown_title')],
     datasets: [
       {
-        label: 'Net Income',
+        label: t('charts.net_income'),
         data: [b2b_results.roczne_netto_na_reke],
         backgroundColor: '#4CAF50', // Green
       },
       {
-        label: 'ZUS',
+        label: t('charts.zus'),
         data: [b2b_results.roczny_zus],
         backgroundColor: '#FFC107', // Amber
       },
       {
-        label: 'Tax',
+        label: t('charts.tax'),
         data: [b2b_results.roczny_podatek],
         backgroundColor: '#FF9800', // Orange
       },
       {
-        label: 'Business Costs',
+        label: t('charts.business_costs'),
         data: [b2b_results.roczne_koszty_firmowe],
         backgroundColor: '#9E9E9E', // Grey
       },
       {
-        label: 'Lost Revenue',
+        label: t('charts.lost_revenue'),
         data: [b2b_results.roczny_utracony_przychod],
         backgroundColor: '#F44336', // Red
       },
       {
-        label: 'Company Benefits',
+        label: t('charts.company_benefits'),
         data: [b2b_results.roczna_wartosc_benefitow_od_firmy],
         backgroundColor: '#2196F3', // Blue
       },
       {
-        label: 'Custom Benefits',
+        label: t('charts.custom_benefits'),
         data: [b2b_results.roczna_wartosc_wlasnych_korzysci],
         backgroundColor: '#9C27B0', // Purple
       },
@@ -555,7 +564,7 @@ const ComparisonChart = ({ results }) =&gt; {
       },
       title: {
         display: true,
-        text: 'B2B Annual Value Breakdown',
+        text: t('charts.b2b_breakdown_title'),
       },
     },
     scales: {
@@ -570,30 +579,30 @@ const ComparisonChart = ({ results }) =&gt; {
 &nbsp;
   // Stacked Bar Chart Data for UoP Breakdown
   const uopStackedBarData = {
-    labels: ['UoP Breakdown'],
+    labels: [t('charts.uop_breakdown_title')],
     datasets: [
       {
-        label: 'Net Income',
+        label: t('charts.net_income'),
         data: [uop_results.roczne_netto_na_reke],
         backgroundColor: '#4CAF50', // Green
       },
       {
-        label: 'ZUS',
+        label: t('charts.zus'),
         data: [uop_results.roczny_zus],
         backgroundColor: '#FFC107', // Amber
       },
       {
-        label: 'Tax',
+        label: t('charts.tax'),
         data: [uop_results.roczny_podatek],
         backgroundColor: '#FF9800', // Orange
       },
       {
-        label: 'Benefits',
+        label: t('charts.benefits'),
         data: [uop_results.roczna_wartosc_benefitow],
         backgroundColor: '#2196F3', // Blue
       },
       {
-        label: 'Paid Days Off',
+        label: t('charts.paid_days_off'),
         data: [uop_results.roczna_wartosc_platnych_dni_wolnych],
         backgroundColor: '#9C27B0', // Purple
       },
@@ -608,7 +617,7 @@ const ComparisonChart = ({ results }) =&gt; {
       },
       title: {
         display: true,
-        text: 'UoP Annual Value Breakdown',
+        text: t('charts.uop_breakdown_title'),
       },
     },
     scales: {
@@ -646,7 +655,7 @@ export default ComparisonChart;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-28T14:58:25.160Z
+                at 2025-07-28T23:36:54.009Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

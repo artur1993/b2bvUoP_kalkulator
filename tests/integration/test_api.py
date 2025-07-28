@@ -267,13 +267,31 @@ def test_export_pdf_success_positive(client):
     """
     data = {
         "b2b_results": {
-            "calkowita_roczna_wartosc": 120000
+            "calkowita_roczna_wartosc": 120000,
+            "roczne_netto_na_reke": 80000,
+            "roczny_podatek": 20000,
+            "roczny_zus": 20000,
+            "steps": {}
         },
         "uop_results": {
-            "calkowita_roczna_wartosc": 100000
-        }
+            "calkowita_roczna_wartosc": 100000,
+            "roczne_netto_na_reke": 70000,
+            "roczny_podatek": 15000,
+            "roczny_zus": 15000,
+            "steps": {}
+        },
+        "input_data": {
+            "b2b": {
+                "faktura_miesieczna": 10000,
+                "forma_opodatkowania": "ryczalt_IT"
+            },
+            "uop": {
+                "wynagrodzenie_brutto": 8000
+            }
+        },
+        "language": "en"
     }
     response = client.post('/api/export/pdf', json=data)
     assert response.status_code == 200
     assert response.mimetype == 'application/pdf'
-    assert response.headers['Content-Disposition'].startswith('attachment; filename=kalkulator_wyniki.pdf')
+    assert response.headers['Content-Disposition'].startswith('attachment; filename=Raport_B2B_vs_UoP.pdf')

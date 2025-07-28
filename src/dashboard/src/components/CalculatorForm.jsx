@@ -4,7 +4,7 @@ import Input from './Input';
 import Select from './Select';
 import Checkbox from './Checkbox';
 
-const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleCalculate, loading }) => {
+const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleCalculate, loading, calculationMode, handleCalculationModeChange }) => {
   const { t } = useTranslation();
 
   const zusOptions = [
@@ -29,6 +29,37 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Calculation Mode Selection */}
+      <div className="md:col-span-2 bg-white p-6 rounded-lg shadow mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('form.calculation_mode_title')}</h2>
+        <div className="flex items-center space-x-4">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              className="form-radio text-primary"
+              name="calculationMode"
+              value="uop_to_b2b"
+              checked={calculationMode === 'uop_to_b2b'}
+              onChange={handleCalculationModeChange}
+              data-testid="uop-to-b2b-radio"
+            />
+            <span className="ml-2 text-gray-700">{t('form.uop_to_b2b_mode')}</span>
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              className="form-radio text-primary"
+              name="calculationMode"
+              value="b2b_to_uop"
+              checked={calculationMode === 'b2b_to_uop'}
+              onChange={handleCalculationModeChange}
+              data-testid="b2b-to-uop-radio"
+            />
+            <span className="ml-2 text-gray-700">{t('form.b2b_to_uop_mode')}</span>
+          </label>
+        </div>
+      </div>
+
       {/* B2B Section */}
       <div className="bg-gray-50 p-6 rounded-lg shadow">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6" data-testid="b2b-form-title">{t('form.b2b_title')}</h2>

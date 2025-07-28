@@ -48,8 +48,7 @@
   - [x] Cleanup: Remove the existing `src/dashboard/dist` directory.
   - [x] Scaffold New React App: Create new directory structure for React source code inside `src/dashboard/`.
   - [x] Create Core Files: Generate initial files for the React application (`package.json`, `vite.config.js`, `tailwind.config.js`, `postcss.config.js`, `index.html`, `src/main.jsx`, `src/App.jsx`, `src/index.css`, placeholder components, `api.js`).
-  - [x] Update `.gitignore`: Add `src/dashboard/node_modules/` and `src/dashboard/dist/`.
-  - [x] Update `README.md`: Modify installation and usage instructions.
+  - [x] Update `.gitignore`: Add `src/dashboard/node_modules/` and `src/dashboard/dist/`.n  - [x] Update `README.md`: Modify installation and usage instructions.
 
 - [x] **Task 12: Implement Core UI Components (Form & State)**
   - [x] Refactor `App.jsx` to manage application state and handle calculations.
@@ -140,3 +139,52 @@
   - [x] Changed Flask backend port to 5001 to avoid conflicts.
   - [x] Updated frontend API base URL to point to the new backend port.
   - [x] Implemented Flask-CORS to resolve cross-origin issues.
+
+## Phase 12: Implement Flexible Break-Even Analysis
+
+- [x] **Task 29: Implement B2B to UoP Break-Even Calculation in Backend**
+  - [x] Added `calculate_uop_break_even` function to `src/app.py`.
+  - [x] Modified `/api/calculate` endpoint to accept `calculation_mode` parameter and use `calculate_uop_break_even` when `b2b_to_uop` mode is selected.
+- [x] **Task 30: Implement Calculation Mode Selection in Frontend**
+  - [x] Added radio buttons for calculation mode selection in `src/dashboard/src/components/CalculatorForm.jsx`.
+  - [x] Updated `src/dashboard/src/App.jsx` to manage `calculationMode` state and pass it to `CalculatorForm`.
+  - [x] Updated `src/dashboard/src/services/api.js` to send `calculation_mode` to the backend.
+  - [x] Updated translation files (`src/dashboard/src/locales/en/translation.json`, `src/dashboard/src/locales/pl/translation.json`) with new translation keys for calculation modes.
+- [x] **Task 31: Update Results Display for Flexible Break-Even Analysis**
+  - [x] Modified `src/dashboard/src/components/ResultsDisplay.jsx` to dynamically display break-even point based on `calculationMode`.
+  - [x] Updated `src/dashboard/src/App.jsx` to pass `calculationMode` to `ResultsDisplay`.
+  - [x] Updated translation files (`src/dashboard/src/locales/en/translation.json`, `src/dashboard/src/locales/pl/translation.json`) with new translation keys for break-even titles and subtitles.
+- [x] **Task 32: Update Frontend Tests for Flexible Break-Even Analysis**
+  - [x] Updated `src/dashboard/src/components/ResultsDisplay.test.jsx` to handle dynamic break-even text and test both calculation modes.
+  - [x] Fixed import path for `i18n.js` in `src/dashboard/src/components/ResultsDisplay.test.jsx`.
+  - [x] Updated `src/dashboard/src/components/CalculatorForm.test.jsx` to pass `calculationMode` to `CalculatorForm` in tests.
+  - [x] Fixed whitespace issue in `formatCurrencyForTest` in `src/dashboard/src/components/ResultsDisplay.test.jsx`.
+- [x] **Task 33: Update Documentation for Flexible Break-Even Analysis**
+  - [x] Updated `README.md` to describe the new flexible break-even analysis feature.
+
+## Phase 13: Network Access
+
+- [x] **Task 34: Configure Backend for Network Access**
+  - [x] Modified `run_app.sh` to make Flask listen on `0.0.0.0`.
+- [x] **Task 35: Adjust Frontend API Base URL**
+  - [x] Changed `API_BASE_URL` in `src/dashboard/src/services/api.js` back to a relative path (`/api`).
+- [x] **Task 36: Update Frontend Tests for Relative API Path**
+  - [x] Updated `src/dashboard/src/services/api.test.js` to expect relative API paths in assertions.
+- [x] **Task 37: Update Documentation for Network Access**
+  - [x] Updated `README.md` with instructions for accessing the application from other devices in the local network.
+
+## Phase 14: PDF Report Generation
+
+- [x] **Task 38: Implement Professional PDF Report Generation**
+  - [x] Created `src/pdf_generator.py` with `PDFReport` class.
+  - [x] Implemented title page, input summary, financial comparison, and charts pages.
+  - [x] Integrated `pdf_generator.py` with `/api/export/pdf` endpoint in `src/app.py`.
+  - [x] Added `matplotlib` to `requirements.txt` and installed it.
+  - [x] Fixed relative import issue in `src/app.py`.
+
+## Phase 15: Hotfix
+
+- [x] **Task 39: Fix PDF Generator Module Import**
+  - [x] Corrected `ModuleNotFoundError` by changing the import statement in `src/app.py` to a relative import.
+  - [x] Updated the `PDFReportGenerator` instantiation to use absolute paths to ensure access to templates and static files.
+  - [x] Verified the fix by running all backend tests successfully.

@@ -41,7 +41,10 @@
     "benefit_life": "Life Insurance",
     "benefit_training": "Training",
     "benefit_ppk": "PPK",
-    "calculate_button": "Calculate Comparison"
+    "calculate_button": "Calculate Comparison",
+    "calculation_mode_title": "Calculation Mode",
+    "uop_to_b2b_mode": "UoP to B2B (Calculate B2B invoice to match UoP)",
+    "b2b_to_uop_mode": "B2B to UoP (Calculate UoP salary to match B2B)"
   },
   "results": {
     "title": "Calculation Results",
@@ -61,6 +64,10 @@
     "total_uop_value": "Total Annual UoP Value",
     "break_even_title": "Break-Even Monthly B2B Invoice",
     "break_even_subtitle": "(This is the monthly B2B invoice amount needed to match the total annual value of the UoP contract)",
+    "break_even_b2b_title": "Break-Even Monthly B2B Invoice",
+    "break_even_b2b_subtitle": "(This is the monthly B2B invoice amount needed to match the total annual value of the UoP contract)",
+    "break_even_uop_title": "Break-Even Monthly UoP Gross Salary",
+    "break_even_uop_subtitle": "(This is the monthly UoP gross salary needed to match the total annual value of the B2B contract)",
     "export_pdf": "Export to PDF",
     "export_excel": "Export to Excel"
   },
@@ -77,5 +84,37 @@
     "custom_benefits": "Custom Benefits",
     "benefits": "Benefits",
     "paid_days_off": "Paid Days Off"
+  },
+  "report": {
+    "input_summary_title": "Input Parameters Summary",
+    "financial_comparison_title": "Financial Comparison (Annual)",
+    "visual_analysis_title": "Visual Analysis",
+    "category": "Category",
+    "footer_generated_on": "Report generated on"
+  },
+  "methodology": {
+    "title": "How we calculated it?",
+    "steps": {
+      "b2b": {
+        "Przychód roczny": "Annual Revenue",
+        "Koszty firmowe roczne": "Annual Business Costs",
+        "Dochód (przed ZUS)": "Income (before ZUS)",
+        "Składki społeczne ZUS": "Social Security Contributions (ZUS)",
+        "Podstawa do opodatkowania": "Taxable Base",
+        "Roczny podatek": "Annual Tax",
+        "Składka zdrowotna ZUS": "Health Insurance Contribution (ZUS)",
+        "Utracony przychód": "Lost Revenue"
+      },
+      "uop": {
+        "Roczne wynagrodzenie brutto": "Annual Gross Salary",
+        "Składki społeczne ZUS": "Social Security Contributions (ZUS)",
+        "Składka zdrowotna ZUS": "Health Insurance Contribution (ZUS)",
+        "Koszty uzyskania przychodu": "Tax-Deductible Costs",
+        "Podstawa do opodatkowania": "Taxable Base",
+        "Roczny podatek": "Annual Tax",
+        "Wartość benefitów": "Benefits Value",
+        "Wartość płatnych dni wolnych": "Paid Days Off Value"
+      }
+    }
   }
 }

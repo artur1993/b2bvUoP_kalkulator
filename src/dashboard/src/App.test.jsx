@@ -117,7 +117,7 @@ describe('App', () => {
 
     await waitFor(() => expect(api.exportToPdf).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(saveAs).toHaveBeenCalledTimes(1));
-    expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'kalkulator_wyniki.pdf');
+    expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'Raport_B2B_vs_UoP.pdf');
   });
 
   it('handles B2B input changes correctly', async () => {

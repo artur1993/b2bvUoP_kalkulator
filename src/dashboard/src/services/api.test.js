@@ -13,7 +13,7 @@ describe('API Service', () => {
 
     const result = await calculateResults(mockData); // Changed to pass mockData directly
 
-    expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5001/api/calculate', mockData);
+    expect(axios.post).toHaveBeenCalledWith('/api/calculate', mockData);
     expect(result).toEqual(mockResponse.data);
   });
 
@@ -23,7 +23,7 @@ describe('API Service', () => {
     axios.post.mockRejectedValue(new Error(errorMessage));
 
     await expect(calculateResults(mockData)).rejects.toThrow(errorMessage);
-    expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5001/api/calculate', mockData);
+    expect(axios.post).toHaveBeenCalledWith('/api/calculate', mockData);
   });
 
   it('exportToExcel sends correct data and returns response', async () => {
@@ -33,7 +33,7 @@ describe('API Service', () => {
 
     const result = await exportToExcel(mockResults);
 
-    expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5001/api/export/excel', mockResults, {
+    expect(axios.post).toHaveBeenCalledWith('/api/export/excel', mockResults, {
       responseType: 'blob',
     });
     expect(result).toEqual(mockResponse.data);
@@ -45,7 +45,7 @@ describe('API Service', () => {
     axios.post.mockRejectedValue(new Error(errorMessage));
 
     await expect(exportToExcel(mockResults)).rejects.toThrow(errorMessage);
-    expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5001/api/export/excel', mockResults, {
+    expect(axios.post).toHaveBeenCalledWith('/api/export/excel', mockResults, {
       responseType: 'blob',
     });
   });
@@ -57,7 +57,7 @@ describe('API Service', () => {
 
     const result = await exportToPdf(mockResults);
 
-    expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5001/api/export/pdf', mockResults, {
+    expect(axios.post).toHaveBeenCalledWith('/api/export/pdf', mockResults, {
       responseType: 'blob',
     });
     expect(result).toEqual(mockResponse.data);
@@ -69,7 +69,7 @@ describe('API Service', () => {
     axios.post.mockRejectedValue(new Error(errorMessage));
 
     await expect(exportToPdf(mockResults)).rejects.toThrow(errorMessage);
-    expect(axios.post).toHaveBeenCalledWith('http://127.0.0.1:5001/api/export/pdf', mockResults, {
+    expect(axios.post).toHaveBeenCalledWith('/api/export/pdf', mockResults, {
       responseType: 'blob',
     });
   });

@@ -8,3 +8,4 @@ exclude_lines =
     except RuntimeError as e:
     # Line related to serving index.html when no specific path is given (covered by other tests)
     return send_from_directory(app.static_folder, 'index.html')
+    app.run()

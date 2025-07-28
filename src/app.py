@@ -2,9 +2,9 @@ import json
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
 from openpyxl import Workbook
-from fpdf import FPDF, XPos, YPos
 import io
 import os
+from src.pdf_generator.generator import PDFReportGenerator
 
 def _get_float(data, key, default=0.0):
     """Safely gets a float value from a dictionary, returning a default if conversion fails."""
@@ -33,10 +33,6 @@ file_handler.setFormatter(logging.Formatter(
 file_handler.setLevel(logging.DEBUG) # Set to DEBUG to capture more details
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.DEBUG) # Set to DEBUG to capture more details
-
-# Define font path for PDF generation and add to app config
-app.config['FONT_DIR'] = os.path.join(BASE_DIR, 'src', 'fonts')
-app.config['FONT_PATH'] = os.path.join(app.config['FONT_DIR'], 'DejaVuSans.ttf') # User needs to ensure DejaVuSans.ttf is placed in src/fonts/
 
 # Load data from JSON file at startup
 with open(DATA_FILE_PATH, 'r', encoding='utf-8') as f:
@@ -144,7 +140,19 @@ def calculate_b2b_results(b2b_data):
     # Total value includes net income and all benefits
     calkowita_wartosc_b2b = dochod_netto_rocznie + wartosc_benefitow_od_firmy + custom_benefits_rocznie
 
-    return {
+    # --- Calculation Steps for Methodology Section ---
+    calculation_steps = {
+        'Przychód roczny': faktura_rocznie,
+        'Koszty firmowe roczne': koszty_rocznie,
+        'Dochód (przed ZUS)': dochod_brutto,
+        'Składki społeczne ZUS': skladki_spoleczne_rocznie,
+        'Podstawa do opodatkowania': podstawa_do_opodatkowania if 'podstawa_do_opodatkowania' in locals() else podstawa_opodatkowania,
+        'Roczny podatek': podatek_roczny,
+        'Składka zdrowotna ZUS': skladka_zdrowotna_rocznie,
+        'Utracony przychód': calkowity_utracony_przychod
+    }
+
+    results = {
         "roczny_przychod": faktura_rocznie,
         "roczne_koszty_firmowe": koszty_rocznie,
         "roczny_zus": wszystkie_skladki_zus,
@@ -156,6 +164,8 @@ def calculate_b2b_results(b2b_data):
         "calkowita_roczna_wartosc": calkowita_wartosc_b2b,
         "miesieczne_netto": calkowita_wartosc_b2b / 12
     }
+    results['steps'] = calculation_steps
+    return results
 
 def calculate_uop_results(uop_data):
     """Calculates all financial aspects for an Employment Contract (UoP)."""
@@ -197,7 +207,19 @@ def calculate_uop_results(uop_data):
     
     calkowita_wartosc_uop = netto_rocznie_na_reke + wartosc_benefitow + wartosc_dni_wolnych
 
-    return {
+    # --- Calculation Steps for Methodology Section ---
+    calculation_steps = {
+        'Roczne wynagrodzenie brutto': brutto_rocznie,
+        'Składki społeczne ZUS': skladki_spoleczne,
+        'Składka zdrowotna ZUS': skladka_zdrowotna,
+        'Koszty uzyskania przychodu': koszty_uzyskania,
+        'Podstawa do opodatkowania': podstawa_opodatkowania,
+        'Roczny podatek': podatek_roczny,
+        'Wartość benefitów': wartosc_benefitow,
+        'Wartość płatnych dni wolnych': wartosc_dni_wolnych
+    }
+
+    results = {
         "roczne_brutto": brutto_rocznie,
         "roczny_zus": skladki_spoleczne + skladka_zdrowotna,
         "roczny_podatek": podatek_roczny,
@@ -207,6 +229,8 @@ def calculate_uop_results(uop_data):
         "calkowita_roczna_wartosc": calkowita_wartosc_uop,
         "miesieczne_netto": calkowita_wartosc_uop / 12,
     }
+    results['steps'] = calculation_steps
+    return results
 
 def calculate_break_even(uop_total_value, b2b_base_data):
     """Iteratively finds the B2B invoice amount to match UoP total value."""
@@ -223,6 +247,21 @@ def calculate_break_even(uop_total_value, b2b_base_data):
             return faktura_miesieczna_test
     return -1 # Indicates break-even point not found in range
 
+def calculate_uop_break_even(b2b_total_value, uop_base_data):
+    """Iteratively finds the UoP gross salary to match B2B total value."""
+    # Use a wider and more dynamic range for searching
+    start_range = int(_get_float(uop_base_data, 'wynagrodzenie_brutto', 5000) * 0.5)
+    end_range = 50000 # Set a reasonable upper limit for search
+
+    for wynagrodzenie_brutto_test in range(start_range, end_range, 100):
+        test_data = uop_base_data.copy()
+        test_data['wynagrodzenie_brutto'] = wynagrodzenie_brutto_test
+        uop_res = calculate_uop_results(test_data)
+        # Compare the total value of both contracts
+        if uop_res['calkowita_roczna_wartosc'] >= b2b_total_value:
+            return wynagrodzenie_brutto_test
+    return -1 # Indicates break-even point not found in range
+
 @app.route('/api/calculate', methods=['POST'])
 def calculate():
     """Main endpoint to calculate and compare B2B vs. UoP earnings."""
@@ -232,6 +271,7 @@ def calculate():
         # Ensure data exists to prevent KeyErrors
         b2b_data = request_data.get('b2b', {})
         uop_data = request_data.get('uop', {})
+        calculation_mode = request_data.get('calculation_mode', 'uop_to_b2b') # Default to uop_to_b2b
 
         if not b2b_data or not uop_data:
             return jsonify({"error": "Missing 'b2b' or 'uop' data in request."}), 400
@@ -239,12 +279,20 @@ def calculate():
         b2b_results = calculate_b2b_results(b2b_data)
         uop_results = calculate_uop_results(uop_data)
         
-        break_even_point = calculate_break_even(uop_results['calkowita_roczna_wartosc'], b2b_data)
+        break_even_point = -1
+        if calculation_mode == 'uop_to_b2b':
+            break_even_point = calculate_break_even(uop_results['calkowita_roczna_wartosc'], b2b_data)
+            break_even_key = "break_even_faktura"
+        elif calculation_mode == 'b2b_to_uop':
+            break_even_point = calculate_uop_break_even(b2b_results['calkowita_roczna_wartosc'], uop_data)
+            break_even_key = "break_even_wynagrodzenie_brutto"
+        else:
+            return jsonify({"error": "Invalid calculation_mode provided."}), 400
 
         response_data = {
             "b2b_results": b2b_results,
             "uop_results": uop_results,
-            "break_even_faktura": break_even_point,
+            break_even_key: break_even_point,
             "komentarze": "Porównanie wygenerowane pomyślnie."
         }
         return jsonify(response_data)
@@ -279,41 +327,32 @@ def export_to_excel():
     return send_file(buffer, as_attachment=True, download_name="kalkulator_wyniki.xlsx", 
                      mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
+# Initialize the generator once when the app starts
+pdf_generator = PDFReportGenerator(
+    template_path=os.path.join(BASE_DIR, 'src/pdf_generator/templates'),
+    static_path=os.path.join(BASE_DIR, 'src/pdf_generator/static')
+)
+
 @app.route('/api/export/pdf', methods=['POST'])
 def export_to_pdf():
-    """Exports the calculation results to a PDF file."""
+    """Exports the calculation results to a visually rich PDF file."""
     data = request.get_json()
-    b2b_results = data.get('b2b_results', {})
-    uop_results = data.get('uop_results', {})
-
-    pdf = FPDF()
-    # Ensure the fonts directory exists
-    if not os.path.exists(app.config['FONT_DIR']):
-        os.makedirs(app.config['FONT_DIR'])
+    if not data:
+        return {"error": "Invalid request body"}, 400
     
-    font_added = False
-    try:
-        pdf.add_font('DejaVuSans', '', app.config['FONT_PATH'])
-        font_added = True
-    except RuntimeError as e:
-        print(f"Error adding font: {e}. Please ensure DejaVuSans.ttf is in {app.config['FONT_DIR']}")
+    # Generate the PDF using the new module
+    pdf_bytes = pdf_generator.generate(data)
     
-    if font_added:
-        pdf.set_font("DejaVuSans", size=12)
-    else:
-        pdf.set_font("Helvetica", size=12) # Fallback font
-    
-    pdf.add_page()
-    
-    pdf.cell(200, 10, text="Wyniki Kalkulatora B2B vs UoP", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-    pdf.cell(200, 10, text=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-    pdf.cell(200, 10, text=f"Całkowita roczna wartość UoP: {uop_results.get('calkowita_roczna_wartosc'):.2f} PLN", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
-
-    # Save to a memory buffer
-    buffer = io.BytesIO(pdf.output()) # pdf.output() returns bytes directly
+    # Send the file to the user
+    buffer = io.BytesIO(pdf_bytes)
     buffer.seek(0)
 
-    return send_file(buffer, as_attachment=True, download_name="kalkulator_wyniki.pdf", mimetype='application/pdf')
+    return send_file(
+        buffer, 
+        as_attachment=True, 
+        download_name="Raport_B2B_vs_UoP.pdf", 
+        mimetype='application/pdf'
+    )
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for dashboard/src/components/Input.jsx</title>
+    <title>Code coverage report for dashboard/src/components/LanguageSwitcher.jsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">dashboard/src/components</a> Input.jsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">dashboard/src/components</a> LanguageSwitcher.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>22/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>22/22</span>
             </div>
         
             
@@ -85,51 +85,69 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
-<span class="cline-any cline-yes">616x</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">616x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { useTranslation } from 'react-i18next';
 &nbsp;
-const Input = ({ label, id, type = 'text', value, onChange, ...props }) =&gt; {
+const LanguageSwitcher = () =&gt; {
+  const { i18n } = useTranslation();
+&nbsp;
+  const changeLanguage = (lng) =&gt; {
+    i18n.changeLanguage(lng);
+  };
+&nbsp;
   return (
-    &lt;div className="mb-4"&gt;
-      &lt;label htmlFor={id} className="block text-gray-700 text-sm font-bold mb-2"&gt;
-        {label}
-      &lt;/label&gt;
-      &lt;input
-        type={type}
-        id={id}
-        name={id}
-        value={value}
-        onChange={onChange}
-        className="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200"
-        {...props}
-      /&gt;
+    &lt;div className="flex space-x-2"&gt;
+      &lt;button 
+        onClick={() =&gt; changeLanguage('pl')}
+        className={`px-3 py-1 rounded-md text-sm font-medium ${i18n.language === 'pl' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}
+      &gt;
+        PL
+      &lt;/button&gt;
+      &lt;button 
+        onClick={() =&gt; changeLanguage('en')}
+        className={`px-3 py-1 rounded-md text-sm font-medium ${i18n.language === 'en' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}
+      &gt;
+        EN
+      &lt;/button&gt;
     &lt;/div&gt;
   );
 };
 &nbsp;
-export default Input;
-&nbsp;</pre></td></tr></table></pre>
+export default LanguageSwitcher;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

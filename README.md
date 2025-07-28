@@ -12,8 +12,11 @@ This tool provides a detailed and accurate financial comparison, taking into acc
 - **Comprehensive Visualizations**: 
   - A grouped bar chart to compare the total annual value of UoP, standard B2B, and B2B with benefits.
   - A pie chart showing the distribution of your B2B revenue (net income, taxes, ZUS, etc.).
-- **Export Results**: Export the detailed comparison to PDF or Excel for your records.
+- **Export Results**: Export the detailed comparison to Excel or a professional PDF report.
+- **Internationalized PDF Reports**: The generated PDF report is fully translated into the language selected in the UI (English or Polish).
+- **Transparent Methodology**: The PDF report includes a dedicated "How we calculated it?" section that breaks down the key steps of the calculation for both B2B and UoP, ensuring full transparency.
 - **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
+- **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
 
 ## Installation
 
@@ -44,7 +47,8 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     ```bash
     ./run_app.sh
     ```
-    The Flask backend will run on `http://127.0.0.1:5001` and the React frontend will typically open in your browser at `http://localhost:5173`.
+    The Flask backend will run on `http://0.0.0.0:5001` and the React frontend will typically open in your browser at `http://localhost:5173`.
+    To access the application from other devices in your local network, replace `localhost` with the IP address of the machine running the application (e.g., `http://192.168.1.100:5173`). Ensure your firewall allows connections on ports 5001 and 5173.
 2.  Fill in the form with your data and click "Calculate" to see the comparison.
 3.  **To stop the application:**
     ```bash

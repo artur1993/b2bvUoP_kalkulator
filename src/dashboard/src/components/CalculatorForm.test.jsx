@@ -37,9 +37,14 @@ describe('CalculatorForm', () => {
   };
 
   // Test Wrapper component to manage state
-  const TestWrapper = ({ initialB2b, initialUop, onCalculate, onExport, loading }) => {
+  const TestWrapper = ({ initialB2b, initialUop, onCalculate, onExport, loading, initialCalculationMode }) => {
     const [b2bData, setB2bData] = useState(initialB2b);
     const [uopData, setUopData] = useState(initialUop);
+    const [calculationMode, setCalculationMode] = useState(initialCalculationMode || 'uop_to_b2b');
+
+    const handleCalculationModeChange = (e) => {
+      setCalculationMode(e.target.value);
+    };
 
     const handleB2bChange = (e) => {
       const { name, value, type, checked } = e.target;
@@ -89,6 +94,8 @@ describe('CalculatorForm', () => {
         handleCalculate={onCalculate}
         onExport={onExport}
         loading={loading}
+        calculationMode={calculationMode}
+        handleCalculationModeChange={handleCalculationModeChange}
       />
     );
   };

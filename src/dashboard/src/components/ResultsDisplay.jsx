@@ -10,12 +10,25 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
-const ResultsDisplay = ({ results, onExportPdf, onExportExcel, 'data-testid': dataTestId }) => {
+const ResultsDisplay = ({ results, onExportPdf, onExportExcel, calculationMode, 'data-testid': dataTestId }) => {
   const { t } = useTranslation();
 
   if (!results) return null;
 
-  const { b2b_results, uop_results, break_even_faktura } = results;
+  const { b2b_results, uop_results } = results;
+  const break_even_faktura = results.break_even_faktura;
+  const break_even_wynagrodzenie_brutto = results.break_even_wynagrodzenie_brutto;
+
+  let breakEvenText = '';
+  let breakEvenSubtitle = '';
+
+  if (calculationMode === 'uop_to_b2b' && break_even_faktura !== -1) {
+    breakEvenText = t('results.break_even_b2b_title') + ': ' + formatCurrency(break_even_faktura);
+    breakEvenSubtitle = t('results.break_even_b2b_subtitle');
+  } else if (calculationMode === 'b2b_to_uop' && break_even_wynagrodzenie_brutto !== -1) {
+    breakEvenText = t('results.break_even_uop_title') + ': ' + formatCurrency(break_even_wynagrodzenie_brutto);
+    breakEvenSubtitle = t('results.break_even_uop_subtitle');
+  }
 
   return (
     <div id="results-section" className="mt-10 p-6 bg-white rounded-lg shadow-lg" data-testid={dataTestId}>
@@ -74,13 +87,13 @@ const ResultsDisplay = ({ results, onExportPdf, onExportExcel, 'data-testid': da
         </div>
       </div>
 
-      {break_even_faktura !== -1 && (
+      {breakEvenText && (
         <div className="text-center bg-yellow-50 p-4 rounded-lg shadow-md mb-8">
           <p className="text-xl font-bold text-yellow-800">
-            {t('results.break_even_title')}: {formatCurrency(break_even_faktura)}
+            {breakEvenText}
           </p>
           <p className="text-gray-600 text-sm">
-            {t('results.break_even_subtitle')}
+            {breakEvenSubtitle}
           </p>
         </div>
       )}

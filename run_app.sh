@@ -6,7 +6,8 @@ echo "Starting B2B vs UoP Calculator..."
 echo "-> Starting Flask backend..."
 export FLASK_APP=src/app.py
 export FLASK_DEBUG=1
-flask run --port 5001 &> flask.log &
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+flask run --host 0.0.0.0 --port 5001 &> flask.log &
 
 # Start Vite Frontend in the background and capture its output
 echo "-> Starting Vite frontend..."

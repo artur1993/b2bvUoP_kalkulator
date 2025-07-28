@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CalculatorForm from './components/CalculatorForm';
 import ResultsDisplay from './components/ResultsDisplay';
 import ComparisonChart from './components/ComparisonChart';
@@ -9,6 +10,8 @@ import { calculateResults, exportToExcel, exportToPdf } from './services/api';
 import { saveAs } from 'file-saver';
 
 function App() {
+  const { i18n } = useTranslation();
+  const [calculationMode, setCalculationMode] = useState('uop_to_b2b'); // 'uop_to_b2b' or 'b2b_to_uop'
   const [b2bData, setB2bData] = useState({
     faktura_miesieczna: 10000,
     koszty_firmowe_miesieczne: 500,
@@ -81,11 +84,15 @@ function App() {
     }
   };
 
+  const handleCalculationModeChange = (e) => {
+    setCalculationMode(e.target.value);
+  };
+
   const handleCalculate = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = { b2b: b2bData, uop: uopData };
+      const data = { b2b: b2bData, uop: uopData, calculation_mode: calculationMode };
       const res = await calculateResults(data);
       setResults(res);
     } catch (err) {
@@ -97,12 +104,21 @@ function App() {
   };
 
   const handleExportPdf = async () => {
+    if (!results) return;
     try {
-      const data = { b2b_results: results.b2b_results, uop_results: results.uop_results };
+      const data = {
+        b2b_results: results.b2b_results,
+        uop_results: results.uop_results,
+        input_data: {
+          b2b: b2bData,
+          uop: uopData,
+        },
+        language: i18n.language, // <-- DODANO
+      };
       const blob = await exportToPdf(data);
-      saveAs(blob, 'kalkulator_wyniki.pdf');
+      saveAs(blob, 'Raport_B2B_vs_UoP.pdf');
     } catch (err) {
-
+      console.error('Error exporting PDF:', err);
       alert('Failed to export PDF.');
     }
   };
@@ -130,6 +146,8 @@ function App() {
             handleUopChange={handleUopChange}
             handleCalculate={handleCalculate}
             loading={loading}
+            calculationMode={calculationMode}
+            handleCalculationModeChange={handleCalculationModeChange}
           />
 
           {loading && <SkeletonLoader />}
@@ -137,7 +155,7 @@ function App() {
 
           {!loading && results && (
             <div className="mt-8">
-              <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} data-testid="results-display" />
+              <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} calculationMode={calculationMode} data-testid="results-display" />
               <ComparisonChart results={results} />
             </div>
           )}

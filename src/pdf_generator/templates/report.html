@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ t.header.title }}</title>
+    <link rel="stylesheet" href="../static/report.css">
+</head>
+<body>
+    <header>
+        <h1>{{ t.header.title }}</h1>
+        <p>{{ t.header.subtitle }}</p>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2>{{ t.report.input_summary_title | default('Input Parameters Summary') }}</h2>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>{{ t.form.b2b_title }}</h3>
+                    <ul>
+                        <li><strong>{{ t.form.monthly_invoice }}:</strong> {{ input_data.b2b.faktura_miesieczna | format_currency }}</li>
+                        <li><strong>{{ t.form.tax_form }}:</strong> {{ input_data.b2b.forma_opodatkowania }}</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>{{ t.form.uop_title }}</h3>
+                    <ul>
+                        <li><strong>{{ t.form.gross_salary }}:</strong> {{ input_data.uop.wynagrodzenie_brutto | format_currency }}</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>{{ t.report.financial_comparison_title | default('Financial Comparison (Annual)') }}</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>{{ t.report.category | default('Category') }}</th>
+                        <th>B2B</th>
+                        <th>UoP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td><strong>{{ t.results.total_b2b_value }} / {{ t.results.total_uop_value }}</strong></td>
+                        <td><strong>{{ b2b_results.calkowita_roczna_wartosc | format_currency }}</strong></td>
+                        <td><strong>{{ uop_results.calkowita_roczna_wartosc | format_currency }}</strong></td>
+                    </tr>
+                    <tr><td>{{ t.results.net_income }}</td><td>{{ b2b_results.roczne_netto_na_reke | format_currency }}</td><td>{{ uop_results.roczne_netto_na_reke | format_currency }}</td></tr>
+                    <tr><td>{{ t.results.annual_tax }}</td><td>{{ b2b_results.roczny_podatek | format_currency }}</td><td>{{ uop_results.roczny_podatek | format_currency }}</td></tr>
+                    <tr><td>{{ t.results.annual_zus }}</td><td>{{ b2b_results.roczny_zus | format_currency }}</td><td>{{ uop_results.roczny_zus | format_currency }}</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card">
+            <h2>{{ t.report.visual_analysis_title | default('Visual Analysis') }}</h2>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ charts.total_value_chart }}" alt="{{ t.charts.total_comparison_title }}">
+            </div>
+        </section>
+
+        <section class="card" style="page-break-before: always;">
+            <h2>{{ t.methodology.title | default('How we calculated it?') }}</h2>
+            <div class="two-columns">
+                <div class="column">
+                    <h3>{{ t.form.b2b_title }}</h3>
+                    <table class="methodology-table">
+                        {% if b2b_results.steps %}
+                            {% for key, value in b2b_results.steps.items() %}
+                            <tr>
+                                <td>{{ t.methodology.steps.b2b[key] | default(key) }}</td>
+                                <td>{{ value | format_currency }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+                <div class="column">
+                    <h3>{{ t.form.uop_title }}</h3>
+                    <table class="methodology-table">
+                         {% if uop_results.steps %}
+                            {% for key, value in uop_results.steps.items() %}
+                            <tr>
+                                <td>{{ t.methodology.steps.uop[key] | default(key) }}</td>
+                                <td>{{ value | format_currency }}</td>
+                            </tr>
+                            {% endfor %}
+                         {% endif %}
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        {{ t.report.footer_generated_on | default('Report generated on') }}: {{ generation_date }}
+    </footer>
+</body>
+</html>
