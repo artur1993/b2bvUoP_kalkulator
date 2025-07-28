@@ -62,8 +62,10 @@
   - [x] Refactor `App.jsx` to handle export functions.
   - [x] Update dependencies to include `file-saver`.
 
-**All tasks have been successfully completed.**
 
-## Phase 7: End-to-End Testing
+- [ ] **Task 15: Zwiększenie pokrycia testów jednostkowych do 95%**
+- [ ] **Task 16: Wczytanie przygotowanego planu dla zadań po zwiększeniu pokrycia testów jednostkowych**
 
-- [ ] **Task 14: Implement E2E Tests with Playwright** → CURRENT
+## OTHER:
+
+- [ ] **Task 14: Implement E2E Tests with Playwright**

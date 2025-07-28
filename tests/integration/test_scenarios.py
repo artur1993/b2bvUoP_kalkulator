@@ -56,7 +56,7 @@ class ScenariosTestCase(unittest.TestCase):
             "wybrane_benefity": []
         })
         
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['uop_results']
 
@@ -73,7 +73,7 @@ class ScenariosTestCase(unittest.TestCase):
             "zus_chorobowe": False
         })
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
 
@@ -89,7 +89,7 @@ class ScenariosTestCase(unittest.TestCase):
             "przestoje_miesiace": 0
         })
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
 
@@ -108,7 +108,7 @@ class ScenariosTestCase(unittest.TestCase):
             }
         })
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
 
@@ -122,7 +122,7 @@ class ScenariosTestCase(unittest.TestCase):
         request = self.base_request.copy()
         request['uop']['wynagrodzenie_brutto'] = 25000 # High salary to exceed threshold
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['uop_results']
 
@@ -134,7 +134,7 @@ class ScenariosTestCase(unittest.TestCase):
         request['uop']['wynagrodzenie_brutto'] = 15000 # Set a specific salary for consistent benefit calculation
         request['uop']['wybrane_benefity'] = ["opieka_medyczna", "karta_sportowa", "budzet_szkoleniowy", "ppk", "sprzet"]
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['uop_results']
 
@@ -149,7 +149,7 @@ class ScenariosTestCase(unittest.TestCase):
             "koszty_firmowe_miesieczne": 50
         })
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
 
@@ -162,7 +162,7 @@ class ScenariosTestCase(unittest.TestCase):
         request = self.base_request.copy()
         request['uop']['wynagrodzenie_brutto'] = 15000
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['uop_results']
 
@@ -179,7 +179,7 @@ class ScenariosTestCase(unittest.TestCase):
             "urlop_dni": 20
         })
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
 
@@ -194,7 +194,7 @@ class ScenariosTestCase(unittest.TestCase):
         request = self.base_request.copy()
         request['b2b']['koszty_firmowe_miesieczne'] = 5000
 
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
 
@@ -206,7 +206,7 @@ class ScenariosTestCase(unittest.TestCase):
         """11. B2B, ulga na start, a lot of holiday days."""
         request = self.base_request.copy()
         request['b2b'].update({"zus_rodzaj": "ulga_na_start", "urlop_dni": 50})
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
         self.assertAlmostEqual(data['roczny_zus'], 5026.32, places=2) # Health insurance only
@@ -216,7 +216,7 @@ class ScenariosTestCase(unittest.TestCase):
         """12. B2B without sick leave, 0 holiday."""
         request = self.base_request.copy()
         request['b2b'].update({"zus_chorobowe": False, "urlop_dni": 0})
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
         self.assertEqual(data['roczny_utracony_przychod'], 0)
@@ -227,7 +227,7 @@ class ScenariosTestCase(unittest.TestCase):
         request = self.base_request.copy()
         request['b2b']['faktura_miesieczna'] = 15000
         request['uop']['wynagrodzenie_brutto'] = 15000
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         # Break-even should now compare total values, so the invoice will be higher
@@ -248,7 +248,7 @@ class ScenariosTestCase(unittest.TestCase):
                 "paidSickDays": {"enabled": True, "value": 0, "days": 10} # 10 paid sick days
             }
         })
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
         self.assertAlmostEqual(data['roczny_zus'], 30115.56, places=2)
@@ -265,7 +265,7 @@ class ScenariosTestCase(unittest.TestCase):
             "przestoje_miesiace": 3,
             "zus_rodzaj": "ulga_na_start"
         })
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
         self.assertEqual(data['roczny_utracony_przychod'], 60000)
@@ -285,7 +285,7 @@ class ScenariosTestCase(unittest.TestCase):
                 "paidVacationDays": {"enabled": True, "value": 0, "days": 30} # 30 paid vacation days
             }
         })
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['b2b_results']
         self.assertGreater(data['calkowita_roczna_wartosc'], 0)
@@ -297,7 +297,7 @@ class ScenariosTestCase(unittest.TestCase):
             "wynagrodzenie_brutto": 12000,
             "wybrane_benefity": ["ppk"]
         })
-        response = self.app.post('/calculate', data=json.dumps(request), content_type='application/json')
+        response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)['uop_results']
         # Podstawa: 144000 - (144000*0.1371) - 3000 = 121257.6 -> 121258
@@ -307,11 +307,11 @@ class ScenariosTestCase(unittest.TestCase):
     def test_scenario_18_export_excel(self):
         """18. Test Excel export functionality."""
         # First, get a full calculation result
-        calc_response = self.app.post('/calculate', data=json.dumps(self.base_request), content_type='application/json')
+        calc_response = self.app.post('/api/calculate', data=json.dumps(self.base_request), content_type='application/json')
         calc_data = json.loads(calc_response.data)
 
         # Now, use that result to test the export
-        response = self.app.post('/export/excel', data=json.dumps(calc_data), content_type='application/json')
+        response = self.app.post('/api/export/excel', data=json.dumps(calc_data), content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.mimetype, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 

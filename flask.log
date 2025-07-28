@@ -1,0 +1,173 @@
+127.0.0.1 - - [28/Jul/2025 02:29:32] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:31:27] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:31:28] "[36mGET /assets/index-BZ6rlvaJ.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:31:28] "[36mGET /assets/index-CJuciBkc.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:31:28] "[36mGET /vite.svg HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:32:30] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:32:30] "[36mGET /assets/index-BZ6rlvaJ.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:32:30] "[36mGET /assets/index-CJuciBkc.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:32:31] "[36mGET /vite.svg HTTP/1.1[0m" 304 -
+Traceback (most recent call last):
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 214, in calculate
+    break_even_point = calculate_break_even(uop_results['calkowita_roczna_wartosc'], b2b_data)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 186, in calculate_break_even
+    start_range = int(b2b_base_data.get('faktura_miesieczna', 10000) * 0.5)
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+TypeError: can't multiply sequence by non-int of type 'float'
+127.0.0.1 - - [28/Jul/2025 02:32:35] "[35m[1mPOST /api/calculate HTTP/1.1[0m" 500 -
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+127.0.0.1 - - [28/Jul/2025 02:33:38] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:33:38] "[36mGET /assets/index-CJuciBkc.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:33:38] "[36mGET /assets/index-BZ6rlvaJ.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:33:38] "[36mGET /vite.svg HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jul/2025 02:33:44] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:33:51] "POST /api/calculate HTTP/1.1" 200 -
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+127.0.0.1 - - [28/Jul/2025 02:36:12] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:17] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:20] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:23] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:30] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:35] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:40] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:51] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:36:56] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:37:02] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:37:09] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:37:13] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:37:37] "POST /api/calculate HTTP/1.1" 200 -
+ * Detected change in '/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 145-400-630
+127.0.0.1 - - [28/Jul/2025 02:40:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:25] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:26] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:27] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:27] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:27] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:40:27] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:41:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:41:28] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:41:28] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:42:27] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:42:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:42:29] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:42:29] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 227, in calculate
+    b2b_results = calculate_b2b_results(b2b_data)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 119, in calculate_b2b_results
+    unpaid_vacation_days = max(0, int(b2b_data['urlop_dni']) - paid_vacation_days)
+                                  ~~~^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: ''
+127.0.0.1 - - [28/Jul/2025 02:42:56] "[35m[1mPOST /api/calculate HTTP/1.1[0m" 500 -
+127.0.0.1 - - [28/Jul/2025 02:43:03] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:30] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:30] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:30] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "POST /api/export/excel HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:36] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:43:37] "POST /api/calculate HTTP/1.1" 200 -
+/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:280: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font("Arial", size=12)
+/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:282: DeprecationWarning: The parameter "txt" has been renamed to "text" in 2.7.6
+  pdf.cell(200, 10, txt="Wyniki Kalkulatora B2B vs UoP", ln=True, align='C')
+/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:282: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(200, 10, txt="Wyniki Kalkulatora B2B vs UoP", ln=True, align='C')
+/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:283: DeprecationWarning: The parameter "txt" has been renamed to "text" in 2.7.6
+  pdf.cell(200, 10, txt=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
+/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:283: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=True use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(200, 10, txt=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
+127.0.0.1 - - [28/Jul/2025 02:43:37] "[35m[1mPOST /api/export/pdf HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/fpdf/fpdf.py", line 4873, in normalize_text
+    return text.encode(self.core_fonts_encoding).decode("latin-1")
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'latin-1' codec can't encode character '\u0142' in position 2: ordinal not in range(256)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 283, in export_to_pdf
+    pdf.cell(200, 10, txt=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/fpdf/fpdf.py", line 221, in wrapper
+    return fn(self, *args, **kwargs)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/fpdf/deprecation.py", line 32, in wrapper
+    return fn(self, *args, **kwargs)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/fpdf/fpdf.py", line 3228, in cell
+    text = self.normalize_text(text)
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/venv/lib/python3.13/site-packages/fpdf/fpdf.py", line 4875, in normalize_text
+    raise FPDFUnicodeEncodingException(
+    ^^^^^^^^^^^^
+fpdf.errors.FPDFUnicodeEncodingException: Character "ł" at index 2 in text is outside the range of characters supported by the font used: "helvetica". Please consider using a Unicode font.
+127.0.0.1 - - [28/Jul/2025 02:45:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:39] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "GET /assets/index-BZ6rlvaJ.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:45:40] "GET /assets/index-CJuciBkc.css HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:48:46] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 02:49:58] "POST /api/calculate HTTP/1.1" 200 -

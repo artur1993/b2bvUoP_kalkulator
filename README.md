@@ -34,6 +34,9 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     npm install
     cd ../..
     ```
+4.  **Install PDF Font (for PDF export functionality):**
+    Download `DejaVuSans.ttf` (or another Unicode-compatible font) and place it in the `src/fonts/` directory within the project root. If the `src/fonts/` directory does not exist, it will be created automatically when the Flask app runs.
+    You can find `DejaVuSans.ttf` on the official DejaVu Fonts website or other trusted font repositories.
 
 ## Usage
 

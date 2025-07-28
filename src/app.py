@@ -5,12 +5,30 @@ from fpdf import FPDF
 import io
 import os
 
+def _get_float(data, key, default=0.0):
+    """Safely gets a float value from a dictionary, returning a default if conversion fails."""
+    try:
+        return float(data.get(key, default))
+    except (ValueError, TypeError):
+        return default
+
+def _get_int(data, key, default=0):
+    """Safely gets an int value from a dictionary, returning a default if conversion fails."""
+    try:
+        return int(data.get(key, default))
+    except (ValueError, TypeError):
+        return default
+
 # --- Determine the absolute path to the project root ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE_PATH = os.path.join(BASE_DIR, 'dane_wejsciowe_kalkulator.json')
 
 # Initialize Flask app
 app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'src/dashboard/dist'))
+
+# Define font path for PDF generation and add to app config
+app.config['FONT_DIR'] = os.path.join(BASE_DIR, 'src', 'fonts')
+app.config['FONT_PATH'] = os.path.join(app.config['FONT_DIR'], 'DejaVuSans.ttf') # User needs to ensure DejaVuSans.ttf is placed in src/fonts/
 
 # Load data from JSON file at startup
 with open(DATA_FILE_PATH, 'r', encoding='utf-8') as f:
@@ -24,11 +42,18 @@ DANE['ulga_dla_mlodych_limit'] = 85528
 
 def calculate_b2b_results(b2b_data):
     """Calculates all financial aspects for a B2B contract based on the corrected 2025 rules."""
-    faktura_rocznie = b2b_data['faktura_miesieczna'] * 12
-    koszty_rocznie = b2b_data['koszty_firmowe_miesieczne'] * 12
+    faktura_miesieczna = _get_float(b2b_data, 'faktura_miesieczna')
+    faktura_rocznie = faktura_miesieczna * 12
+    koszty_firmowe_miesieczne = _get_float(b2b_data, 'koszty_firmowe_miesieczne')
+    koszty_rocznie = koszty_firmowe_miesieczne * 12
 
     # ZUS
-    zus_details = DANE['zus_2025'][b2b_data['zus_rodzaj']]
+    zus_type = b2b_data['zus_rodzaj']
+    if zus_type == 'mala_firma':
+        zus_type = 'preferencyjny' # Map 'mala_firma' to 'preferencyjny' ZUS
+    elif zus_type == 'duza_firma':
+        zus_type = 'pelny' # Map 'duza_firma' to 'pelny' ZUS
+    zus_details = DANE['zus_2025'][zus_type]
     skladki_spoleczne_rocznie = sum(v for k, v in zus_details.items() if k in ['emerytalna', 'rentowa', 'wypadkowa', 'fundusz_pracy']) * 12
     if b2b_data['zus_chorobowe']:
         skladki_spoleczne_rocznie += zus_details.get('chorobowa', 0) * 12
@@ -73,10 +98,10 @@ def calculate_b2b_results(b2b_data):
         podatek_roczny = 0
 
     # --- New Benefit and Lost Revenue Logic ---
-    stawka_dzienna = b2b_data['faktura_miesieczna'] / DANE['dane_ogolne']['dni_robocze_miesiecznie']
+    stawka_dzienna = float(b2b_data['faktura_miesieczna']) / DANE['dane_ogolne']['dni_robocze_miesiecznie']
     
     # Custom benefits provided by the user
-    custom_benefits_rocznie = b2b_data.get('customBenefits', 0)
+    custom_benefits_rocznie = float(b2b_data.get('customBenefits', 0))
 
     # Benefits provided by the company
     company_benefits = b2b_data.get('companyBenefits', {})
@@ -84,24 +109,24 @@ def calculate_b2b_results(b2b_data):
     for key, benefit in company_benefits.items():
         if benefit.get('enabled', False):
             if key == 'paidVacationDays':
-                wartosc_benefitow_od_firmy += benefit.get('days', 0) * stawka_dzienna
+                wartosc_benefitow_od_firmy += float(benefit.get('days', 0)) * stawka_dzienna
             elif key == 'paidSickDays':
-                wartosc_benefitow_od_firmy += benefit.get('days', 0) * stawka_dzienna * 0.8 # Assuming 80% pay
+                wartosc_benefitow_od_firmy += float(benefit.get('days', 0)) * stawka_dzienna * 0.8 # Assuming 80% pay
             else:
-                wartosc_benefitow_od_firmy += benefit.get('value', 0)
+                wartosc_benefitow_od_firmy += float(benefit.get('value', 0))
 
     # Adjust lost revenue based on paid days off from company
-    paid_vacation_days = company_benefits.get('paidVacationDays', {}).get('days', 0) if company_benefits.get('paidVacationDays', {}).get('enabled') else 0
-    paid_sick_days = company_benefits.get('paidSickDays', {}).get('days', 0) if company_benefits.get('paidSickDays', {}).get('enabled') else 0
+    paid_vacation_days = float(company_benefits.get('paidVacationDays', {}).get('days', 0)) if company_benefits.get('paidVacationDays', {}).get('enabled') else 0
+    paid_sick_days = float(company_benefits.get('paidSickDays', {}).get('days', 0)) if company_benefits.get('paidSickDays', {}).get('enabled') else 0
     
     # Calculate lost revenue for UNPAID days
-    unpaid_vacation_days = max(0, b2b_data['urlop_dni'] - paid_vacation_days)
+    unpaid_vacation_days = max(0, int(b2b_data['urlop_dni']) - paid_vacation_days)
     # Assuming sick days in form are total, subtract paid ones
-    unpaid_sick_days = max(0, b2b_data.get('chorobowe_dni', 0) - paid_sick_days) 
+    unpaid_sick_days = max(0, int(b2b_data.get('chorobowe_dni', 0)) - paid_sick_days) 
 
     utracony_przychod_urlop = unpaid_vacation_days * stawka_dzienna
     utracony_przychod_chorobowe = unpaid_sick_days * stawka_dzienna * 0.8 # Assuming 80% pay for sick leave
-    utracony_przychod_przestoje = b2b_data['przestoje_miesiace'] * b2b_data['faktura_miesieczna']
+    utracony_przychod_przestoje = _get_float(b2b_data, 'przestoje_miesiace') * faktura_miesieczna
     
     calkowity_utracony_przychod = utracony_przychod_urlop + utracony_przychod_chorobowe + utracony_przychod_przestoje
 
@@ -126,14 +151,17 @@ def calculate_b2b_results(b2b_data):
 
 def calculate_uop_results(uop_data):
     """Calculates all financial aspects for an Employment Contract (UoP)."""
-    brutto_rocznie = uop_data['wynagrodzenie_brutto'] * 12
+    wynagrodzenie_brutto = _get_float(uop_data, 'wynagrodzenie_brutto')
+    koszty_uzyskania_przychodu = _get_float(uop_data, 'koszty_uzyskania_przychodu')
+
+    brutto_rocznie = wynagrodzenie_brutto * 12
     
     zus_uop = DANE['zus_uop_procentowe']
     skladki_spoleczne = brutto_rocznie * (zus_uop['emerytalna'] + zus_uop['rentowa'] + zus_uop['chorobowa'])
     podstawa_zdrowotnej = brutto_rocznie - skladki_spoleczne
     skladka_zdrowotna = podstawa_zdrowotnej * zus_uop['zdrowotna']
     
-    koszty_uzyskania = uop_data['koszty_uzyskania_przychodu'] * 12
+    koszty_uzyskania = koszty_uzyskania_przychodu * 12
     podstawa_opodatkowania = max(0, round(brutto_rocznie - skladki_spoleczne - koszty_uzyskania, 0))
 
     kwota_wolna = DANE['progi_podatkowe']['kwota_wolna']
@@ -156,7 +184,7 @@ def calculate_uop_results(uop_data):
     if 'ppk' in uop_data.get('wybrane_benefity', []):
         wartosc_benefitow += brutto_rocznie * DANE['benefity']['ppk']
         
-    stawka_dzienna = uop_data['wynagrodzenie_brutto'] / DANE['dane_ogolne']['dni_robocze_miesiecznie']
+    stawka_dzienna = wynagrodzenie_brutto / DANE['dane_ogolne']['dni_robocze_miesiecznie']
     wartosc_dni_wolnych = DANE['dni_wolne_uop']['urlop_wypoczynkowy']['dni'] * stawka_dzienna
     
     calkowita_wartosc_uop = netto_rocznie_na_reke + wartosc_benefitow + wartosc_dni_wolnych
@@ -175,8 +203,8 @@ def calculate_uop_results(uop_data):
 def calculate_break_even(uop_total_value, b2b_base_data):
     """Iteratively finds the B2B invoice amount to match UoP total value."""
     # Use a wider and more dynamic range for searching
-    start_range = int(b2b_base_data.get('faktura_miesieczna', 10000) * 0.5)
-    end_range = int(uop_total_value / 12 * 2) # Heuristic for end range
+    start_range = int(_get_float(b2b_base_data, 'faktura_miesieczna', 10000) * 0.5)
+    end_range = 100000 # Set a reasonable upper limit for search
     
     for faktura_miesieczna_test in range(start_range, end_range, 100):
         test_data = b2b_base_data.copy()
@@ -213,7 +241,8 @@ def calculate():
         }
         return jsonify(response_data)
     except Exception as e:
-        # Basic error handling
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/export/excel', methods=['POST'])
@@ -251,15 +280,27 @@ def export_to_pdf():
     uop_results = data.get('uop_results', {})
 
     pdf = FPDF()
+    # Ensure the fonts directory exists
+    if not os.path.exists(app.config['FONT_DIR']):
+        os.makedirs(app.config['FONT_DIR'])
+    
+    # Add Unicode font (User needs to ensure DejaVuSans.ttf is placed in src/fonts/)
+    try:
+        pdf.add_font('DejaVuSans', '', app.config['FONT_PATH'], uni=True)
+    except RuntimeError as e:
+        # Fallback to a basic font if DejaVuSans.ttf is not found or corrupted
+        print(f"Error adding font: {e}. Please ensure DejaVuSans.ttf is in {app.config['FONT_DIR']}")
+        pdf.set_font("Helvetica", size=12) # Fallback font
+    
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("DejaVuSans", size=12) # Use the new font
     
     pdf.cell(200, 10, txt="Wyniki Kalkulatora B2B vs UoP", ln=True, align='C')
     pdf.cell(200, 10, txt=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
     pdf.cell(200, 10, txt=f"Całkowita roczna wartość UoP: {uop_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
 
     # Save to a memory buffer
-    buffer = io.BytesIO(pdf.output(dest='S').encode('latin-1'))
+    buffer = io.BytesIO(pdf.output()) # pdf.output() returns bytes directly
     buffer.seek(0)
 
     return send_file(buffer, as_attachment=True, download_name="kalkulator_wyniki.pdf", mimetype='application/pdf')
@@ -273,4 +314,4 @@ def serve(path):
         return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, use_reloader=True, port=5001)

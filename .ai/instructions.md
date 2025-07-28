@@ -25,7 +25,18 @@ Every project must have this exact structure:
 ## Testing Requirements
 ### Mandatory Tests- **Unit tests**: For every function, method, class- **Integration tests**: For component interactions- **End-to-end tests**: For complete user workflows
 ### Optional Tests (Ask User First)- **Performance tests**: When performance is critical- **Security tests**: For authentication/authorization features  - **Load tests**: For high-traffic scenarios- **API tests**: For RESTful services- **UI tests**: For complex user interfaces
-### Test Standards- Minimum 80% code coverage- Tests must be automated and runnable via CI/CD- Clear test names describing what is being tested- Tests must be independent and deterministic- Include positive, negative, and edge case scenarios
+### Test Standards
+- Minimum 80% code coverage
+- Tests must be automated and runnable via CI/CD
+- Clear test names describing what is being tested
+- Tests must be independent and deterministic
+- Include positive, negative, and edge case scenarios
+
+#### Test Execution Strategy
+- **Initial Run**: All tests are executed.
+- **Subsequent Runs (after failures)**: Only failed tests are re-executed (this applies to all types of tests).
+- **After All Tests Pass**: All tests are executed again to confirm full regression.
+
 ---
 ## Documentation Standards
 ### README.md Structure (Always in English)```markdown# Project Name
