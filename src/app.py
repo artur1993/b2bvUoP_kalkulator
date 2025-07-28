@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from openpyxl import Workbook
-from fpdf import FPDF
+from fpdf import FPDF, XPos, YPos
 import io
 import os
 
@@ -12,12 +12,7 @@ def _get_float(data, key, default=0.0):
     except (ValueError, TypeError):
         return default
 
-def _get_int(data, key, default=0):
-    """Safely gets an int value from a dictionary, returning a default if conversion fails."""
-    try:
-        return int(data.get(key, default))
-    except (ValueError, TypeError):
-        return default
+
 
 # --- Determine the absolute path to the project root ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -98,7 +93,7 @@ def calculate_b2b_results(b2b_data):
         podatek_roczny = 0
 
     # --- New Benefit and Lost Revenue Logic ---
-    stawka_dzienna = float(b2b_data['faktura_miesieczna']) / DANE['dane_ogolne']['dni_robocze_miesiecznie']
+    stawka_dzienna = faktura_miesieczna / DANE['dane_ogolne']['dni_robocze_miesiecznie']
     
     # Custom benefits provided by the user
     custom_benefits_rocznie = float(b2b_data.get('customBenefits', 0))
@@ -120,9 +115,9 @@ def calculate_b2b_results(b2b_data):
     paid_sick_days = float(company_benefits.get('paidSickDays', {}).get('days', 0)) if company_benefits.get('paidSickDays', {}).get('enabled') else 0
     
     # Calculate lost revenue for UNPAID days
-    unpaid_vacation_days = max(0, int(b2b_data['urlop_dni']) - paid_vacation_days)
+    unpaid_vacation_days = max(0, int(_get_float(b2b_data, 'urlop_dni')) - paid_vacation_days)
     # Assuming sick days in form are total, subtract paid ones
-    unpaid_sick_days = max(0, int(b2b_data.get('chorobowe_dni', 0)) - paid_sick_days) 
+    unpaid_sick_days = max(0, int(_get_float(b2b_data, 'chorobowe_dni', 0)) - paid_sick_days) 
 
     utracony_przychod_urlop = unpaid_vacation_days * stawka_dzienna
     utracony_przychod_chorobowe = unpaid_sick_days * stawka_dzienna * 0.8 # Assuming 80% pay for sick leave
@@ -284,20 +279,23 @@ def export_to_pdf():
     if not os.path.exists(app.config['FONT_DIR']):
         os.makedirs(app.config['FONT_DIR'])
     
-    # Add Unicode font (User needs to ensure DejaVuSans.ttf is placed in src/fonts/)
+    font_added = False
     try:
-        pdf.add_font('DejaVuSans', '', app.config['FONT_PATH'], uni=True)
+        pdf.add_font('DejaVuSans', '', app.config['FONT_PATH'])
+        font_added = True
     except RuntimeError as e:
-        # Fallback to a basic font if DejaVuSans.ttf is not found or corrupted
         print(f"Error adding font: {e}. Please ensure DejaVuSans.ttf is in {app.config['FONT_DIR']}")
+    
+    if font_added:
+        pdf.set_font("DejaVuSans", size=12)
+    else:
         pdf.set_font("Helvetica", size=12) # Fallback font
     
     pdf.add_page()
-    pdf.set_font("DejaVuSans", size=12) # Use the new font
     
-    pdf.cell(200, 10, txt="Wyniki Kalkulatora B2B vs UoP", ln=True, align='C')
-    pdf.cell(200, 10, txt=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
-    pdf.cell(200, 10, txt=f"Całkowita roczna wartość UoP: {uop_results.get('calkowita_roczna_wartosc'):.2f} PLN", ln=True)
+    pdf.cell(200, 10, text="Wyniki Kalkulatora B2B vs UoP", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
+    pdf.cell(200, 10, text=f"Całkowita roczna wartość B2B: {b2b_results.get('calkowita_roczna_wartosc'):.2f} PLN", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+    pdf.cell(200, 10, text=f"Całkowita roczna wartość UoP: {uop_results.get('calkowita_roczna_wartosc'):.2f} PLN", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
     # Save to a memory buffer
     buffer = io.BytesIO(pdf.output()) # pdf.output() returns bytes directly

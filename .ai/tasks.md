@@ -62,10 +62,50 @@
   - [x] Refactor `App.jsx` to handle export functions.
   - [x] Update dependencies to include `file-saver`.
 
+- [x] **Task 15: Create Component Tests for ResultsDisplay.jsx**
+  - [x] Create `src/dashboard/src/components/ResultsDisplay.test.jsx`.
+  - [x] Implement tests for rendering, currency formatting, conditional logic, and handling of missing props.
+  - [x] Ensure all tests pass using the project's component testing framework.
 
-- [ ] **Task 15: Zwiększenie pokrycia testów jednostkowych do 95%**
-- [ ] **Task 16: Wczytanie przygotowanego planu dla zadań po zwiększeniu pokrycia testów jednostkowych**
+## Phase 7: Visual Tests Debugging
 
-## OTHER:
+- [x] **Task 14: Debug Playwright Visual Tests**
+  - [x] Investigate and fix `net::ERR_CONNECTION_REFUSED` errors in Playwright tests.
+  - [x] Debug CSS style assertion failures (e.g., `box-shadow` or `border-color` for input fields).
+  - [x] Ensure all visual tests in `tests/e2e/visual.spec.js` pass successfully.
 
-- [ ] **Task 14: Implement E2E Tests with Playwright**
+## Phase 8: API Testing & Coverage
+
+- [x] **Task 16: Implement Integration Tests for Flask API**
+  - [x] Install `pytest-flask`.
+  - [x] Create `tests/integration/test_api.py`.
+  - [x] Add tests for successful requests (200 OK).
+  - [x] Add tests for invalid requests (400 Bad Request).
+  - [x] Verify JSON response structure.
+  - [x] Generate a code coverage report for `src/app.py`.
+  - [x] **Sub-task 16.1: Increase Coverage for `src/app.py`**
+    - [x] Refine test for `skala` tax form in `calculate_b2b_results` to cover `else` branch (line 82).
+    - [x] Refine test for `ip_box` tax form in `calculate_b2b_results` to cover line 93.
+    - [x] Re-examine `test_calculate_break_even_not_found` to ensure it covers lines 238-241.
+    - [x] Add test for `serve` endpoint to cover root path `/` (line 309).
+    - [x] Update `.coveragerc` to explicitly exclude lines 280, 285-288, and 312.
+    - [x] Re-run coverage report and analyze results.
+
+## Phase 9: Test Classification and Automation
+
+- [x] **Task 17: Classify Backend Tests**
+  - [x] Analyze and classify Python backend tests as positive, negative, or neutral.
+  - [x] Rename test functions according to the `_positive`, `_negative`, `_neutral` convention.
+- [x] **Task 18: Automate Backend Coverage Reporting**
+  - [x] Create `scripts/backend_cov.sh` to generate detailed backend coverage reports.
+  - [x] Ensure the script displays separate coverage for unit, integration, and combined tests.
+  - [x] Add test classification summary (positive, negative, neutral counts) to the `backend_cov.sh` output.
+- [x] **Task 19: Automate Frontend Coverage Reporting**
+  - [x] Create `scripts/frontend_cov.sh` to generate frontend code coverage reports.
+- [x] **Task 20: Fix Frontend Tests**
+  - [x] Debug and fix failing frontend tests in `src/components/CalculatorForm.test.jsx`.
+  - [x] Ensure all frontend tests pass successfully.
+- [x] **Task 21: Update Documentation for Test Changes**
+  - [x] Update `README.md` to reflect the new test naming conventions and the new coverage scripts.
+- [x] **Task 22: Manual Application Verification**
+  - [x] Successfully launched and manually verified the application's functionality.

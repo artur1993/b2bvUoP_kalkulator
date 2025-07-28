@@ -33,12 +33,12 @@ const ComparisonChart = ({ results }) => {
       {
         label: 'UoP',
         data: [uop_results.calkowita_roczna_wartosc],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+        backgroundColor: '#4fd1c5', // secondary
       },
       {
         label: 'B2B',
         data: [b2b_results.calkowita_roczna_wartosc],
-        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+        backgroundColor: '#2c5282', // primary
       },
     ],
   };
@@ -56,52 +56,49 @@ const ComparisonChart = ({ results }) => {
     },
   };
 
-  // Pie Chart Data (B2B Breakdown)
-  const pieChartData = {
-    labels: [
-      'Net Income',
-      'ZUS',
-      'Tax',
-      'Business Costs',
-      'Lost Revenue',
-      'Company Benefits',
-      'Custom Benefits',
-    ],
+  // Stacked Bar Chart Data for B2B Breakdown
+  const b2bStackedBarData = {
+    labels: ['B2B Breakdown'],
     datasets: [
       {
-        data: [
-          b2b_results.roczne_netto_na_reke,
-          b2b_results.roczny_zus,
-          b2b_results.roczny_podatek,
-          b2b_results.roczne_koszty_firmowe,
-          b2b_results.roczny_utracony_przychod,
-          b2b_results.roczna_wartosc_benefitow_od_firmy,
-          b2b_results.roczna_wartosc_wlasnych_korzysci,
-        ],
-        backgroundColor: [
-          '#4CAF50', // Green for Net Income
-          '#FFC107', // Amber for ZUS
-          '#FF9800', // Orange for Tax
-          '#9E9E9E', // Grey for Business Costs
-          '#F44336', // Red for Lost Revenue
-          '#2196F3', // Blue for Company Benefits
-          '#9C27B0', // Purple for Custom Benefits
-        ],
-        borderColor: [
-          '#ffffff',
-          '#ffffff',
-          '#ffffff',
-          '#ffffff',
-          '#ffffff',
-          '#ffffff',
-          '#ffffff',
-        ],
-        borderWidth: 1,
+        label: 'Net Income',
+        data: [b2b_results.roczne_netto_na_reke],
+        backgroundColor: '#4CAF50', // Green
+      },
+      {
+        label: 'ZUS',
+        data: [b2b_results.roczny_zus],
+        backgroundColor: '#FFC107', // Amber
+      },
+      {
+        label: 'Tax',
+        data: [b2b_results.roczny_podatek],
+        backgroundColor: '#FF9800', // Orange
+      },
+      {
+        label: 'Business Costs',
+        data: [b2b_results.roczne_koszty_firmowe],
+        backgroundColor: '#9E9E9E', // Grey
+      },
+      {
+        label: 'Lost Revenue',
+        data: [b2b_results.roczny_utracony_przychod],
+        backgroundColor: '#F44336', // Red
+      },
+      {
+        label: 'Company Benefits',
+        data: [b2b_results.roczna_wartosc_benefitow_od_firmy],
+        backgroundColor: '#2196F3', // Blue
+      },
+      {
+        label: 'Custom Benefits',
+        data: [b2b_results.roczna_wartosc_wlasnych_korzysci],
+        backgroundColor: '#9C27B0', // Purple
       },
     ],
   };
 
-  const pieChartOptions = {
+  const b2bStackedBarOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -112,16 +109,80 @@ const ComparisonChart = ({ results }) => {
         text: 'B2B Annual Value Breakdown',
       },
     },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  };
+
+  // Stacked Bar Chart Data for UoP Breakdown
+  const uopStackedBarData = {
+    labels: ['UoP Breakdown'],
+    datasets: [
+      {
+        label: 'Net Income',
+        data: [uop_results.roczne_netto_na_reke],
+        backgroundColor: '#4CAF50', // Green
+      },
+      {
+        label: 'ZUS',
+        data: [uop_results.roczny_zus],
+        backgroundColor: '#FFC107', // Amber
+      },
+      {
+        label: 'Tax',
+        data: [uop_results.roczny_podatek],
+        backgroundColor: '#FF9800', // Orange
+      },
+      {
+        label: 'Benefits',
+        data: [uop_results.roczna_wartosc_benefitow],
+        backgroundColor: '#2196F3', // Blue
+      },
+      {
+        label: 'Paid Days Off',
+        data: [uop_results.roczna_wartosc_platnych_dni_wolnych],
+        backgroundColor: '#9C27B0', // Purple
+      },
+    ],
+  };
+
+  const uopStackedBarOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'UoP Annual Value Breakdown',
+      },
+    },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
   };
 
   return (
-    <div className="mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <div className="mt-10 p-6 bg-white rounded-lg shadow-lg" data-testid="comparison-chart-section">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <Bar data={barChartData} options={barChartOptions} />
         </div>
         <div>
-          <Pie data={pieChartData} options={pieChartOptions} />
+          <Bar data={b2bStackedBarData} options={b2bStackedBarOptions} />
+        </div>
+        <div>
+          <Bar data={uopStackedBarData} options={uopStackedBarOptions} />
         </div>
       </div>
     </div>

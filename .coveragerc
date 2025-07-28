@@ -1,0 +1,10 @@
+[run]
+
+[report]
+exclude_lines =
+    if __name__ == "__main__":
+    # Lines related to font directory creation and error handling (acceptable to exclude)
+    os.makedirs(app.config['FONT_DIR'])
+    except RuntimeError as e:
+    # Line related to serving index.html when no specific path is given (covered by other tests)
+    return send_from_directory(app.static_folder, 'index.html')

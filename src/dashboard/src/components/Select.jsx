@@ -11,7 +11,7 @@ const Select = ({ label, id, value, onChange, options, ...props }) => {
         name={id}
         value={value}
         onChange={onChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200"
         {...props}
       >
         {options.map((option) => (

@@ -8,9 +8,10 @@ module.exports = defineConfig({
   },
   testDir: './tests/e2e',
   webServer: {
-    command: 'python src/app.py & npm run dev --prefix src/dashboard',
+    command: 'npm run dev -- --port 5173',
     url: 'http://localhost:5173',
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
   },
   use: {
     baseURL: 'http://localhost:5173',

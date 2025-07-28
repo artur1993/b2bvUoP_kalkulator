@@ -2,3 +2,4 @@ Flask
 pytest-cov
 openpyxl
 fpdf2
+pytest-flask

@@ -17,6 +17,7 @@ Every project must have this exact structure:
 ### Phase 2: Implementation PreparationAfter user approves plan:
 1. **Mark current task**: Add "â†’ CURRENT" marker in `.ai/tasks.md`2. **Update context**: Record all relevant decisions in `.ai/context.md`3. **Set session state**: Update `.ai/session-state.md` with environment info4. **Begin implementation**: Start with marked task
 ### Phase 3: Code Implementation & TestingFor each implementation step:
+**0. Update Session State**: Before any action, update `.ai/session-state.md` using the log entry template. This is the most critical step for ensuring continuity.
 1. **Write/modify code**: Implement the planned functionality2. **Run existing tests**: Ensure no regressions3. **Fix any failures**: Address test failures immediately4. **Add new tests**: Create tests for new functionality   - Unit tests for individual functions/methods   - Integration tests for component interactions   - E2E tests for complete user workflows5. **Verify test coverage**: Ensure comprehensive coverage6. **Test in real environment**: Run the actual application7. **User verification**: If user interface changes, ask user to verify8. **Prepare commit**: Create detailed commit message
 ### Phase 4: Finalization & ContinuationAfter successful implementation:
 1. **Create commit**: Use Conventional Commits format:   ```   <type>(<scope>): <description>      - Detailed explanation of changes made   - Why the change was necessary   - Important implementation notes   - Impact on other components   ```
@@ -72,11 +73,43 @@ docs(api): update endpoint documentation
 - Add examples for all REST endpoints- Document request/response formats- Include authentication requirements```
 ---
 ## Session Recovery Protocol
-### On Starting New Session:1. **Check `.ai/context.md`**: Understand project purpose and background2. **Read `.ai/tasks.md`**: Find current task marked with "â†’ CURRENT"3. **Verify environment**: Run tests to ensure system is working4. **Check session state**: Review `.ai/session-state.md` for last known state5. **Continue from checkpoint**: Resume work from exact interruption point
-### Session State Tracking:Always update `.ai/session-state.md` with:- Current task being worked on- Files being modified- Environment configuration- Any temporary states or variables- Next steps to be performed
+### On Starting New Session:1. **Check `.ai/context.md`**: Understand project purpose and background2. **Read `.ai/tasks.md`**: Find current task marked with "â†’ CURRENT"3. **Verify environment**: Run tests to ensure system is working4. **Check session state**: Review `.ai/session-state.md`. The last entry will indicate the exact action that was interrupted. Verify if the action completed and proceed from there.5. **Continue from checkpoint**: Resume work from exact interruption point
+### Session State Tracking:
+The `.ai/session-state.md` file is a critical working log. It **must be updated before every significant action** (e.g., reading a file, running a command, writing a file) to ensure full recoverability.
+
+**Log Entry Template:**
+Use the following Markdown format for every entry:
+
+```markdown
+# Session State
+
+- **Current Task**: [ID and brief description of the main task from tasks.md]
+- **Current Step**: [Description of the specific sub-step being performed]
+- **Action**: [The exact command or file operation about to be executed]
+- **Expected Outcome**: [What is expected to happen after the action]
+- **Next**: [The plan for the step immediately following this one]
+```
+
+After a task is fully completed, this file should be cleared and reset for the next task.
 ---
 ## Error Handling & Recovery
-### When Tests Fail:1. **Stop immediately**: Do not proceed with failed tests2. **Analyze failure**: Understand root cause3. **Fix the issue**: Address the actual problem, don't just make tests pass4. **Re-run tests**: Ensure fix works5. **Update documentation**: If needed
+### When Tests Fail:
+1. **Stop immediately**: Do not proceed with failed tests.
+2. **Analyze failure**: Understand the root cause.
+3. **Attempt to Fix (Max 3 Tries)**:
+    - Attempt to fix the issue and re-run the failing test.
+    - If the test fails again, attempt a different solution (up to a maximum of three distinct attempts).
+4. **Escalate After 3 Failures**:
+    - If the test still fails after three attempts, **STOP** all further attempts.
+    - Prepare a detailed report for the user in the form of a prompt suitable for an external LLM.
+    - The report must include:
+        - **Context**: The part of the application and functionality being tested.
+        - **Test Goal**: The expected outcome of the test.
+        - **Error Details**: The specific error message and observed behavior.
+        - **Actions Taken**: A summary of the three unsuccessful fix attempts.
+        - **Core Question**: A precise question asking for alternative solutions or insights.
+    - Present this report to the user and wait for their explicit instructions before proceeding.
+5. **On Success**: If a fix is successful, ensure all other tests still pass and update documentation if needed.
 ### When Build Fails:1. **Check dependencies**: Ensure all requirements are met2. **Verify configuration**: Check environment settings3. **Fix step by step**: Address one issue at a time4. **Test incrementally**: Verify each fix
 ### When Code Review Issues:1. **Address all feedback**: Fix every noted issue2. **Update tests**: If behavior changes3. **Update documentation**: If interfaces change4. **Re-submit for review**
 ---

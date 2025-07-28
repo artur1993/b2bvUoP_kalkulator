@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import CalculatorForm from './components/CalculatorForm';
 import ResultsDisplay from './components/ResultsDisplay';
 import ComparisonChart from './components/ComparisonChart';
+import Header from './components/Header';
+import SkeletonLoader from './components/SkeletonLoader';
+import Alert from './components/Alert';
 import { calculateResults, exportToExcel, exportToPdf } from './services/api';
 import { saveAs } from 'file-saver';
 
@@ -116,28 +119,30 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
-      <h1 className="text-4xl font-bold text-gray-800 mb-8">B2B vs UoP Calculator 2025</h1>
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-6xl">
-        <CalculatorForm
-          b2bData={b2bData}
-          uopData={uopData}
-          handleB2bChange={handleB2bChange}
-          handleUopChange={handleUopChange}
-          handleCalculate={handleCalculate}
-          loading={loading}
-        />
+    <div className="min-h-screen flex flex-col items-center bg-background">
+      <Header />
+      <main className="container mx-auto p-4 md:p-8 w-full max-w-7xl">
+        <div className="bg-surface p-6 md:p-8 rounded-xl shadow-lg">
+          <CalculatorForm
+            b2bData={b2bData}
+            uopData={uopData}
+            handleB2bChange={handleB2bChange}
+            handleUopChange={handleUopChange}
+            handleCalculate={handleCalculate}
+            loading={loading}
+          />
 
-        {loading && <p className="text-center text-blue-500 mt-4">Calculating...</p>}
-        {error && <p className="text-center text-red-500 mt-4">{error}</p>}
+          {loading && <SkeletonLoader />}
+          {error && <Alert message={error} type="error" />}
 
-        {results && (
-          <div className="mt-8">
-            <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} />
-            <ComparisonChart results={results} />
-          </div>
-        )}
-      </div>
+          {!loading && results && (
+            <div className="mt-8">
+              <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} />
+              <ComparisonChart results={results} />
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }

@@ -60,6 +60,12 @@ To run the backend unit and integration tests (Python):
 ```bash
 pytest
 ```
+**Note on Test Naming Convention:**
+Backend tests now follow a naming convention to classify their purpose:
+- `_positive`: Tests verifying expected, successful behavior.
+- `_negative`: Tests verifying error handling or unexpected/invalid input.
+- `_neutral`: Tests with a mixed purpose or where classification is not straightforward.
+
 
 To run the end-to-end (E2E) tests (JavaScript/Playwright):
 ```bash
@@ -68,13 +74,11 @@ npm run test:e2e
 
 ### Code Coverage
 
-To generate code coverage reports:
-
-For Python backend:
+To generate code coverage reports for the backend (Python) with detailed classification:
 ```bash
-pytest --cov=src tests/unit tests/integration
+./scripts/backend_cov.sh
 ```
-This will display a summary in the console.
+This script will display coverage for unit tests, integration tests, and combined tests, along with a summary of positive, negative, and neutral test counts.
 
 For JavaScript frontend:
 ```bash
