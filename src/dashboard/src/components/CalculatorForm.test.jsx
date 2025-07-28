@@ -114,36 +114,36 @@ describe('CalculatorForm', () => {
     renderComponent();
 
     // Check for B2B fields
-    expect(screen.getByLabelText(/Monthly Invoice \(PLN\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Monthly Business Costs \(PLN\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/ZUS Type/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Taxation Form/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Youth Tax Relief \(Ulga dla Młodych\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Annual Vacation Days \(unpaid\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Annual Sick Days \(unpaid\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Months of Stoppage\/No Projects/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Custom Annual Benefits Value \(PLN\)/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Monthly Invoice (PLN)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Monthly Business Costs (PLN)')).toBeInTheDocument();
+    expect(screen.getByLabelText('ZUS Type')).toBeInTheDocument();
+    expect(screen.getByLabelText('Taxation Form')).toBeInTheDocument();
+    expect(screen.getByLabelText('Youth Tax Relief')).toBeInTheDocument();
+    expect(screen.getByLabelText('Annual Vacation Days (unpaid)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Annual Sick Days (unpaid)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Months of Stoppage/No Projects')).toBeInTheDocument();
+    expect(screen.getByLabelText('Custom Annual Benefits Value (PLN)')).toBeInTheDocument();
 
     // Check for UoP fields
-    expect(screen.getByLabelText(/Gross Monthly Salary \(PLN\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Annual Tax-Deductible Costs \(PLN\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Youth Tax Relief \(Ulga dla Młodych\)/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Opieka Medyczna/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Karta Sportowa/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Gross Monthly Salary (PLN)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Annual Tax-Deductible Costs (PLN)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Youth Tax Relief')).toBeInTheDocument();
+    expect(screen.getByLabelText('Medical Care')).toBeInTheDocument();
+    expect(screen.getByLabelText('Sport Card')).toBeInTheDocument();
 
     // Check for buttons
-    expect(screen.getByRole('button', { name: /Calculate Comparison/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Calculate Comparison' })).toBeInTheDocument();
   });
 
   it('updates B2B input fields correctly', async () => {
     renderComponent();
-    const fakturaInput = screen.getByLabelText(/Monthly Invoice \(PLN\)/i);
+    const fakturaInput = screen.getByLabelText('Monthly Invoice (PLN)');
     fireEvent.change(fakturaInput, { target: { name: 'faktura_miesieczna', value: '15000' } });
     await waitFor(() => {
       expect(fakturaInput).toHaveValue(15000);
     });
 
-    const costsInput = screen.getByLabelText(/Monthly Business Costs \(PLN\)/i);
+    const costsInput = screen.getByLabelText('Monthly Business Costs (PLN)');
     fireEvent.change(costsInput, { target: { name: 'koszty_firmowe_miesieczne', value: '500' } });
     await waitFor(() => {
       expect(costsInput).toHaveValue(500);
@@ -152,13 +152,13 @@ describe('CalculatorForm', () => {
 
   it('updates UoP input fields correctly', async () => {
     renderComponent();
-    const wynagrodzenieInput = screen.getByLabelText(/Gross Monthly Salary \(PLN\)/i);
+    const wynagrodzenieInput = screen.getByLabelText('Gross Monthly Salary (PLN)');
     fireEvent.change(wynagrodzenieInput, { target: { name: 'wynagrodzenie_brutto', value: '8000' } });
     await waitFor(() => {
       expect(wynagrodzenieInput).toHaveValue(8000);
     });
 
-    const taxDeductibleCostsInput = screen.getByLabelText(/Annual Tax-Deductible Costs \(PLN\)/i);
+    const taxDeductibleCostsInput = screen.getByLabelText('Annual Tax-Deductible Costs (PLN)');
     fireEvent.change(taxDeductibleCostsInput, { target: { name: 'koszty_uzyskania_przychodu', value: '250' } });
     await waitFor(() => {
       expect(taxDeductibleCostsInput).toHaveValue(250);
@@ -167,7 +167,7 @@ describe('CalculatorForm', () => {
 
   it('calls onCalculate on form submission', () => {
     renderComponent();
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     expect(mockOnCalculate).toHaveBeenCalledTimes(1);
   });
 
@@ -222,13 +222,13 @@ describe('CalculatorForm', () => {
 
   it('updates UoP selected benefits correctly', async () => {
     renderComponent();
-    const medicalCareCheckbox = screen.getByLabelText('Opieka Medyczna');
+    const medicalCareCheckbox = screen.getByLabelText('Medical Care');
     fireEvent.click(medicalCareCheckbox);
     await waitFor(() => {
       expect(medicalCareCheckbox).toBeChecked();
     });
 
-    const sportCardCheckbox = screen.getByLabelText('Karta Sportowa');
+    const sportCardCheckbox = screen.getByLabelText('Sport Card');
     fireEvent.click(sportCardCheckbox);
     await waitFor(() => {
       expect(sportCardCheckbox).toBeChecked();

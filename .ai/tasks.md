@@ -109,3 +109,26 @@
   - [x] Update `README.md` to reflect the new test naming conventions and the new coverage scripts.
 - [x] **Task 22: Manual Application Verification**
   - [x] Successfully launched and manually verified the application's functionality.
+
+## Phase 10: Internationalization (i18n)
+
+- [x] **Task 23: Install i18n Dependencies**
+  - [x] Installed `i18next`, `react-i18next`, `i18next-browser-languagedetector`.
+- [x] **Task 24: Create Translation File Structure**
+  - [x] Created `src/locales/en/` and `src/locales/pl/` directories.
+  - [x] Created `src/locales/en/translation.json` with English translations.
+  - [x] Created `src/locales/pl/translation.json` with Polish translations.
+- [x] **Task 25: Configure and Integrate i18next**
+  - [x] Created `src/i18n.js` configuration file.
+  - [x] Updated `src/main.jsx` to import `i18n.js`.
+  - [x] Fixed `setupTests.js` to correctly initialize i18n for tests (using `import` instead of `require`).
+- [x] **Task 26: Implement Language Switcher and Refactor Components**
+  - [x] Created `src/components/LanguageSwitcher.jsx` component.
+  - [x] Refactored `src/components/Header.jsx` to use `useTranslation` and include `LanguageSwitcher`.
+  - [x] Refactored `src/components/CalculatorForm.jsx` to use `useTranslation` and translated texts.
+  - [x] Refactored `src/components/ResultsDisplay.jsx` to use `useTranslation` and translated texts.
+  - [x] Refactored `src/components/ComparisonChart.jsx` to use `useTranslation` and translated texts.
+- [x] **Task 27: Create i18n Component Tests**
+  - [x] Created `src/components/Header.test.jsx` for i18n component testing.
+  - [x] Fixed `CalculatorForm.test.jsx` to use translated texts in assertions.
+  - [x] Fixed `App.test.jsx` to use translated texts in assertions.

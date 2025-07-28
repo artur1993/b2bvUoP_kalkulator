@@ -1,95 +1,98 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Input from './Input';
 import Select from './Select';
 import Checkbox from './Checkbox';
 
 const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleCalculate, loading }) => {
+  const { t } = useTranslation();
+
   const zusOptions = [
-    { value: 'mala_firma', label: 'Mała firma (preferencyjny ZUS)' },
-    { value: 'duza_firma', label: 'Duża firma (pełny ZUS)' },
+    { value: 'mala_firma', label: t('form.zus_preferential') },
+    { value: 'duza_firma', label: t('form.zus_full') },
   ];
 
   const taxFormOptions = [
-    { value: 'ryczalt_IT', label: 'Ryczałt IT (12%)' },
-    { value: 'liniowy', label: 'Liniowy (19%)' },
-    { value: 'skala', label: 'Skala Podatkowa' },
-    { value: 'ip_box', label: 'IP Box (5%)' },
+    { value: 'ryczalt_IT', label: t('form.tax_flat_it') },
+    { value: 'liniowy', label: t('form.tax_linear') },
+    { value: 'skala', label: t('form.tax_scale') },
+    { value: 'ip_box', label: t('form.tax_ip_box') },
   ];
 
   const benefitOptions = [
-    { value: 'opieka_medyczna', label: 'Opieka Medyczna' },
-    { value: 'karta_sportowa', label: 'Karta Sportowa' },
-    { value: 'ubezpieczenie_na_zycie', label: 'Ubezpieczenie na Życie' },
-    { value: 'szkolenia', label: 'Szkolenia' },
-    { value: 'ppk', label: 'PPK' },
+    { value: 'opieka_medyczna', label: t('form.benefit_medical') },
+    { value: 'karta_sportowa', label: t('form.benefit_sport') },
+    { value: 'ubezpieczenie_na_zycie', label: t('form.benefit_life') },
+    { value: 'szkolenia', label: t('form.benefit_training') },
+    { value: 'ppk', label: t('form.benefit_ppk') },
   ];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* B2B Section */}
       <div className="bg-gray-50 p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">B2B Contract</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">{t('form.b2b_title')}</h2>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">Dane Finansowe</legend>
+          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
           <Input
-            label="Monthly Invoice (PLN)"
+            label={t('form.monthly_invoice')}
             id="faktura_miesieczna"
             type="number"
             value={b2bData.faktura_miesieczna}
             onChange={handleB2bChange}
           />
           <Input
-            label="Monthly Business Costs (PLN)"
+            label={t('form.business_costs')}
             id="koszty_firmowe_miesieczne"
             type="number"
             value={b2bData.koszty_firmowe_miesieczne}
             onChange={handleB2bChange}
           />
           <Select
-            label="ZUS Type"
+            label={t('form.zus_type')}
             id="zus_rodzaj"
             value={b2bData.zus_rodzaj}
             onChange={handleB2bChange}
             options={zusOptions}
           />
           <Checkbox
-            label="Voluntary Sick Leave (ZUS Chorobowe)"
+            label={t('form.voluntary_sick_leave')}
             id="zus_chorobowe"
             checked={b2bData.zus_chorobowe}
             onChange={handleB2bChange}
           />
           <Select
-            label="Taxation Form"
+            label={t('form.tax_form')}
             id="forma_opodatkowania"
             value={b2bData.forma_opodatkowania}
             onChange={handleB2bChange}
             options={taxFormOptions}
           />
           <Checkbox
-            label="Youth Tax Relief (Ulga dla Młodych)"
+            label={t('form.youth_relief')}
             id="ulga_dla_mlodych"
             checked={b2bData.ulga_dla_mlodych}
             onChange={handleB2bChange}
           />
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">Czas Wolny i Przestoje</legend>
+          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>
           <Input
-            label="Annual Vacation Days (unpaid)"
+            label={t('form.unpaid_vacation')}
             id="urlop_dni"
             type="number"
             value={b2bData.urlop_dni}
             onChange={handleB2bChange}
           />
           <Input
-            label="Annual Sick Days (unpaid)"
+            label={t('form.unpaid_sick')}
             id="chorobowe_dni"
             type="number"
             value={b2bData.chorobowe_dni}
             onChange={handleB2bChange}
           />
           <Input
-            label="Months of Stoppage/No Projects"
+            label={t('form.stoppage_months')}
             id="przestoje_miesiace"
             type="number"
             value={b2bData.przestoje_miesiace}
@@ -97,25 +100,25 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
           />
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">Benefity</legend>
+          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.benefits')}</legend>
           <Input
-            label="Custom Annual Benefits Value (PLN)"
+            label={t('form.custom_benefits_value')}
             id="customBenefits"
             type="number"
             value={b2bData.customBenefits}
             onChange={handleB2bChange}
           />
 
-          <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-4">Company Provided Benefits</h3>
+          <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-4">{t('form.company_benefits')}</h3>
           <Checkbox
-            label="Paid Vacation Days (from company)"
+            label={t('form.paid_vacation')}
             id="companyBenefits.paidVacationDays.enabled"
             checked={b2bData.companyBenefits.paidVacationDays.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.paidVacationDays.enabled && (
             <Input
-              label="Number of Paid Vacation Days"
+              label={t('form.paid_vacation').replace(' (from company)', '') + ' Days'}
               id="companyBenefits.paidVacationDays.days"
               type="number"
               value={b2bData.companyBenefits.paidVacationDays.days}
@@ -124,14 +127,14 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label="Paid Sick Days (from company)"
+            label={t('form.paid_sick')}
             id="companyBenefits.paidSickDays.enabled"
             checked={b2bData.companyBenefits.paidSickDays.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.paidSickDays.enabled && (
             <Input
-              label="Number of Paid Sick Days"
+              label={t('form.paid_sick').replace(' (from company)', '') + ' Days'}
               id="companyBenefits.paidSickDays.days"
               type="number"
               value={b2bData.companyBenefits.paidSickDays.days}
@@ -140,14 +143,14 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label="Medical Care (from company)"
+            label={t('form.medical_care')}
             id="companyBenefits.medicalCare.enabled"
             checked={b2bData.companyBenefits.medicalCare.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.medicalCare.enabled && (
             <Input
-              label="Medical Care Value (PLN/year)"
+              label={t('form.medical_care').replace(' (from company)', '') + ' Value (PLN/year)'}
               id="companyBenefits.medicalCare.value"
               type="number"
               value={b2bData.companyBenefits.medicalCare.value}
@@ -156,14 +159,14 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label="Life Insurance (from company)"
+            label={t('form.life_insurance')}
             id="companyBenefits.lifeInsurance.enabled"
             checked={b2bData.companyBenefits.lifeInsurance.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.lifeInsurance.enabled && (
             <Input
-              label="Life Insurance Value (PLN/year)"
+              label={t('form.life_insurance').replace(' (from company)', '') + ' Value (PLN/year)'}
               id="companyBenefits.lifeInsurance.value"
               type="number"
               value={b2bData.companyBenefits.lifeInsurance.value}
@@ -172,14 +175,14 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label="Sport Card (from company)"
+            label={t('form.sport_card')}
             id="companyBenefits.sportCard.enabled"
             checked={b2bData.companyBenefits.sportCard.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.sportCard.enabled && (
             <Input
-              label="Sport Card Value (PLN/year)"
+              label={t('form.sport_card').replace(' (from company)', '') + ' Value (PLN/year)'}
               id="companyBenefits.sportCard.value"
               type="number"
               value={b2bData.companyBenefits.sportCard.value}
@@ -188,14 +191,14 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label="Training Budget (from company)"
+            label={t('form.training_budget')}
             id="companyBenefits.trainingBudget.enabled"
             checked={b2bData.companyBenefits.trainingBudget.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.trainingBudget.enabled && (
             <Input
-              label="Training Budget Value (PLN/year)"
+              label={t('form.training_budget').replace(' (from company)', '') + ' Value (PLN/year)'}
               id="companyBenefits.trainingBudget.value"
               type="number"
               value={b2bData.companyBenefits.trainingBudget.value}
@@ -204,14 +207,14 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label="Other Benefits (from company)"
+            label={t('form.other_benefits')}
             id="companyBenefits.otherBenefits.enabled"
             checked={b2bData.companyBenefits.otherBenefits.enabled}
             onChange={handleB2bChange}
           />
           {b2bData.companyBenefits.otherBenefits.enabled && (
             <Input
-              label="Other Benefits Value (PLN/year)"
+              label={t('form.other_benefits').replace(' (from company)', '') + ' Value (PLN/year)'}
               id="companyBenefits.otherBenefits.value"
               type="number"
               value={b2bData.companyBenefits.otherBenefits.value}
@@ -224,25 +227,25 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
 
       {/* UoP Section */}
       <div className="bg-gray-50 p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Employment Contract (UoP)</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">{t('form.uop_title')}</h2>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">Dane Finansowe</legend>
+          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
           <Input
-            label="Gross Monthly Salary (PLN)"
+            label={t('form.gross_salary')}
             id="wynagrodzenie_brutto"
             type="number"
             value={uopData.wynagrodzenie_brutto}
             onChange={handleUopChange}
           />
           <Input
-            label="Annual Tax-Deductible Costs (PLN)"
+            label={t('form.tax_deductible_costs')}
             id="koszty_uzyskania_przychodu"
             type="number"
             value={uopData.koszty_uzyskania_przychodu}
             onChange={handleUopChange}
           />
           <Checkbox
-            label="Youth Tax Relief (Ulga dla Młodych)"
+            label={t('form.youth_relief')}
             id="ulga_dla_mlodych"
             checked={uopData.ulga_dla_mlodych}
             onChange={handleUopChange}
@@ -250,8 +253,8 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
         </fieldset>
 
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">Benefity</legend>
-          <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-4">Selected Benefits</h3>
+          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.benefits')}</legend>
+          <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-4">{t('form.selected_benefits')}</h3>
           {benefitOptions.map((option) => (
             <Checkbox
               key={option.value}
@@ -272,7 +275,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
           disabled={loading}
           className="w-full md:w-auto bg-primary hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
         >
-          {loading ? 'Calculating...' : 'Calculate Comparison'}
+          {loading ? 'Calculating...' : t('form.calculate_button')}
         </button>
       </div>
     </div>

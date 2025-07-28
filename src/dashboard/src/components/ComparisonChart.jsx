@@ -10,6 +10,7 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
+import { useTranslation } from 'react-i18next';
 
 ChartJS.register(
   CategoryScale,
@@ -22,21 +23,23 @@ ChartJS.register(
 );
 
 const ComparisonChart = ({ results }) => {
+  const { t } = useTranslation();
+
   if (!results) return null;
 
   const { b2b_results, uop_results } = results;
 
   // Bar Chart Data
   const barChartData = {
-    labels: ['Total Annual Value'],
+    labels: [t('charts.total_comparison_title')],
     datasets: [
       {
-        label: 'UoP',
+        label: t('form.uop_title'),
         data: [uop_results.calkowita_roczna_wartosc],
         backgroundColor: '#4fd1c5', // secondary
       },
       {
-        label: 'B2B',
+        label: t('form.b2b_title'),
         data: [b2b_results.calkowita_roczna_wartosc],
         backgroundColor: '#2c5282', // primary
       },
@@ -51,47 +54,47 @@ const ComparisonChart = ({ results }) => {
       },
       title: {
         display: true,
-        text: 'Total Annual Value Comparison',
+        text: t('charts.total_comparison_title'),
       },
     },
   };
 
   // Stacked Bar Chart Data for B2B Breakdown
   const b2bStackedBarData = {
-    labels: ['B2B Breakdown'],
+    labels: [t('charts.b2b_breakdown_title')],
     datasets: [
       {
-        label: 'Net Income',
+        label: t('charts.net_income'),
         data: [b2b_results.roczne_netto_na_reke],
         backgroundColor: '#4CAF50', // Green
       },
       {
-        label: 'ZUS',
+        label: t('charts.zus'),
         data: [b2b_results.roczny_zus],
         backgroundColor: '#FFC107', // Amber
       },
       {
-        label: 'Tax',
+        label: t('charts.tax'),
         data: [b2b_results.roczny_podatek],
         backgroundColor: '#FF9800', // Orange
       },
       {
-        label: 'Business Costs',
+        label: t('charts.business_costs'),
         data: [b2b_results.roczne_koszty_firmowe],
         backgroundColor: '#9E9E9E', // Grey
       },
       {
-        label: 'Lost Revenue',
+        label: t('charts.lost_revenue'),
         data: [b2b_results.roczny_utracony_przychod],
         backgroundColor: '#F44336', // Red
       },
       {
-        label: 'Company Benefits',
+        label: t('charts.company_benefits'),
         data: [b2b_results.roczna_wartosc_benefitow_od_firmy],
         backgroundColor: '#2196F3', // Blue
       },
       {
-        label: 'Custom Benefits',
+        label: t('charts.custom_benefits'),
         data: [b2b_results.roczna_wartosc_wlasnych_korzysci],
         backgroundColor: '#9C27B0', // Purple
       },
@@ -106,7 +109,7 @@ const ComparisonChart = ({ results }) => {
       },
       title: {
         display: true,
-        text: 'B2B Annual Value Breakdown',
+        text: t('charts.b2b_breakdown_title'),
       },
     },
     scales: {
@@ -121,30 +124,30 @@ const ComparisonChart = ({ results }) => {
 
   // Stacked Bar Chart Data for UoP Breakdown
   const uopStackedBarData = {
-    labels: ['UoP Breakdown'],
+    labels: [t('charts.uop_breakdown_title')],
     datasets: [
       {
-        label: 'Net Income',
+        label: t('charts.net_income'),
         data: [uop_results.roczne_netto_na_reke],
         backgroundColor: '#4CAF50', // Green
       },
       {
-        label: 'ZUS',
+        label: t('charts.zus'),
         data: [uop_results.roczny_zus],
         backgroundColor: '#FFC107', // Amber
       },
       {
-        label: 'Tax',
+        label: t('charts.tax'),
         data: [uop_results.roczny_podatek],
         backgroundColor: '#FF9800', // Orange
       },
       {
-        label: 'Benefits',
+        label: t('charts.benefits'),
         data: [uop_results.roczna_wartosc_benefitow],
         backgroundColor: '#2196F3', // Blue
       },
       {
-        label: 'Paid Days Off',
+        label: t('charts.paid_days_off'),
         data: [uop_results.roczna_wartosc_platnych_dni_wolnych],
         backgroundColor: '#9C27B0', // Purple
       },
@@ -159,7 +162,7 @@ const ComparisonChart = ({ results }) => {
       },
       title: {
         display: true,
-        text: 'UoP Annual Value Breakdown',
+        text: t('charts.uop_breakdown_title'),
       },
     },
     scales: {

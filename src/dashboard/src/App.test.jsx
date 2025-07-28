@@ -49,22 +49,22 @@ describe('App', () => {
 
   it('renders CalculatorForm and Header initially', () => {
     render(<App />);
-    expect(screen.getByText(/B2B vs UoP Calculator/i)).toBeInTheDocument(); // From Header
-    expect(screen.getByText(/B2B Contract/i)).toBeInTheDocument(); // From CalculatorForm
+    expect(screen.getByText('B2B vs UoP Calculator 2025')).toBeInTheDocument(); // From Header
+    expect(screen.getByText('B2B Contract')).toBeInTheDocument(); // From CalculatorForm
   });
 
   it('calls calculateResults and displays results on form submission', async () => {
     render(<App />);
 
     // Simulate form submission
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
 
     // Expect calculateResults to be called
     expect(api.calculateResults).toHaveBeenCalledTimes(1);
 
     // Wait for results to be displayed
     await waitFor(() => {
-      expect(screen.getByText(/Total Annual Value/i)).toBeInTheDocument(); // From ResultsDisplay
+      expect(screen.getByText('Total Annual Value')).toBeInTheDocument(); // From ResultsDisplay
     });
   });
 
@@ -72,10 +72,10 @@ describe('App', () => {
     api.calculateResults.mockRejectedValue(new Error('API Error'));
     render(<App />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Failed to fetch results. Please try again./i)).toBeInTheDocument();
+      expect(screen.getByText('Failed to fetch results. Please try again.')).toBeInTheDocument();
     });
   });
 
@@ -83,14 +83,14 @@ describe('App', () => {
     render(<App />);
 
     // First, calculate results to enable export buttons
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     await waitFor(() => {
-      expect(screen.getByText(/Total Annual Value/i)).toBeInTheDocument();
+      expect(screen.getByText('Total Annual Value')).toBeInTheDocument();
     });
 
     // Wait for the button to appear before clicking
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Export to Excel/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Export to Excel' })).toBeInTheDocument();
     });
     fireEvent.click(screen.getByRole('button', { name: /Export to Excel/i }));
 
@@ -103,14 +103,14 @@ describe('App', () => {
     render(<App />);
 
     // First, calculate results to enable export buttons
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     await waitFor(() => {
-      expect(screen.getByText(/Total Annual Value/i)).toBeInTheDocument();
+      expect(screen.getByText('Total Annual Value')).toBeInTheDocument();
     });
 
     // Wait for the button to appear before clicking
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Export to PDF/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Export to PDF' })).toBeInTheDocument();
     });
     fireEvent.click(screen.getByRole('button', { name: /Export to PDF/i }));
 
@@ -121,7 +121,7 @@ describe('App', () => {
 
   it('handles B2B input changes correctly', async () => {
     render(<App />);
-    const fakturaInput = screen.getByLabelText(/Monthly Invoice \(PLN\)/i);
+    const fakturaInput = screen.getByLabelText('Monthly Invoice (PLN)');
     fireEvent.change(fakturaInput, { target: { name: 'faktura_miesieczna', value: '15000' } });
     await waitFor(() => {
       expect(fakturaInput).toHaveValue(15000);
@@ -130,7 +130,7 @@ describe('App', () => {
 
   it('handles UoP input changes correctly', async () => {
     render(<App />);
-    const wynagrodzenieInput = screen.getByLabelText(/Gross Monthly Salary \(PLN\)/i);
+    const wynagrodzenieInput = screen.getByLabelText('Gross Monthly Salary (PLN)');
     fireEvent.change(wynagrodzenieInput, { target: { name: 'wynagrodzenie_brutto', value: '9000' } });
     await waitFor(() => {
       expect(wynagrodzenieInput).toHaveValue(9000);
@@ -139,13 +139,13 @@ describe('App', () => {
 
   it('toggles company benefits and updates values correctly', async () => {
     render(<App />);
-    const paidVacationCheckbox = screen.getByLabelText(/Paid Vacation Days \(from company\)/i);
+    const paidVacationCheckbox = screen.getByLabelText('Paid Vacation Days (from company)');
     fireEvent.click(paidVacationCheckbox);
     await waitFor(() => {
       expect(paidVacationCheckbox).toBeChecked();
     });
 
-    const vacationDaysInput = screen.getByLabelText(/Number of Paid Vacation Days/i);
+    const vacationDaysInput = screen.getByLabelText('Number of Paid Vacation Days');
     fireEvent.change(vacationDaysInput, { target: { name: 'companyBenefits.paidVacationDays.days', value: '5' } });
     await waitFor(() => {
       expect(vacationDaysInput).toHaveValue(5);
@@ -154,7 +154,7 @@ describe('App', () => {
 
   it('adds and removes UoP selected benefits correctly', async () => {
     render(<App />);
-    const medicalCareCheckbox = screen.getByLabelText(/Opieka Medyczna/i);
+    const medicalCareCheckbox = screen.getByLabelText('Medical Care');
     fireEvent.click(medicalCareCheckbox);
     await waitFor(() => {
       expect(medicalCareCheckbox).toBeChecked();
@@ -173,7 +173,7 @@ describe('App', () => {
       break_even_faktura: 11000,
     }), 100))); // Simulate loading
     render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     expect(screen.getByTestId('skeleton-loader')).toBeInTheDocument();
     await waitFor(() => expect(screen.queryByTestId('skeleton-loader')).not.toBeInTheDocument());
   });
@@ -181,19 +181,19 @@ describe('App', () => {
   it('displays Alert when error is present', async () => {
     api.calculateResults.mockRejectedValue(new Error('Test Error'));
     render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
-      expect(screen.getByText(/Failed to fetch results. Please try again./i)).toBeInTheDocument();
+      expect(screen.getByText('Failed to fetch results. Please try again.')).toBeInTheDocument();
     });
   });
 
   it('displays alert if exportToExcel fails', async () => {
     api.exportToExcel.mockRejectedValue(new Error('Export Excel Error'));
     render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     await waitFor(() => {
-      expect(screen.getByText(/Total Annual Value/i)).toBeInTheDocument();
+      expect(screen.getByText('Total Annual Value')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByRole('button', { name: /Export to Excel/i }));
     await waitFor(() => {
@@ -204,9 +204,9 @@ describe('App', () => {
   it('displays alert if exportToPdf fails', async () => {
     api.exportToPdf.mockRejectedValue(new Error('Export PDF Error'));
     render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: /Calculate Comparison/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     await waitFor(() => {
-      expect(screen.getByText(/Total Annual Value/i)).toBeInTheDocument();
+      expect(screen.getByText('Total Annual Value')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByRole('button', { name: /Export to PDF/i }));
     await waitFor(() => {
