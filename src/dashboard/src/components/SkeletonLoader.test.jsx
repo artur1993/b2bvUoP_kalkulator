@@ -1,12 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import SkeletonLoader from './SkeletonLoader';
 import React from 'react';
+import { render, screen } from '@testing-library/react';
+import SkeletonLoader from './SkeletonLoader';
+import { describe, it, expect } from 'vitest';
 
 describe('SkeletonLoader', () => {
-  it('renders the skeleton loader component', () => {
+  it('renders the skeleton loader correctly', () => {
     render(<SkeletonLoader />);
-    expect(screen.getByTestId('skeleton-loader')).toBeInTheDocument();
-    expect(screen.getByTestId('skeleton-loader')).toHaveClass('animate-pulse');
+    const skeletonLoader = screen.getByTestId('skeleton-loader');
+    expect(skeletonLoader).toBeInTheDocument();
+    expect(skeletonLoader).toHaveClass('animate-pulse');
   });
 });

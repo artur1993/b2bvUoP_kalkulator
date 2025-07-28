@@ -1,7 +1,7 @@
 # Session State
 
-- **Current Task**: Zatwierdzenie zmian i18n w repozytorium Git
-- **Current Step**: Dodanie wszystkich zmienionych plików do stagingu
-- **Action**: run_shell_command z komendą 'git add .'
-- **Expected Outcome**: Wszystkie zmienione pliki zostaną dodane do stagingu
-- **Next**: Wykonanie commitu dla zmian i18n
+- **Current Task**: Weryfikacja poprawności działania aplikacji po zmianach i18n
+- **Current Step**: Ponowne uruchomienie testów frontendu
+- **Action**: run_shell_command z komendą 'npm test' w katalogu src/dashboard
+- **Expected Outcome**: Wszystkie testy frontendu przejdą pomyślnie
+- **Next**: Zakończenie zadania

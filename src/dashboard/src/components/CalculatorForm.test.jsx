@@ -173,19 +173,19 @@ describe('CalculatorForm', () => {
 
   // New tests for company benefits
   const companyBenefits = [
-    { label: 'Paid Vacation Days (from company)', id: 'paidVacationDays', type: 'days' },
-    { label: 'Paid Sick Days (from company)', id: 'paidSickDays', type: 'days' },
-    { label: 'Medical Care (from company)', id: 'medicalCare', type: 'value' },
-    { label: 'Life Insurance (from company)', id: 'lifeInsurance', type: 'value' },
-    { label: 'Sport Card (from company)', id: 'sportCard', type: 'value' },
-    { label: 'Training Budget (from company)', id: 'trainingBudget', type: 'value' },
-    { label: 'Other Benefits (from company)', id: 'otherBenefits', type: 'value' },
+    { label: 'Paid Vacation Days (from company)', id: 'paidVacationDays', type: 'days', testId: 'paid-vacation' },
+    { label: 'Paid Sick Days (from company)', id: 'paidSickDays', type: 'days', testId: 'paid-sick' },
+    { label: 'Medical Care (from company)', id: 'medicalCare', type: 'value', testId: 'medical-care' },
+    { label: 'Life Insurance (from company)', id: 'lifeInsurance', type: 'value', testId: 'life-insurance' },
+    { label: 'Sport Card (from company)', id: 'sportCard', type: 'value', testId: 'sport-card' },
+    { label: 'Training Budget (from company)', id: 'trainingBudget', type: 'value', testId: 'training-budget' },
+    { label: 'Other Benefits (from company)', id: 'otherBenefits', type: 'value', testId: 'other-benefits' },
   ];
 
   companyBenefits.forEach(benefit => {
     it(`toggles ${benefit.label} and updates its value correctly`, async () => {
       renderComponent();
-      const checkbox = screen.getByLabelText(benefit.label);
+      const checkbox = screen.getByTestId(`${benefit.testId}-checkbox`);
       
       // Enable the benefit
       fireEvent.click(checkbox);
@@ -194,17 +194,14 @@ describe('CalculatorForm', () => {
       });
 
       // Check if the input field appears and update its value
-      let inputLabel = '';
+      const input = screen.getByTestId(`${benefit.testId}-input`);
       let inputValue = '';
       if (benefit.type === 'days') {
-        inputLabel = `Number of ${benefit.label.replace(' (from company)', '')}`;
         inputValue = '10';
       } else {
-        inputLabel = `${benefit.label.replace(' (from company)', '')} Value (PLN/year)`;
         inputValue = '1000';
       }
       
-      const input = screen.getByLabelText(inputLabel);
       fireEvent.change(input, { target: { name: `companyBenefits.${benefit.id}.${benefit.type === 'days' ? 'days' : 'value'}`, value: inputValue } });
       await waitFor(() => {
         expect(input).toHaveValue(parseInt(inputValue));
@@ -216,7 +213,7 @@ describe('CalculatorForm', () => {
         expect(checkbox).not.toBeChecked();
       });
       // Ensure the input field is no longer in the document
-      expect(screen.queryByLabelText(inputLabel)).not.toBeInTheDocument();
+      expect(screen.queryByTestId(`${benefit.testId}-input`)).not.toBeInTheDocument();
     });
   });
 

@@ -31,7 +31,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* B2B Section */}
       <div className="bg-gray-50 p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">{t('form.b2b_title')}</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6" data-testid="b2b-form-title">{t('form.b2b_title')}</h2>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
           <Input
@@ -115,6 +115,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.paidVacationDays.enabled"
             checked={b2bData.companyBenefits.paidVacationDays.enabled}
             onChange={handleB2bChange}
+            data-testid="paid-vacation-checkbox"
           />
           {b2bData.companyBenefits.paidVacationDays.enabled && (
             <Input
@@ -124,6 +125,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.paidVacationDays.days}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="paid-vacation-input"
             />
           )}
           <Checkbox
@@ -131,6 +133,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.paidSickDays.enabled"
             checked={b2bData.companyBenefits.paidSickDays.enabled}
             onChange={handleB2bChange}
+            data-testid="paid-sick-checkbox"
           />
           {b2bData.companyBenefits.paidSickDays.enabled && (
             <Input
@@ -140,6 +143,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.paidSickDays.days}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="paid-sick-input"
             />
           )}
           <Checkbox
@@ -147,6 +151,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.medicalCare.enabled"
             checked={b2bData.companyBenefits.medicalCare.enabled}
             onChange={handleB2bChange}
+            data-testid="medical-care-checkbox"
           />
           {b2bData.companyBenefits.medicalCare.enabled && (
             <Input
@@ -156,6 +161,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.medicalCare.value}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="medical-care-input"
             />
           )}
           <Checkbox
@@ -163,6 +169,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.lifeInsurance.enabled"
             checked={b2bData.companyBenefits.lifeInsurance.enabled}
             onChange={handleB2bChange}
+            data-testid="life-insurance-checkbox"
           />
           {b2bData.companyBenefits.lifeInsurance.enabled && (
             <Input
@@ -172,6 +179,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.lifeInsurance.value}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="life-insurance-input"
             />
           )}
           <Checkbox
@@ -179,6 +187,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.sportCard.enabled"
             checked={b2bData.companyBenefits.sportCard.enabled}
             onChange={handleB2bChange}
+            data-testid="sport-card-checkbox"
           />
           {b2bData.companyBenefits.sportCard.enabled && (
             <Input
@@ -188,6 +197,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.sportCard.value}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="sport-card-input"
             />
           )}
           <Checkbox
@@ -195,6 +205,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.trainingBudget.enabled"
             checked={b2bData.companyBenefits.trainingBudget.enabled}
             onChange={handleB2bChange}
+            data-testid="training-budget-checkbox"
           />
           {b2bData.companyBenefits.trainingBudget.enabled && (
             <Input
@@ -204,6 +215,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.trainingBudget.value}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="training-budget-input"
             />
           )}
           <Checkbox
@@ -211,6 +223,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             id="companyBenefits.otherBenefits.enabled"
             checked={b2bData.companyBenefits.otherBenefits.enabled}
             onChange={handleB2bChange}
+            data-testid="other-benefits-checkbox"
           />
           {b2bData.companyBenefits.otherBenefits.enabled && (
             <Input
@@ -220,6 +233,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               value={b2bData.companyBenefits.otherBenefits.value}
               onChange={handleB2bChange}
               className="ml-6"
+              data-testid="other-benefits-input"
             />
           )}
         </fieldset>

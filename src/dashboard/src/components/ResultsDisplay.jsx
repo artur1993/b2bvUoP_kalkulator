@@ -10,7 +10,7 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
-const ResultsDisplay = ({ results, onExportPdf, onExportExcel }) => {
+const ResultsDisplay = ({ results, onExportPdf, onExportExcel, 'data-testid': dataTestId }) => {
   const { t } = useTranslation();
 
   if (!results) return null;
@@ -18,7 +18,7 @@ const ResultsDisplay = ({ results, onExportPdf, onExportExcel }) => {
   const { b2b_results, uop_results, break_even_faktura } = results;
 
   return (
-    <div id="results-section" className="mt-10 p-6 bg-white rounded-lg shadow-lg">
+    <div id="results-section" className="mt-10 p-6 bg-white rounded-lg shadow-lg" data-testid={dataTestId}>
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">{t('results.title')}</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -89,12 +89,14 @@ const ResultsDisplay = ({ results, onExportPdf, onExportExcel }) => {
         <button
           onClick={onExportPdf}
           className="bg-transparent hover:bg-secondary/10 text-secondary font-bold py-2 px-6 border border-secondary rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
+          data-testid="export-pdf-button"
         >
           {t('results.export_pdf')}
         </button>
         <button
           onClick={onExportExcel}
           className="bg-primary hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md"
+          data-testid="export-excel-button"
         >
           {t('results.export_excel')}
         </button>

@@ -2,16 +2,9 @@
 > dashboard@0.0.0 dev
 > vite --host
 
-Port 5173 is in use, trying another one...
+Re-optimizing dependencies because lockfile has changed
 
-  VITE v5.4.19  ready in 240 ms
+  VITE v5.4.19  ready in 298 ms
 
-  ➜  Local:   http://localhost:5174/
-  ➜  Network: http://192.168.0.101:5174/
-3:15:06 PM [vite] http proxy error: /api/calculate
-Error: connect ECONNREFUSED 127.0.0.1:5001
-    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
-3:15:08 PM [vite] page reload src/components/CalculatorForm.test.jsx
-3:15:11 PM [vite] http proxy error: /api/calculate
-Error: connect ECONNREFUSED 127.0.0.1:5001
-    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.0.101:5173/

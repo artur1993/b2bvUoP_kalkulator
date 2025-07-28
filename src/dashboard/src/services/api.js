@@ -7,7 +7,7 @@ export const calculateResults = async (data) => {
     const response = await axios.post(`${API_BASE_URL}/calculate`, data);
     return response.data;
   } catch (error) {
-    console.error('Error calculating results:', error);
+    
     throw error;
   }
 };
@@ -19,7 +19,7 @@ export const exportToExcel = async (data) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error exporting to Excel:', error);
+    
     throw error;
   }
 };
@@ -31,7 +31,7 @@ export const exportToPdf = async (data) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error exporting to PDF:', error);
+    
     throw error;
   }
 };

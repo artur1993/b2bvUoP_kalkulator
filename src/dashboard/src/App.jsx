@@ -90,7 +90,7 @@ function App() {
       setResults(res);
     } catch (err) {
       setError('Failed to fetch results. Please try again.');
-      console.error(err);
+      
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ function App() {
       const blob = await exportToPdf(data);
       saveAs(blob, 'kalkulator_wyniki.pdf');
     } catch (err) {
-      console.error('Error exporting PDF:', err);
+
       alert('Failed to export PDF.');
     }
   };
@@ -113,7 +113,7 @@ function App() {
       const blob = await exportToExcel(data);
       saveAs(blob, 'kalkulator_wyniki.xlsx');
     } catch (err) {
-      console.error('Error exporting Excel:', err);
+      
       alert('Failed to export Excel.');
     }
   };
@@ -137,7 +137,7 @@ function App() {
 
           {!loading && results && (
             <div className="mt-8">
-              <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} />
+              <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} data-testid="results-display" />
               <ComparisonChart results={results} />
             </div>
           )}

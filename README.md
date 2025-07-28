@@ -72,6 +72,12 @@ To run the end-to-end (E2E) tests (JavaScript/Playwright):
 npm run test:e2e
 ```
 
+### Internationalization (i18n)
+The application supports internationalization using `i18next` for the frontend.
+-   **Languages**: Currently supports English (`en`) and Polish (`pl`).
+-   **Implementation**: Translations are managed in `src/dashboard/src/locales/en/translation.json` and `src/dashboard/src/locales/pl/translation.json`.
+-   **Language Switching**: Users can switch languages using the language switcher in the header.
+
 ### Code Coverage
 
 To generate code coverage reports for the backend (Python) with detailed classification:

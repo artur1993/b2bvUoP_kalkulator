@@ -33,7 +33,7 @@ const Alert = ({ message, type }) => {
   }
 
   return (
-    <div className={`p-4 mb-4 text-sm rounded-lg ${bgColor} ${textColor} border ${borderColor}`} role="alert">
+    <div className={`p-4 mb-4 text-sm rounded-lg ${bgColor} ${textColor} border ${borderColor}`} role="alert" data-testid="alert-message">
       <div className="flex items-center">
         {type === 'error' && (
           <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-3 ${iconColor}`} viewBox="0 0 20 20" fill="currentColor">

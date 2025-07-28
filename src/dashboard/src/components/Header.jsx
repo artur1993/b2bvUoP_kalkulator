@@ -9,7 +9,7 @@ const Header = () => {
     <header className="bg-surface w-full py-4 shadow-md mb-8">
       <div className="container mx-auto px-6 flex justify-between items-center">
         <div className="text-left">
-          <h1 className="text-3xl font-bold text-primary">
+          <h1 className="text-3xl font-bold text-primary" data-testid="header-title">
             {t('header.title')}
           </h1>
           <p className="text-gray-600">{t('header.subtitle')}</p>
