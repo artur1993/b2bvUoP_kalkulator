@@ -5,6 +5,7 @@ from openpyxl import Workbook
 import io
 import os
 from src.pdf_generator.generator import PDFReportGenerator
+from src.analysis import generate_executive_summary, get_risk_analysis
 
 def _get_float(data, key, default=0.0):
     """Safely gets a float value from a dictionary, returning a default if conversion fails."""
@@ -353,6 +354,22 @@ def export_to_pdf():
         download_name="Raport_B2B_vs_UoP.pdf", 
         mimetype='application/pdf'
     )
+
+@app.route('/api/export/pdf/advanced', methods=['POST'])
+def export_to_advanced_pdf():
+    data = request.get_json()
+    if not data: return {"error": "Invalid request body"}, 400
+    
+    lang = data.get('language', 'en')
+    summary = generate_executive_summary(data.get('b2b_results', {}), data.get('uop_results', {}), data.get('break_even_faktura', 0), lang)
+    risk_analysis = get_risk_analysis(lang)
+    data['analysis'] = {"summary": summary, "risk": risk_analysis}
+
+    pdf_bytes = pdf_generator.generate(data, report_type='advanced')
+    
+    buffer = io.BytesIO(pdf_bytes)
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name="Raport_Zaawansowany_B2B_vs_UoP.pdf", mimetype='application/pdf')
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

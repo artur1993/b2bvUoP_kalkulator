@@ -52,5 +52,63 @@
   "dane_ogolne": {
     "dni_robocze_rocznie": 252,
     "dni_robocze_miesiecznie": 21
+  },
+  "analiza_ryzyka": {
+    "pl": {
+      "zdolnosc_kredytowa_uop": "Banki generalnie preferują stabilność zatrudnienia na umowę o pracę, co może ułatwić uzyskanie kredytu hipotecznego.",
+      "zdolnosc_kredytowa_b2b": "Na B2B zdolność kredytowa jest często niższa lub wymaga dłuższego stażu działalności (np. 12-24 miesiące).",
+      "stabilnosc_zatrudnienia_uop": "Umowa o pracę oferuje większą stabilność zatrudnienia, ochronę przed zwolnieniem i okres wypowiedzenia.",
+      "stabilnosc_zatrudnienia_b2b": "B2B wiąże się z mniejszą stabilnością, brakiem ochrony kodeksu pracy i krótszymi okresami wypowiedzenia.",
+      "ryzyko_podatkowe_uop": "Minimalne ryzyko podatkowe, pracodawca odpowiada za rozliczenia.",
+      "ryzyko_podatkowe_b2b": "Wyższe ryzyko błędów w rozliczeniach, konieczność samodzielnego prowadzenia księgowości lub zatrudnienia biura rachunkowego."
+    },
+    "en": {
+      "zdolnosc_kredytowa_uop": "Banks generally prefer employment contracts, which can facilitate obtaining a mortgage.",
+      "zdolnosc_kredytowa_b2b": "On B2B, creditworthiness is often lower or requires a longer period of business activity (e.g., 12-24 months).",
+      "stabilnosc_zatrudnienia_uop": "An employment contract offers greater job stability, protection against dismissal, and a notice period.",
+      "stabilnosc_zatrudnienia_b2b": "B2B involves less stability, lack of labor code protection, and shorter notice periods.",
+      "ryzyko_podatkowe_uop": "Minimal tax risk, employer is responsible for settlements.",
+      "ryzyko_podatkowe_b2b": "Higher risk of errors in settlements, necessity of self-accounting or hiring an accounting office."
+    }
+  },
+  "rekomendacje": {
+    "pl": {
+      "b2b_lepsze": "Dla osób ceniących elastyczność, wyższe zarobki netto i możliwość optymalizacji podatkowej, B2B może być lepszym wyborem, zwłaszcza przy stabilnych projektach.",
+      "uop_lepsze": "Dla osób ceniących stabilność, bezpieczeństwo socjalne i mniejsze ryzyko, umowa o pracę jest bardziej odpowiednia.",
+      "zblizone": "Obie formy zatrudnienia są finansowo zbliżone. Wybór zależy od indywidualnych preferencji dotyczących stabilności vs. elastyczności."
+    },
+    "en": {
+      "b2b_lepsze": "For those who value flexibility, higher net earnings, and tax optimization opportunities, B2B can be a better choice, especially with stable projects.",
+      "uop_lepsze": "For those who value stability, social security, and lower risk, an employment contract is more suitable.",
+      "zblizone": "Both forms of employment are financially similar. The choice depends on individual preferences regarding stability vs. flexibility."
+    }
+  },
+  "checklists": {
+    "pl": {
+      "title": "Checklista Przed Przejściem na B2B",
+      "items": [
+        "Zarejestruj działalność gospodarczą w CEIDG.",
+        "Wybierz formę opodatkowania (skala, liniowy, ryczałt).",
+        "Zgłoś się do ZUS jako płatnik składek.",
+        "Otwórz firmowe konto bankowe.",
+        "Zabezpiecz poduszkę finansową na co najmniej 3-6 miesięcy.",
+        "Znajdź biuro rachunkowe lub oprogramowanie do księgowości.",
+        "Przygotuj wzór umowy o współpracę B2B.",
+        "Upewnij się, że masz zapewnioną ciągłość zleceń."
+      ]
+    },
+    "en": {
+      "title": "Checklist Before Switching to B2B",
+      "items": [
+        "Register your business activity in CEIDG.",
+        "Choose your form of taxation (progressive, flat, lump-sum).",
+        "Register with ZUS as a premium payer.",
+        "Open a business bank account.",
+        "Secure a financial cushion for at least 3-6 months.",
+        "Find an accounting office or accounting software.",
+        "Prepare a B2B cooperation agreement template.",
+        "Ensure you have a continuous flow of orders."
+      ]
+    }
   }
 }

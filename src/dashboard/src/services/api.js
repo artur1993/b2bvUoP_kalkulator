@@ -35,3 +35,15 @@ export const exportToPdf = async (data) => {
     throw error;
   }
 };
+
+export const exportToAdvancedPdf = async (data) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/export/pdf/advanced`, data, {
+      responseType: 'blob',
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error exporting to Advanced PDF:', error);
+    throw error;
+  }
+};

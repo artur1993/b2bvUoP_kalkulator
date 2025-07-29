@@ -6,7 +6,7 @@ import ComparisonChart from './components/ComparisonChart';
 import Header from './components/Header';
 import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
-import { calculateResults, exportToExcel, exportToPdf } from './services/api';
+import { calculateResults, exportToExcel, exportToPdf, exportToAdvancedPdf } from './services/api';
 import { saveAs } from 'file-saver';
 
 function App() {
@@ -134,6 +134,24 @@ function App() {
     }
   };
 
+  const handleExportAdvancedPdf = async () => {
+    if (!results) return;
+    try {
+      const data = {
+        b2b_results: results.b2b_results,
+        uop_results: results.uop_results,
+        input_data: { b2b: b2bData, uop: uopData },
+        language: i18n.language,
+        break_even_faktura: results.break_even_faktura,
+      };
+      const blob = await exportToAdvancedPdf(data);
+      saveAs(blob, 'Raport_Zaawansowany_B2B_vs_UoP.pdf');
+    } catch (err) {
+      console.error('Error exporting advanced PDF:', err);
+      alert('Failed to export advanced PDF.');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-background">
       <Header />
@@ -155,7 +173,14 @@ function App() {
 
           {!loading && results && (
             <div className="mt-8">
-              <ResultsDisplay results={results} onExportPdf={handleExportPdf} onExportExcel={handleExportExcel} calculationMode={calculationMode} data-testid="results-display" />
+              <ResultsDisplay 
+                results={results} 
+                onExportPdf={handleExportPdf} 
+                onExportAdvancedPdf={handleExportAdvancedPdf} 
+                onExportExcel={handleExportExcel} 
+                calculationMode={calculationMode} 
+                data-testid="results-display" 
+              />
               <ComparisonChart results={results} />
             </div>
           )}

@@ -7,14 +7,14 @@
 [33mPress CTRL+C to quit[0m
  * Restarting with stat
  * Debugger is active!
- * Debugger PIN: 145-400-630
-127.0.0.1 - - [29/Jul/2025 01:35:55] "POST /api/calculate HTTP/1.1" 200 -
+ * Debugger PIN: 127-876-830
+127.0.0.1 - - [29/Jul/2025 17:53:59] "POST /api/calculate HTTP/1.1" 200 -
 /home/artur/PycharmProjects/b2v_UoP_kalkulator/src/pdf_generator/generator.py:31: UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.
   plt.figure(figsize=(8, 5))
-127.0.0.1 - - [29/Jul/2025 01:36:00] "POST /api/export/pdf HTTP/1.1" 200 -
-2025-07-29 01:36:15,759 ERROR: Error during calculation: [in /home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:300]
+127.0.0.1 - - [29/Jul/2025 17:54:02] "POST /api/export/pdf/advanced HTTP/1.1" 200 -
+2025-07-29 18:24:31,869 ERROR: Error during calculation: [in /home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:301]
 Traceback (most recent call last):
-  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 279, in calculate
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 280, in calculate
     b2b_results = calculate_b2b_results(b2b_data)
   File "/usr/lib/python3.13/unittest/mock.py", line 1167, in __call__
     return self._mock_call(*args, **kwargs)
@@ -25,22 +25,9 @@ Traceback (most recent call last):
   File "/usr/lib/python3.13/unittest/mock.py", line 1226, in _execute_mock_call
     raise effect
 Exception: Test error
-2025-07-29 01:36:26,408 ERROR: Error during calculation: [in /home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:300]
+2025-07-29 18:25:06,059 ERROR: Error during calculation: [in /home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:301]
 Traceback (most recent call last):
-  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 279, in calculate
-    b2b_results = calculate_b2b_results(b2b_data)
-  File "/usr/lib/python3.13/unittest/mock.py", line 1167, in __call__
-    return self._mock_call(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/unittest/mock.py", line 1171, in _mock_call
-    return self._execute_mock_call(*args, **kwargs)
-           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/unittest/mock.py", line 1226, in _execute_mock_call
-    raise effect
-Exception: Test error
-2025-07-29 01:37:22,893 ERROR: Error during calculation: [in /home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py:300]
-Traceback (most recent call last):
-  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 279, in calculate
+  File "/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/app.py", line 280, in calculate
     b2b_results = calculate_b2b_results(b2b_data)
   File "/usr/lib/python3.13/unittest/mock.py", line 1167, in __call__
     return self._mock_call(*args, **kwargs)

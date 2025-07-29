@@ -68,7 +68,8 @@
     "break_even_b2b_subtitle": "(This is the monthly B2B invoice amount needed to match the total annual value of the UoP contract)",
     "break_even_uop_title": "Break-Even Monthly UoP Gross Salary",
     "break_even_uop_subtitle": "(This is the monthly UoP gross salary needed to match the total annual value of the B2B contract)",
-    "export_pdf": "Export to PDF",
+    "export_pdf_basic": "Download Basic Report",
+    "export_pdf_advanced": "Download Advanced Report",
     "export_excel": "Export to Excel"
   },
   "charts": {
@@ -83,7 +84,8 @@
     "company_benefits": "Company Benefits",
     "custom_benefits": "Custom Benefits",
     "benefits": "Benefits",
-    "paid_days_off": "Paid Days Off"
+    "paid_days_off": "Paid Days Off",
+    "b2b_waterfall_title": "B2B Contract Cash Flow"
   },
   "report": {
     "input_summary_title": "Input Parameters Summary",
@@ -116,5 +118,20 @@
         "Wartość płatnych dni wolnych": "Paid Days Off Value"
       }
     }
+  },
+  "executive_summary": {
+    "title": "Executive Summary"
+  },
+  "risk_analysis": {
+    "title": "Risk and Stability Analysis",
+    "zdolnosc_kredytowa_uop": "Creditworthiness (UoP)",
+    "zdolnosc_kredytowa_b2b": "Creditworthiness (B2B)",
+    "stabilnosc_zatrudnienia_uop": "Job Stability (UoP)",
+    "stabilnosc_zatrudnienia_b2b": "Job Stability (B2B)",
+    "ryzyko_podatkowe_uop": "Tax Risk (UoP)",
+    "ryzyko_podatkowe_b2b": "Tax Risk (B2B)"
+  },
+  "checklists": {
+    "title": "Checklist Before Switching to B2B"
   }
 }

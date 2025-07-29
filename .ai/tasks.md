@@ -178,8 +178,7 @@
 - [x] **Task 38: Implement Professional PDF Report Generation**
   - [x] Created `src/pdf_generator.py` with `PDFReport` class.
   - [x] Implemented title page, input summary, financial comparison, and charts pages.
-  - [x] Integrated `pdf_generator.py` with `/api/export/pdf` endpoint in `src/app.py`.
-  - [x] Added `matplotlib` to `requirements.txt` and installed it.
+  - [x] Integrated `pdf_generator.py` with `/api/export/pdf` endpoint in `src/app.py`.n  - [x] Added `matplotlib` to `requirements.txt` and installed it.
   - [x] Fixed relative import issue in `src/app.py`.
 
 ## Phase 15: Hotfix
@@ -188,3 +187,26 @@
   - [x] Corrected `ModuleNotFoundError` by changing the import statement in `src/app.py` to a relative import.
   - [x] Updated the `PDFReportGenerator` instantiation to use absolute paths to ensure access to templates and static files.
   - [x] Verified the fix by running all backend tests successfully.
+
+## Phase 16: Advanced PDF Report
+
+- [x] **Task 40: Implement Advanced PDF Report**
+  - [x] **Sub-task 40.1: Update `dane_wejsciowe_kalkulator.json` with `analiza_ryzyka` and `rekomendacje` sections.**
+  - [x] **Sub-task 40.2: Create `src/analysis.py` with `generate_executive_summary` and `get_risk_analysis` functions.**
+  - [x] **Sub-task 40.3: Modify `src/dashboard/src/components/ResultsDisplay.jsx` to add new button.**
+  - [x] **Sub-task 40.4: Modify `src/dashboard/src/App.jsx` to add `handleExportAdvancedPdf` function.**
+  - [x] **Sub-task 40.5: Modify `src/dashboard/src/services/api.js` to add `exportToAdvancedPdf` function.**
+  - [x] **Sub-task 40.6: Modify `src/app.py` to add new `/api/export/pdf/advanced` endpoint.**
+  - [x] **Sub-task 40.7: Modify `src/pdf_generator/generator.py` to update `generate` method.**
+  - [x] **Sub-task 40.8: Modify `src/pdf_generator/templates/report.html` to add conditional rendering.**
+  - [x] **Sub-task 40.9: Modify `tests/unit/test_pdf_generator.py` to add new test cases.**
+  - [x] **Sub-task 40.10: Update `src/dashboard/src/locales/en/translation.json` and `src/dashboard/src/locales/pl/translation.json` with new translation keys.**
+
+## Phase 17: Improve Test Coverage
+
+- [x] **Task 41: Improve Backend Test Coverage**
+  - [x] **Sub-task 41.1: Create `tests/unit/test_analysis.py` and add unit tests for `src/analysis.py`.**
+  - [x] **Sub-task 41.2: Create `tests/unit/test_app_utils.py` and add unit tests for `_get_float` function in `src/app.py`.**
+  - [x] **Sub-task 41.3: Add integration tests for error paths in `/api/calculate`, `/api/export/excel`, `/api/export/pdf` and `/api/export/pdf/advanced` in `tests/integration/test_api.py`.**
+- [x] **Task 42: Improve Frontend Test Coverage**
+  - [x] **Sub-task 42.1: Fix failing tests in `src/App.test.jsx` and `src/components/ResultsDisplay.test.jsx` by updating button names and adding advanced PDF test.**

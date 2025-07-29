@@ -10,7 +10,7 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
-const ResultsDisplay = ({ results, onExportPdf, onExportExcel, calculationMode, 'data-testid': dataTestId }) => {
+const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExcel, calculationMode, 'data-testid': dataTestId }) => {
   const { t } = useTranslation();
 
   if (!results) return null;
@@ -104,11 +104,18 @@ const ResultsDisplay = ({ results, onExportPdf, onExportExcel, calculationMode, 
           className="bg-transparent hover:bg-secondary/10 text-secondary font-bold py-2 px-6 border border-secondary rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
           data-testid="export-pdf-button"
         >
-          {t('results.export_pdf')}
+          {t('results.export_pdf_basic')}
+        </button>
+        <button
+          onClick={onExportAdvancedPdf}
+          className="bg-primary hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md"
+          data-testid="export-advanced-pdf-button"
+        >
+          {t('results.export_pdf_advanced')}
         </button>
         <button
           onClick={onExportExcel}
-          className="bg-primary hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md"
+          className="bg-transparent hover:bg-secondary/10 text-secondary font-bold py-2 px-6 border border-secondary rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
           data-testid="export-excel-button"
         >
           {t('results.export_excel')}

@@ -12,8 +12,13 @@ This tool provides a detailed and accurate financial comparison, taking into acc
 - **Comprehensive Visualizations**: 
   - A grouped bar chart to compare the total annual value of UoP, standard B2B, and B2B with benefits.
   - A pie chart showing the distribution of your B2B revenue (net income, taxes, ZUS, etc.).
-- **Export Results**: Export the detailed comparison to Excel or a professional PDF report.
+- **Export Results**: Export the detailed comparison to Excel, a basic PDF report, or an advanced PDF report.
 - **Internationalized PDF Reports**: The generated PDF report is fully translated into the language selected in the UI (English or Polish).
+- **Advanced PDF Report**: Generate a comprehensive, multi-page PDF report with a professional design, including:
+    - **Executive Summary & Risk Analysis**: High-level insights and risk assessment.
+    - **Narrative Calculation Methodology**: A clear, step-by-step "waterfall" breakdown of how the final B2B net income is calculated.
+    - **Advanced Charts**: Includes a bar chart for overall comparison and a waterfall chart visualizing the B2B cash flow.
+    - **B2B Checklist**: A practical checklist for individuals transitioning to a B2B contract.
 - **Transparent Methodology**: The PDF report includes a dedicated "How we calculated it?" section that breaks down the key steps of the calculation for both B2B and UoP, ensuring full transparency.
 - **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
 - **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
@@ -87,13 +92,13 @@ To generate code coverage reports for the backend (Python) with detailed classif
 ```bash
 ./scripts/backend_cov.sh
 ```
-This script will display coverage for unit tests, integration tests, and combined tests, along with a summary of positive, negative, and neutral test counts.
+This script will display coverage for unit tests, integration tests, and combined tests, along with a summary of positive, negative, and neutral test counts. Current coverage: Unit tests: >85%, Combined (Unit + Integration): >96%.
 
 For JavaScript frontend:
 ```bash
 ./scripts/frontend_cov.sh
 ```
-After running frontend tests, open `src/dashboard/coverage/index.html` in your browser to view the detailed report.
+After running frontend tests, open `src/dashboard/coverage/index.html` in your browser to view the detailed report. Current coverage: >85%.
 
 ### CORS Configuration
 

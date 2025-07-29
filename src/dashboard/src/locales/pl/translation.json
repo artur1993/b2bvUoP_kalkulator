@@ -68,7 +68,8 @@
     "break_even_b2b_subtitle": "(Jest to kwota miesięcznej faktury B2B potrzebna do zrównania się z całkowitą roczną wartością umowy o pracę)",
     "break_even_uop_title": "Miesięczne Wynagrodzenie Brutto UoP do Wyrównania",
     "break_even_uop_subtitle": "(Jest to kwota miesięcznego wynagrodzenia brutto UoP potrzebna do zrównania się z całkowitą roczną wartością umowy B2B)",
-    "export_pdf": "Eksportuj do PDF",
+    "export_pdf_basic": "Pobierz Raport Podstawowy",
+    "export_pdf_advanced": "Pobierz Raport Zaawansowany",
     "export_excel": "Eksportuj do Excel"
   },
   "charts": {
@@ -83,7 +84,8 @@
     "company_benefits": "Benefity od Firmy",
     "custom_benefits": "Własne Korzyści",
     "benefits": "Benefity",
-    "paid_days_off": "Płatne Dni Wolne"
+    "paid_days_off": "Płatne Dni Wolne",
+    "b2b_waterfall_title": "Przepływ środków na kontrakcie B2B"
   },
   "report": {
     "input_summary_title": "Podsumowanie Parametrów Wejściowych",
@@ -101,9 +103,9 @@
         "Dochód (przed ZUS)": "Dochód (przed ZUS)",
         "Składki społeczne ZUS": "Składki społeczne ZUS",
         "Podstawa do opodatkowania": "Podstawa do opodatkowania",
-        "Roczny podatek": "Roczny podatek",
-        "Składka zdrowotna ZUS": "Składka zdrowotna ZUS",
-        "Utracony przychód": "Utracony przychód"
+        "Podatek dochodowy": "Podatek dochodowy",
+        "Dochód po opodatkowaniu": "Dochód po opodatkowaniu",
+        "Składka zdrowotna": "Składka zdrowotna"
       },
       "uop": {
         "Roczne wynagrodzenie brutto": "Roczne wynagrodzenie brutto",
@@ -116,5 +118,20 @@
         "Wartość płatnych dni wolnych": "Wartość płatnych dni wolnych"
       }
     }
+  },
+  "executive_summary": {
+    "title": "Streszczenie dla Menedżerów"
+  },
+  "risk_analysis": {
+    "title": "Analiza Ryzyka i Stabilności",
+    "zdolnosc_kredytowa_uop": "Zdolność Kredytowa (UoP)",
+    "zdolnosc_kredytowa_b2b": "Zdolność Kredytowa (B2B)",
+    "stabilnosc_zatrudnienia_uop": "Stabilność Zatrudnienia (UoP)",
+    "stabilnosc_zatrudnienia_b2b": "Stabilność Zatrudnienia (B2B)",
+    "ryzyko_podatkowe_uop": "Ryzyko Podatkowe (UoP)",
+    "ryzyko_podatkowe_b2b": "Ryzyko Podatkowe (B2B)"
+  },
+  "checklists": {
+    "title": "Checklista Przed Przejściem na B2B"
   }
 }

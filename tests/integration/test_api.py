@@ -80,7 +80,7 @@ def test_calculate_missing_data_negative(client):
 def test_calculate_invalid_input_type_neutral(client):
     """
     Test the /api/calculate endpoint with invalid input types (e.g., string instead of number)
-    for a 500 Internal Server Error response due to calculation errors.
+    for a 200 OK response because _get_float handles invalid types by returning a default value (0.0).
     """
     data = {
         "b2b": {
@@ -104,7 +104,6 @@ def test_calculate_invalid_input_type_neutral(client):
         }
     }
     response = client.post('/api/calculate', json=data)
-    # Expecting 200 because _get_float handles invalid types by returning a default value (0.0)
     assert response.status_code == 200
     json_data = response.get_json()
     assert "b2b_results" in json_data
@@ -236,6 +235,36 @@ def test_calculate_break_even_not_found_negative(client):
     assert "break_even_faktura" in json_data
     assert json_data["break_even_faktura"] == -1
 
+def test_calculate_invalid_calculation_mode_negative(client):
+    """
+    Test the /api/calculate endpoint with an invalid calculation_mode.
+    """
+    data = {
+        "b2b": {
+            "faktura_miesieczna": 10000,
+            "koszty_firmowe_miesieczne": 500,
+            "zus_rodzaj": "preferencyjny",
+            "zus_chorobowe": True,
+            "forma_opodatkowania": "liniowy",
+            "ulga_dla_mlodych": False,
+            "urlop_dni": 20,
+            "chorobowe_dni": 5,
+            "przestoje_miesiace": 0,
+            "customBenefits": 0,
+            "companyBenefits": {}
+        },
+        "uop": {
+            "wynagrodzenie_brutto": 8000,
+            "koszty_uzyskania_przychodu": 250,
+            "ulga_dla_mlodych": False,
+            "wybrane_benefity": []
+        },
+        "calculation_mode": "invalid_mode"
+    }
+    response = client.post('/api/calculate', json=data)
+    assert response.status_code == 400
+    assert "Invalid calculation_mode provided." in response.get_json()["error"]
+
 def test_serve_static_file_positive(client):
     """
     Test the /<path:path> endpoint to serve a static file.
@@ -260,6 +289,14 @@ def test_export_excel_success_positive(client):
     assert response.status_code == 200
     assert response.mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     assert response.headers['Content-Disposition'].startswith('attachment; filename=kalkulator_wyniki.xlsx')
+
+def test_export_excel_no_data_negative(client):
+    """
+    Test the /api/export/excel endpoint with no data.
+    """
+    response = client.post('/api/export/excel', json={})
+    assert response.status_code == 200 # The current implementation returns 200 even with empty data
+    # Further assertions can be added to check the content of the generated Excel if needed
 
 def test_export_pdf_success_positive(client):
     """
@@ -295,3 +332,127 @@ def test_export_pdf_success_positive(client):
     assert response.status_code == 200
     assert response.mimetype == 'application/pdf'
     assert response.headers['Content-Disposition'].startswith('attachment; filename=Raport_B2B_vs_UoP.pdf')
+
+def test_export_pdf_no_data_negative(client):
+    """
+    Test the /api/export/pdf endpoint with no data.
+    """
+    response = client.post('/api/export/pdf', json={})
+    assert response.status_code == 400
+    assert "Invalid request body" in response.get_json()["error"]
+
+def test_export_advanced_pdf_success_positive(client):
+    """
+    Test the /api/export/pdf/advanced endpoint with valid data for a 200 OK response and correct mimetype.
+    """
+    data = {
+        "b2b_results": {
+            "calkowita_roczna_wartosc": 120000,
+            "roczne_netto_na_reke": 80000,
+            "roczny_podatek": 20000,
+            "roczny_zus": 20000,
+            "steps": {}
+        },
+        "uop_results": {
+            "calkowita_roczna_wartosc": 100000,
+            "roczne_netto_na_reke": 70000,
+            "roczny_podatek": 15000,
+            "roczny_zus": 15000,
+            "steps": {}
+        },
+        "input_data": {
+            "b2b": {
+                "faktura_miesieczna": 10000,
+                "forma_opodatkowania": "ryczalt_IT"
+            },
+            "uop": {
+                "wynagrodzenie_brutto": 8000
+            }
+        },
+        "language": "en",
+        "break_even_faktura": 12000
+    }
+    response = client.post('/api/export/pdf/advanced', json=data)
+    assert response.status_code == 200
+    assert response.mimetype == 'application/pdf'
+    assert response.headers['Content-Disposition'].startswith('attachment; filename=Raport_Zaawansowany_B2B_vs_UoP.pdf')
+
+def test_export_advanced_pdf_no_data_negative(client):
+    """
+    Test the /api/export/pdf/advanced endpoint with no data.
+    """
+    response = client.post('/api/export/pdf/advanced', json={})
+    assert response.status_code == 400
+    assert "Invalid request body" in response.get_json()["error"]
+
+def test_serve_root_path_positive(client):
+    """
+    Test the / endpoint to serve index.html.
+    """
+    response = client.get('/')
+    assert response.status_code == 200
+    assert 'text/html' in response.mimetype
+
+def test_calculate_b2b_to_uop_mode_positive(client):
+    """
+    Test the /api/calculate endpoint with calculation_mode set to 'b2b_to_uop'.
+    """
+    data = {
+        "b2b": {
+            "faktura_miesieczna": 10000,
+            "koszty_firmowe_miesieczne": 500,
+            "zus_rodzaj": "preferencyjny",
+            "zus_chorobowe": True,
+            "forma_opodatkowania": "liniowy",
+            "ulga_dla_mlodych": False,
+            "urlop_dni": 20,
+            "chorobowe_dni": 5,
+            "przestoje_miesiace": 0,
+            "customBenefits": 0,
+            "companyBenefits": {}
+        },
+        "uop": {
+            "wynagrodzenie_brutto": 8000,
+            "koszty_uzyskania_przychodu": 250,
+            "ulga_dla_mlodych": False,
+            "wybrane_benefity": []
+        },
+        "calculation_mode": "b2b_to_uop"
+    }
+    response = client.post('/api/calculate', json=data)
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert "break_even_wynagrodzenie_brutto" in json_data
+    assert json_data["break_even_wynagrodzenie_brutto"] != -1
+
+def test_calculate_b2b_to_uop_break_even_not_found_negative(client):
+    """
+    Test the /api/calculate endpoint where b2b_to_uop break-even point is not found.
+    """
+    data = {
+        "b2b": {
+            "faktura_miesieczna": 1000000, # Very high B2B value
+            "koszty_firmowe_miesieczne": 0,
+            "zus_rodzaj": "ulga_na_start",
+            "zus_chorobowe": False,
+            "forma_opodatkowania": "ryczalt_IT",
+            "ulga_dla_mlodych": False,
+            "urlop_dni": 0,
+            "chorobowe_dni": 0,
+            "przestoje_miesiace": 0,
+            "customBenefits": 0,
+            "companyBenefits": {}
+        },
+        "uop": {
+            "wynagrodzenie_brutto": 100, # Very low UoP value
+            "koszty_uzyskania_przychodu": 0,
+            "ulga_dla_mlodych": False,
+            "wybrane_benefity": []
+        },
+        "calculation_mode": "b2b_to_uop"
+    }
+    response = client.post('/api/calculate', json=data)
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert "break_even_wynagrodzenie_brutto" in json_data
+    assert json_data["break_even_wynagrodzenie_brutto"] == -1

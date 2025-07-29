@@ -150,7 +150,8 @@ describe('ResultsDisplay Component', () => {
       />
     );
 
-    expect(screen.getByRole('button', { name: i18n.t('results.export_pdf') })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: i18n.t('results.export_pdf_basic') })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: i18n.t('results.export_pdf_advanced') })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: i18n.t('results.export_excel') })).toBeInTheDocument();
   });
 });
