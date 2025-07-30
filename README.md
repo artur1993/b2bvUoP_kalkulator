@@ -91,17 +91,17 @@ The application supports internationalization using `i18next` for the frontend.
 
 ### Code Coverage
 
-To generate code coverage reports for the backend (Python) with detailed classification:
+To generate code coverage reports for the backend (Python) with detailed classification and function coverage:
 ```bash
 ./scripts/backend_cov.sh
 ```
-This script will display coverage for unit tests, integration tests, and combined tests, along with a summary of positive, negative, and neutral test counts. Current coverage: Unit tests: >85%, Combined (Unit + Integration): >96%.
+This script will display coverage for unit tests, integration tests, combined tests, and the percentage of functions covered, along with a summary of positive, negative, and neutral test counts.
 
 For JavaScript frontend:
 ```bash
 ./scripts/frontend_cov.sh
 ```
-After running frontend tests, open `src/dashboard/coverage/index.html` in your browser to view the detailed report. Current coverage: >85%.
+After running frontend tests, open `src/dashboard/coverage/index.html` in your browser to view the detailed report.
 
 ### CORS Configuration
 
@@ -121,5 +121,10 @@ The project follows a standard Flask application structure:
   - `unit/`: Backend unit tests.
   - `integration/`: Backend integration tests.
   - `e2e/`: Frontend end-to-end tests.
+- `scripts/`: Contains utility scripts, including:
+  - `backend_cov.sh`: Script for generating backend code coverage reports.
+  - `calculate_function_coverage.py`: Python script to calculate function coverage percentage.
+  - `frontend_cov.sh`: Script for generating frontend code coverage reports.
+  - `generate_coverage_summary.sh`: Script for generating a summary table of coverage.
 - `package.json`: Node.js project configuration and scripts (for root level, e.g., Playwright).
 - `playwright.config.js`: Playwright E2E test configuration.

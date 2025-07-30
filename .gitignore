@@ -7,3 +7,12 @@ node_modules/
 test-results/
 src/dashboard/node_modules/
 src/dashboard/dist/
+
+# Generated files and logs
+.coverage
+coverage_report.json
+flask.log
+vite_output.log
+vite.log
+src/dashboard/coverage/
+

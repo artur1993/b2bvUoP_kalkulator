@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import ResultsDisplay from './ResultsDisplay';
 import '@testing-library/jest-dom';
+import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n.js'; // Import i18n instance
 
 // Mock data for the tests
@@ -71,13 +72,21 @@ const formatCurrencyForTest = (value) => {
 describe('ResultsDisplay Component', () => {
   // Test 5: Handling no results
   it('should render null when no results are provided', () => {
-    const { container } = render(<ResultsDisplay />);
+    const { container } = render(
+      <I18nextProvider i18n={i18n}>
+        <ResultsDisplay />
+      </I18nextProvider>
+    );
     expect(container.firstChild).toBeNull();
   });
 
   // Test 1: Correct rendering of all key data
   it('should render all key data correctly', () => {
-    render(<ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />
+      </I18nextProvider>
+    );
 
     expect(screen.getByText(i18n.t('results.title'))).toBeInTheDocument();
     expect(screen.getByText(i18n.t('form.b2b_title'))).toBeInTheDocument();
@@ -90,7 +99,11 @@ describe('ResultsDisplay Component', () => {
 
   // Test 2: Correct currency formatting
   it('should format numerical values as PLN currency', () => {
-    render(<ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />
+      </I18nextProvider>
+    );
     
     const expectedRevenue = formatCurrencyForTest(120000);
     const expectedGrossSalary = formatCurrencyForTest(100000);
@@ -106,7 +119,11 @@ describe('ResultsDisplay Component', () => {
   // Test 3: Conditional logic for "Break-Even Point"
   describe('Break-Even Point Logic', () => {
     it('should display the break-even section when break_even_faktura is not -1 (UoP to B2B mode)', () => {
-      render(<ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />);
+      render(
+        <I18nextProvider i18n={i18n}>
+          <ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />
+        </I18nextProvider>
+      );
       const expectedBreakEven = formatCurrencyForTest(8500);
       
       const breakEvenLabel = screen.getByText(i18n.t('results.break_even_b2b_title') + ': ' + expectedBreakEven);
@@ -115,7 +132,11 @@ describe('ResultsDisplay Component', () => {
     });
 
     it('should display the break-even section when break_even_wynagrodzenie_brutto is not -1 (B2B to UoP mode)', () => {
-      render(<ResultsDisplay results={mockResultsB2bToUop} calculationMode="b2b_to_uop" />);
+      render(
+        <I18nextProvider i18n={i18n}>
+          <ResultsDisplay results={mockResultsB2bToUop} calculationMode="b2b_to_uop" />
+        </I18nextProvider>
+      );
       const expectedBreakEven = formatCurrencyForTest(9000);
       
       const breakEvenLabel = screen.getByText(i18n.t('results.break_even_uop_title') + ': ' + expectedBreakEven);
@@ -125,13 +146,21 @@ describe('ResultsDisplay Component', () => {
 
     it('should not display the break-even section when break_even_faktura is -1 (UoP to B2B mode)', () => {
       const resultsWithNoBreakEven = { ...mockResultsUopToB2b, break_even_faktura: -1 };
-      render(<ResultsDisplay results={resultsWithNoBreakEven} calculationMode="uop_to_b2b" />);
+      render(
+        <I18nextProvider i18n={i18n}>
+          <ResultsDisplay results={resultsWithNoBreakEven} calculationMode="uop_to_b2b" />
+        </I18nextProvider>
+      );
       expect(screen.queryByText(new RegExp(i18n.t('results.break_even_b2b_title')))).not.toBeInTheDocument();
     });
 
     it('should not display the break-even section when break_even_wynagrodzenie_brutto is -1 (B2B to UoP mode)', () => {
       const resultsWithNoBreakEven = { ...mockResultsB2bToUop, break_even_wynagrodzenie_brutto: -1 };
-      render(<ResultsDisplay results={resultsWithNoBreakEven} calculationMode="b2b_to_uop" />);
+      render(
+        <I18nextProvider i18n={i18n}>
+          <ResultsDisplay results={resultsWithNoBreakEven} calculationMode="b2b_to_uop" />
+        </I18nextProvider>
+      );
       expect(screen.queryByText(new RegExp(i18n.t('results.break_even_uop_title')))).not.toBeInTheDocument();
     });
   });
@@ -142,12 +171,14 @@ describe('ResultsDisplay Component', () => {
     const handleExportExcel = vi.fn();
 
     render(
-      <ResultsDisplay
-        results={mockResultsUopToB2b}
-        onExportPdf={handleExportPdf}
-        onExportExcel={handleExportExcel}
-        calculationMode="uop_to_b2b"
-      />
+      <I18nextProvider i18n={i18n}>
+        <ResultsDisplay
+          results={mockResultsUopToB2b}
+          onExportPdf={handleExportPdf}
+          onExportExcel={handleExportExcel}
+          calculationMode="uop_to_b2b"
+        />
+      </I18nextProvider>
     );
 
     expect(screen.getByRole('button', { name: i18n.t('results.export_pdf_basic') })).toBeInTheDocument();

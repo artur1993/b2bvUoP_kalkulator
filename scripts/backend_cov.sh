@@ -1,26 +1,50 @@
 #!/bin/bash
 
+# --- Testy Jednostkowe ---
 echo "--- Pokrycie testów jednostkowych (Unit Tests) ---"
-pytest tests/unit/ --cov=src --cov-report=term-missing
+echo "Poniższa lista 'Missing' wskazuje linie kodu niepokryte testami, co oznacza, że zawierające je funkcje nie są w pełni przetestowane."
+UNIT_COV_OUTPUT=$(pytest --color=no tests/unit/ --cov=src --cov-report=term-missing 2>&1)
+echo "$UNIT_COV_OUTPUT"
+UNIT_COV=$(echo "$UNIT_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//')
 
+# --- Testy Integracyjne ---
 echo ""
 echo "--- Pokrycie testów integracyjnych (Integration Tests) ---"
-pytest tests/integration/ --cov=src --cov-report=term-missing
+echo "Poniższa lista 'Missing' wskazuje linie kodu niepokryte testami, co oznacza, że zawierające je funkcje nie są w pełni przetestowane."
+INT_COV_OUTPUT=$(pytest --color=no tests/integration/ --cov=src --cov-report=term-missing 2>&1)
+echo "$INT_COV_OUTPUT"
+INT_COV=$(echo "$INT_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//')
 
+# --- Testy Łączne ---
 echo ""
 echo "--- Łączne pokrycie testów (Unit + Integration Tests) ---"
-pytest tests/ --cov=src --cov-report=term-missing
+echo "Poniższa lista 'Missing' wskazuje linie kodu niepokryte testami, co oznacza, że zawierające je funkcje nie są w pełni przetestowane."
+COMBINED_COV_OUTPUT=$(pytest --color=no tests/ --cov=src --cov-report=term-missing 2>&1)
+echo "$COMBINED_COV_OUTPUT"
+COMBINED_COV=$(echo "$COMBINED_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//')
 
+# --- Pokrycie Funkcji (Function Coverage) ---
+echo ""
+echo "--- Pokrycie Funkcji (Function Coverage) ---"
+echo "Poniższa lista 'Missing' wskazuje linie kodu, które nie zostały wykonane. W kontekście pokrycia funkcji, oznacza to, że funkcje zawierające te linie nie zostały w pełni wywołane lub przetestowane."
+FUNCTION_COV_OUTPUT=$(pytest --color=no --cov=src --cov-report=term-missing 2>&1)
+echo "$FUNCTION_COV_OUTPUT"
+
+# Generowanie raportu JSON dla pokrycia funkcji
+coverage run --source=src -m pytest tests/
+coverage json -o coverage_report.json
+
+# Obliczanie procentowego pokrycia funkcji
+FUNCTION_PERCENTAGE=$(python scripts/calculate_function_coverage.py coverage_report.json src)
+echo "Procentowe pokrycie funkcji: ${FUNCTION_PERCENTAGE}%"
+
+# --- Podsumowanie Klasyfikacji ---
 echo ""
 echo "--- Podsumowanie klasyfikacji testów ---"
-
-# Collect all test names
-all_tests=$(pytest --collect-only -q | grep "::test_")
-
+all_tests=$(pytest --color=no --collect-only -q | grep "::test_")
 positive_tests=$(echo "$all_tests" | grep "_positive" | wc -l)
 negative_tests=$(echo "$all_tests" | grep "_negative" | wc -l)
 neutral_tests=$(echo "$all_tests" | grep "_neutral" | wc -l)
-
 total_tests=$((positive_tests + negative_tests + neutral_tests))
 
 echo "Testy pozytywne: $positive_tests"
@@ -38,3 +62,10 @@ if [ "$total_tests" -gt 0 ]; then
     echo "  Negatywne: ${negative_ratio}%"
     echo "  Neutralne: ${neutral_ratio}%"
 fi
+
+# --- Wygenerowanie Tabeli Podsumowującej ---
+echo "DEBUG: UNIT_COV=${UNIT_COV}"
+echo "DEBUG: INT_COV=${INT_COV}"
+echo "DEBUG: COMBINED_COV=${COMBINED_COV}"
+echo "DEBUG: FUNCTION_PERCENTAGE before passing: ${FUNCTION_PERCENTAGE}"
+./scripts/generate_coverage_summary.sh "$UNIT_COV" "$INT_COV" "$COMBINED_COV" "$FUNCTION_PERCENTAGE"

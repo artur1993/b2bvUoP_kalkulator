@@ -1,7 +1,10 @@
+import '../../setupTests.js';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CalculatorForm from './CalculatorForm';
 import React, { useState } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../i18n';
 
 describe('CalculatorForm', () => {
   const mockOnCalculate = vi.fn();
@@ -116,13 +119,15 @@ describe('CalculatorForm', () => {
 
   const renderComponent = (b2b = initialB2bData, uop = initialUopData) => {
     render(
-      <TestWrapper
-        initialB2b={b2b}
-        initialUop={uop}
-        onCalculate={mockOnCalculate}
-        onExport={mockOnExport}
-        loading={false}
-      />
+      <I18nextProvider i18n={i18n}>
+        <TestWrapper
+          initialB2b={b2b}
+          initialUop={uop}
+          onCalculate={mockOnCalculate}
+          onExport={mockOnExport}
+          loading={false}
+        />
+      </I18nextProvider>
     );
   };
 
@@ -304,16 +309,18 @@ describe('CalculatorForm', () => {
       };
 
       return (
-        <CalculatorForm
-          b2bData={initialB2bData}
-          uopData={uopData}
-          handleB2bChange={() => {}}
-          handleUopChange={handleUopChange}
-          handleCalculate={mockOnCalculate}
-          loading={false}
-          calculationMode="uop_to_b2b"
-          handleCalculationModeChange={() => {}}
-        />
+        <I18nextProvider i18n={i18n}>
+          <CalculatorForm
+            b2bData={initialB2bData}
+            uopData={uopData}
+            handleB2bChange={() => {}}
+            handleUopChange={handleUopChange}
+            handleCalculate={mockOnCalculate}
+            loading={false}
+            calculationMode="uop_to_b2b"
+            handleCalculationModeChange={() => {}}
+          />
+        </I18nextProvider>
       );
     };
 

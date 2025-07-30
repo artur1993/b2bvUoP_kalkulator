@@ -10,7 +10,9 @@ vi.mock('./services/api', () => ({
   calculateResults: vi.fn(),
   exportToExcel: vi.fn(),
   exportToPdf: vi.fn(),
-  exportToAdvancedPdf: vi.fn(), // Mock exportToAdvancedPdf
+  exportToAdvancedPdf: vi.fn(),
+  calculateBreakEvenAnalysis: vi.fn(),
+  calculateSensitivityAnalysis: vi.fn(),
 }));
 
 // Mock file-saver
@@ -44,6 +46,9 @@ describe('App', () => {
       uop_results: { calkowita_roczna_wartosc: 100000, roczne_brutto: 120000, roczny_zus: 10000, roczny_podatek: 10000, roczna_wartosc_benefitow: 0, roczna_wartosc_platnych_dni_wolnych: 0, roczne_netto_na_reke: 100000, miesieczne_netto: 8000 },
       break_even_faktura: 11000,
     });
+
+    api.calculateBreakEvenAnalysis.mockResolvedValue([]);
+    api.calculateSensitivityAnalysis.mockResolvedValue([]);
 
     api.exportToExcel.mockResolvedValue(new Blob(['excel data'], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
     api.exportToPdf.mockResolvedValue(new Blob(['pdf data'], { type: 'application/pdf' }));
@@ -161,32 +166,33 @@ describe('App', () => {
     });
   });
 
-  it('toggles company benefits and updates values correctly', async () => {
+  it('handles B2B input changes correctly for company benefits', async () => {
     render(<App />);
-    const paidVacationCheckbox = screen.getByTestId('paid-vacation-checkbox');
-    fireEvent.click(paidVacationCheckbox);
-    await waitFor(() => {
-      expect(paidVacationCheckbox).toBeChecked();
-    });
-
-    const vacationDaysInput = screen.getByTestId('paid-vacation-input');
-    fireEvent.change(vacationDaysInput, { target: { name: 'companyBenefits.paidVacationDays.days', value: '5' } });
-    await waitFor(() => {
-      expect(vacationDaysInput).toHaveValue(5);
-    });
-  });
-
-  it('adds and removes UoP selected benefits correctly', async () => {
-    render(<App />);
-    const medicalCareCheckbox = screen.getByLabelText('Medical Care');
+    const medicalCareCheckbox = screen.getByTestId('medical-care-checkbox');
     fireEvent.click(medicalCareCheckbox);
     await waitFor(() => {
       expect(medicalCareCheckbox).toBeChecked();
     });
 
-    fireEvent.click(medicalCareCheckbox); // Click again to uncheck
+    const medicalCareInput = screen.getByTestId('medical-care-input');
+    fireEvent.change(medicalCareInput, { target: { name: 'companyBenefits.medicalCare.value', value: '500' } });
     await waitFor(() => {
-      expect(medicalCareCheckbox).not.toBeChecked();
+      expect(medicalCareInput).toHaveValue(500);
+    });
+  });
+
+  it('handles UoP input changes correctly for KUP settings', async () => {
+    render(<App />);
+    const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
+    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'autorskie_50' } });
+    await waitFor(() => {
+      expect(kupSelect).toHaveValue('autorskie_50');
+    });
+
+    const creativePercentageInput = screen.getByLabelText('Creative Work Percentage (%)');
+    fireEvent.change(creativePercentageInput, { target: { name: 'kup_settings.creative_work_percentage', value: '80' } });
+    await waitFor(() => {
+      expect(creativePercentageInput).toHaveValue(80);
     });
   });
 

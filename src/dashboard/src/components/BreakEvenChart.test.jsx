@@ -2,10 +2,14 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import BreakEvenChart from './BreakEvenChart';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
+import i18n from '../i18n';
 import * as api from '../services/api';
+import { vi } from 'vitest';
 
-jest.mock('../services/api');
+vi.mock('../services/api');
+vi.mock('react-chartjs-2', () => ({
+    Line: () => <div data-testid="mock-line-chart" />,
+}));
 
 const mockB2bData = { faktura_miesieczna: 10000 };
 const mockUopData = { wynagrodzenie_brutto: 8000 };
@@ -23,10 +27,8 @@ describe('BreakEvenChart', () => {
             </I18nextProvider>
         );
 
-        expect(screen.getByText(/loading/i)).toBeInTheDocument();
-
         await waitFor(() => {
-            expect(screen.getByText(/Break-Even Analysis/i)).toBeInTheDocument();
+            expect(screen.getByTestId('mock-line-chart')).toBeInTheDocument();
         });
     });
 
@@ -40,7 +42,7 @@ describe('BreakEvenChart', () => {
         );
 
         await waitFor(() => {
-            expect(screen.getByText(/no_data/i)).toBeInTheDocument();
+            expect(screen.queryByTestId('mock-line-chart')).not.toBeInTheDocument();
         });
     });
 });

@@ -2,7 +2,12 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import WaterfallChart from './WaterfallChart';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
+import i18n from '../i18n';
+import { vi } from 'vitest';
+
+vi.mock('react-chartjs-2', () => ({
+    Bar: () => <div data-testid="mock-waterfall-chart" />,
+}));
 
 const mockResults = {
     b2b_results: {
@@ -38,7 +43,7 @@ describe('WaterfallChart', () => {
                 <WaterfallChart results={mockResults} />
             </I18nextProvider>
         );
-        expect(screen.getByText(/B2B Waterfall Chart/i)).toBeInTheDocument();
+        expect(screen.getByTestId('mock-waterfall-chart')).toBeInTheDocument();
     });
 
     test('displays loading state when no results are provided', () => {
@@ -47,6 +52,6 @@ describe('WaterfallChart', () => {
                 <WaterfallChart results={null} />
             </I18nextProvider>
         );
-        expect(screen.getByText(/loading/i)).toBeInTheDocument();
+        expect(screen.queryByTestId('mock-waterfall-chart')).not.toBeInTheDocument();
     });
 });

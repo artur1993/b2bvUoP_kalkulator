@@ -20,5 +20,11 @@ export default defineConfig({
     coverage: {
       exclude: ['src/main.jsx'],
     },
+    environmentOptions: {
+      jsdom: {
+        resources: 'usable',
+      },
+    },
+    threads: false, // Required for canvas to work
   },
 })
