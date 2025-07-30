@@ -47,3 +47,23 @@ export const exportToAdvancedPdf = async (data) => {
     throw error;
   }
 };
+
+export const calculateBreakEvenAnalysis = async (data) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/calculate/break-even-analysis`, data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching break-even data:', error);
+    throw error;
+  }
+};
+
+export const calculateSensitivityAnalysis = async (data) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/calculate/sensitivity-analysis`, data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching sensitivity data:', error);
+    throw error;
+  }
+};

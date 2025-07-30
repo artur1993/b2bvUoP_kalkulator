@@ -31,7 +31,7 @@ describe('CalculatorForm', () => {
 
   const initialUopData = {
     wynagrodzenie_brutto: 0,
-    koszty_uzyskania_przychodu: 0,
+    kup_settings: { type: 'standard', creative_work_percentage: 70 },
     ulga_dla_mlodych: false,
     wybrane_benefity: [],
   };
@@ -76,6 +76,15 @@ describe('CalculatorForm', () => {
           wybrane_benefity: checked
             ? [...prev.wybrane_benefity, value]
             : prev.wybrane_benefity.filter(benefit => benefit !== value),
+        }));
+      } else if (name.startsWith('kup_settings.')) {
+        const field = name.split('.')[1];
+        setUopData(prev => ({
+          ...prev,
+          kup_settings: {
+            ...prev.kup_settings,
+            [field]: value,
+          },
         }));
       } else {
         setUopData(prev => ({
@@ -133,7 +142,7 @@ describe('CalculatorForm', () => {
 
     // Check for UoP fields
     expect(screen.getByLabelText('Gross Monthly Salary (PLN)')).toBeInTheDocument();
-    expect(screen.getByLabelText('Annual Tax-Deductible Costs (PLN)')).toBeInTheDocument();
+    expect(screen.getByLabelText('Type of Tax-Deductible Costs')).toBeInTheDocument();
     expect(screen.getByLabelText('Youth Tax Relief')).toBeInTheDocument();
     expect(screen.getByLabelText('Medical Care')).toBeInTheDocument();
     expect(screen.getByLabelText('Sport Card')).toBeInTheDocument();
@@ -163,12 +172,6 @@ describe('CalculatorForm', () => {
     fireEvent.change(wynagrodzenieInput, { target: { name: 'wynagrodzenie_brutto', value: '8000' } });
     await waitFor(() => {
       expect(wynagrodzenieInput).toHaveValue(8000);
-    });
-
-    const taxDeductibleCostsInput = screen.getByLabelText('Annual Tax-Deductible Costs (PLN)');
-    fireEvent.change(taxDeductibleCostsInput, { target: { name: 'koszty_uzyskania_przychodu', value: '250' } });
-    await waitFor(() => {
-      expect(taxDeductibleCostsInput).toHaveValue(250);
     });
   });
 
@@ -244,5 +247,88 @@ describe('CalculatorForm', () => {
       expect(medicalCareCheckbox).not.toBeChecked();
     });
     expect(sportCardCheckbox).toBeChecked(); // Other should remain checked
+  });
+
+  it('renders KUP type select and its options', () => {
+    renderComponent();
+    const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
+    expect(kupSelect).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Standard (250 PLN/month)' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Elevated (300 PLN/month)' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '50% Creative Work Costs' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'None' })).toBeInTheDocument();
+  });
+
+  it('shows/hides creative work percentage input based on KUP type selection', async () => {
+    renderComponent();
+    const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
+    const creativePercentageLabel = 'Creative Work Percentage (%)';
+
+    // Initially, creative work percentage input should not be visible
+    expect(screen.queryByLabelText(creativePercentageLabel)).not.toBeInTheDocument();
+
+    // Select '50% Creative Work Costs'
+    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'autorskie_50' } });
+    await waitFor(() => {
+      expect(screen.getByLabelText(creativePercentageLabel)).toBeInTheDocument();
+    });
+
+    // Select 'Standard' again
+    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'standard' } });
+    await waitFor(() => {
+      expect(screen.queryByLabelText(creativePercentageLabel)).not.toBeInTheDocument();
+    });
+  });
+
+  it('updates KUP settings in state correctly', async () => {
+    const TestWrapperWithState = () => {
+      const [uopData, setUopData] = useState({
+        wynagrodzenie_brutto: 8000,
+        kup_settings: { type: 'standard', creative_work_percentage: 70 },
+        ulga_dla_mlodych: false,
+        wybrane_benefity: [],
+      });
+
+      const handleUopChange = (e) => {
+        const { name, value } = e.target;
+        if (name.startsWith('kup_settings.')) {
+          const field = name.split('.')[1];
+          setUopData(prev => ({
+            ...prev,
+            kup_settings: {
+              ...prev.kup_settings,
+              [field]: value,
+            },
+          }));
+        }
+      };
+
+      return (
+        <CalculatorForm
+          b2bData={initialB2bData}
+          uopData={uopData}
+          handleB2bChange={() => {}}
+          handleUopChange={handleUopChange}
+          handleCalculate={mockOnCalculate}
+          loading={false}
+          calculationMode="uop_to_b2b"
+          handleCalculationModeChange={() => {}}
+        />
+      );
+    };
+
+    render(<TestWrapperWithState />);
+
+    const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
+    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'autorskie_50' } });
+    await waitFor(() => {
+      expect(kupSelect).toHaveValue('autorskie_50');
+    });
+
+    const creativePercentageInput = screen.getByLabelText('Creative Work Percentage (%)');
+    fireEvent.change(creativePercentageInput, { target: { name: 'kup_settings.creative_work_percentage', value: '85' } });
+    await waitFor(() => {
+      expect(creativePercentageInput).toHaveValue(85);
+    });
   });
 });

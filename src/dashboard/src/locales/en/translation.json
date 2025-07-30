@@ -34,6 +34,12 @@
     "training_budget": "Training Budget (from company)",
     "other_benefits": "Other Benefits (from company)",
     "gross_salary": "Gross Monthly Salary (PLN)",
+    "kup_type": "Type of Tax-Deductible Costs",
+    "kup_standard": "Standard (250 PLN/month)",
+    "kup_elevated": "Elevated (300 PLN/month)",
+    "kup_creative_50": "50% Creative Work Costs",
+    "kup_none": "None",
+    "creative_work_percentage": "Creative Work Percentage (%)",
     "tax_deductible_costs": "Annual Tax-Deductible Costs (PLN)",
     "selected_benefits": "Selected Benefits",
     "benefit_medical": "Medical Care",
@@ -86,6 +92,32 @@
     "benefits": "Benefits",
     "paid_days_off": "Paid Days Off",
     "b2b_waterfall_title": "B2B Contract Cash Flow"
+  },
+  "waterfall": {
+    "title_b2b": "B2B Waterfall Chart",
+    "title_uop": "UoP Waterfall Chart",
+    "gross_income": "Gross Income",
+    "gross_salary": "Gross Salary",
+    "costs": "Business Costs",
+    "zus_contributions": "ZUS Contributions",
+    "health_contribution": "Health Contribution",
+    "tax": "Tax",
+    "lost_revenue": "Lost Revenue",
+    "net_income": "Net Income"
+  },
+  "break_even": {
+    "title": "Break-Even Analysis",
+    "net_difference": "Net Difference (B2B - UoP)",
+    "b2b_rate": "Monthly B2B Rate (PLN)",
+    "net_difference_annual": "Annual Net Difference (PLN)"
+  },
+  "sensitivity": {
+    "title": "Sensitivity Analysis (Tornado Chart)",
+    "impact_on_net": "Impact on Net Difference",
+    "impact_on_net_annual": "Impact on Annual Net Difference (PLN)",
+    "koszty_firmowe_miesieczne": "Monthly Business Costs",
+    "urlop_dni": "Vacation Days",
+    "przestoje_miesiace": "Stoppage Months"
   },
   "report": {
     "input_summary_title": "Input Parameters Summary",

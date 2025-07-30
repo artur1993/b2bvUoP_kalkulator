@@ -1,4 +1,5 @@
 import pytest
+import os
 from src.app import app
 
 @pytest.fixture
@@ -456,3 +457,21 @@ def test_calculate_b2b_to_uop_break_even_not_found_negative(client):
     json_data = response.get_json()
     assert "break_even_wynagrodzenie_brutto" in json_data
     assert json_data["break_even_wynagrodzenie_brutto"] == -1
+
+def test_serve_existing_static_file_positive(client):
+    """
+    Test the /<path:path> endpoint to serve an existing static file (e.g., a CSS file).
+    """
+    # Create a dummy static file for testing
+    static_dir = app.static_folder
+    dummy_file_path = os.path.join(static_dir, 'test_static.css')
+    with open(dummy_file_path, 'w') as f:
+        f.write('body { color: red; }')
+
+    response = client.get('/test_static.css')
+    assert response.status_code == 200
+    assert 'text/css' in response.mimetype
+    assert response.data.decode('utf-8') == 'body { color: red; }'
+
+    # Clean up the dummy file
+    os.remove(dummy_file_path)

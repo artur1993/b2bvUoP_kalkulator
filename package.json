@@ -24,6 +24,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
+    "@google/gemini-cli": "^0.1.14",
     "playwright": "^1.54.1"
   }
 }

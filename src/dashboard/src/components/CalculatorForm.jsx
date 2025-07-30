@@ -282,13 +282,30 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             value={uopData.wynagrodzenie_brutto}
             onChange={handleUopChange}
           />
-          <Input
-            label={t('form.tax_deductible_costs')}
-            id="koszty_uzyskania_przychodu"
-            type="number"
-            value={uopData.koszty_uzyskania_przychodu}
+          <Select
+            label={t('form.kup_type')}
+            id="kup_settings.type"
+            name="kup_settings.type"
+            value={uopData.kup_settings.type}
             onChange={handleUopChange}
+            options={[
+              { value: 'standard', label: t('form.kup_standard') },
+              { value: 'elevated', label: t('form.kup_elevated') },
+              { value: 'autorskie_50', label: t('form.kup_creative_50') },
+              { value: 'brak', label: t('form.kup_none') },
+            ]}
           />
+          {uopData.kup_settings.type === 'autorskie_50' && (
+            <Input
+              label={t('form.creative_work_percentage')}
+              id="kup_settings.creative_work_percentage"
+              name="kup_settings.creative_work_percentage"
+              type="number"
+              value={uopData.kup_settings.creative_work_percentage}
+              onChange={handleUopChange}
+              className="ml-4 mt-2"
+            />
+          )}
           <Checkbox
             label={t('form.youth_relief')}
             id="ulga_dla_mlodych"

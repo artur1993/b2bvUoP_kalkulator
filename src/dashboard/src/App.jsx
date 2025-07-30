@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import CalculatorForm from './components/CalculatorForm';
 import ResultsDisplay from './components/ResultsDisplay';
 import ComparisonChart from './components/ComparisonChart';
+import WaterfallChart from './components/WaterfallChart';
+import BreakEvenChart from './components/BreakEvenChart';
+import SensitivityChart from './components/SensitivityChart';
 import Header from './components/Header';
 import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
@@ -36,7 +39,7 @@ function App() {
 
   const [uopData, setUopData] = useState({
     wynagrodzenie_brutto: 8000,
-    koszty_uzyskania_przychodu: 250,
+    kup_settings: { type: 'standard', creative_work_percentage: 70 },
     ulga_dla_mlodych: false,
     wybrane_benefity: [],
   });
@@ -69,12 +72,22 @@ function App() {
 
   const handleUopChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     if (name === 'wybrane_benefity') {
       setUopData((prevData) => ({
         ...prevData,
         wybrane_benefity: checked
           ? [...prevData.wybrane_benefity, value]
           : prevData.wybrane_benefity.filter((benefit) => benefit !== value),
+      }));
+    } else if (name.startsWith('kup_settings.')) {
+      const field = name.split('.')[1];
+      setUopData((prevData) => ({
+        ...prevData,
+        kup_settings: {
+          ...prevData.kup_settings,
+          [field]: value,
+        },
       }));
     } else {
       setUopData((prevData) => ({
@@ -182,6 +195,9 @@ function App() {
                 data-testid="results-display" 
               />
               <ComparisonChart results={results} />
+              <WaterfallChart results={results} />
+              <BreakEvenChart b2b={b2bData} uop={uopData} />
+              <SensitivityChart b2b={b2bData} uop={uopData} />
             </div>
           )}
         </div>

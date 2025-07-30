@@ -12,6 +12,9 @@ This tool provides a detailed and accurate financial comparison, taking into acc
 - **Comprehensive Visualizations**: 
   - A grouped bar chart to compare the total annual value of UoP, standard B2B, and B2B with benefits.
   - A pie chart showing the distribution of your B2B revenue (net income, taxes, ZUS, etc.).
+  - **Waterfall Chart**: Visualizes the breakdown of gross income to net income, showing deductions like ZUS, taxes (with detailed breakdown by tax brackets), and other costs.
+  - **Break-Even Analysis Chart**: A line chart illustrating the break-even point between B2B and UoP contracts, showing the net difference across various B2B monthly rates.
+  - **Sensitivity (Tornado) Chart**: Identifies and visualizes the impact of key parameters (e.g., business costs, vacation days, stoppage months) on the final net income difference, sorted by impact magnitude.
 - **Export Results**: Export the detailed comparison to Excel, a basic PDF report, or an advanced PDF report.
 - **Internationalized PDF Reports**: The generated PDF report is fully translated into the language selected in the UI (English or Polish).
 - **Advanced PDF Report**: Generate a comprehensive, multi-page PDF report with a professional design, including:

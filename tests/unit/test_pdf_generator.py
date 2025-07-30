@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 from unittest.mock import MagicMock, patch
-from src.pdf_generator.generator import PDFReportGenerator
+from src.pdf_generator.generator import PDFReportGenerator, format_currency
 
 class PDFGeneratorTestCase(unittest.TestCase):
     def setUp(self):
@@ -108,6 +108,43 @@ class PDFGeneratorTestCase(unittest.TestCase):
         })
         
         self.assertNotIn("Checklista Przed Przejściem na B2B", rendered_html)
+
+    def test_format_currency_filter(self):
+        """Test the Jinja2 currency formatting filter."""
+        self.assertEqual(format_currency(12345.67), "12 345,67 zł")
+        self.assertEqual(format_currency(1000), "1 000,00 zł")
+        self.assertEqual(format_currency("not a number"), "not a number")
+
+    @patch('matplotlib.pyplot.savefig')
+    @patch('matplotlib.pyplot.show')
+    def test_generate_charts_basic_report(self, mock_show, mock_savefig):
+        """Test that only the total value chart is generated for a basic report."""
+        charts = self.pdf_generator._generate_charts(
+            self.mock_data['b2b_results'],
+            self.mock_data['uop_results'],
+            self.pdf_generator.translations['pl'],
+            report_type='basic'
+        )
+        self.assertIn('total_value_chart', charts)
+        self.assertIsNotNone(charts['total_value_chart'])
+        self.assertIsNone(charts['b2b_waterfall_chart'])
+        self.assertEqual(mock_savefig.call_count, 1)
+
+    @patch('matplotlib.pyplot.savefig')
+    @patch('matplotlib.pyplot.show')
+    def test_generate_charts_advanced_report(self, mock_show, mock_savefig):
+        """Test that both charts are generated for an advanced report."""
+        charts = self.pdf_generator._generate_charts(
+            self.mock_data['b2b_results'],
+            self.mock_data['uop_results'],
+            self.pdf_generator.translations['pl'],
+            report_type='advanced'
+        )
+        self.assertIn('total_value_chart', charts)
+        self.assertIn('b2b_waterfall_chart', charts)
+        self.assertIsNotNone(charts['total_value_chart'])
+        self.assertIsNotNone(charts['b2b_waterfall_chart'])
+        self.assertEqual(mock_savefig.call_count, 2)
 
 if __name__ == '__main__':
     unittest.main()

@@ -7,7 +7,14 @@
     "kwota_wolna": 30000,
     "liniowy": 0.19,
     "ryczalt_IT": 0.12,
-    "ip_box": 0.05
+    "ip_box": 0.05,
+    "limit_kup_autorskie": 120000
+  },
+  "koszty_uzyskania_przychodu": {
+    "standardowe": 250,
+    "standardowe_roczny_limit": 3000,
+    "podwyzszone": 300,
+    "elevatedowe_roczny_limit": 3600
   },
   "zus_2025": {
     "ulga_na_start": {

@@ -210,3 +210,25 @@
   - [x] **Sub-task 41.3: Add integration tests for error paths in `/api/calculate`, `/api/export/excel`, `/api/export/pdf` and `/api/export/pdf/advanced` in `tests/integration/test_api.py`.**
 - [x] **Task 42: Improve Frontend Test Coverage**
   - [x] **Sub-task 42.1: Fix failing tests in `src/App.test.jsx` and `src/components/ResultsDisplay.test.jsx` by updating button names and adding advanced PDF test.**
+
+## Phase 18: Advanced Analytics
+
+- [x] **Task 43: Implement Waterfall Chart**
+  - [x] **Sub-task 43.1: Modify `calculate_b2b_results` and `calculate_uop_results` in `src/app.py` to return detailed steps.**
+  - [x] **Sub-task 43.2: Create `src/dashboard/src/components/WaterfallChart.jsx` component.**
+  - [x] **Sub-task 43.3: Integrate `WaterfallChart.jsx` into `App.jsx`.**
+- [x] **Task 44: Implement Break-Even Analysis Chart**
+  - [x] **Sub-task 44.1: Create `/api/calculate/break-even-analysis` endpoint in `src/app.py`.**
+  - [x] **Sub-task 44.2: Create `src/dashboard/src/components/BreakEvenChart.jsx` component.**
+  - [x] **Sub-task 44.3: Integrate `BreakEvenChart.jsx` into `App.jsx`.**
+- [x] **Task 45: Implement Sensitivity (Tornado) Analysis Chart**
+  - [x] **Sub-task 45.1: Create `/api/calculate/sensitivity-analysis` endpoint in `src/app.py`.**
+  - [x] **Sub-task 45.2: Create `src/dashboard/src/components/SensitivityChart.jsx` component.**
+  - [x] **Sub-task 45.3: Integrate `SensitivityChart.jsx` into `App.jsx`.**
+- [x] **Task 46: Implement Tests for New Analytics Features**
+  - [x] **Sub-task 46.1: Create `tests/unit/test_calculation_details.py` to test detailed calculation results.**
+  - [x] **Sub-task 46.2: Create `tests/unit/test_analysis_endpoints.py` to test new analysis endpoints.**
+  - [x] **Sub-task 46.3: Create component tests for `WaterfallChart.jsx`, `BreakEvenChart.jsx`, and `SensitivityChart.jsx`.**
+  - [x] **Sub-task 46.4: Fixed all failing backend tests and ensured all tests pass.**
+- [x] **Task 47: Update Translations**
+  - [x] **Sub-task 47.1: Add new translation keys to `en/translation.json` and `pl/translation.json`.**
