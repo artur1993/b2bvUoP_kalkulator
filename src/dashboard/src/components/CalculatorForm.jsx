@@ -105,6 +105,13 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             checked={b2bData.ulga_dla_mlodych}
             onChange={handleB2bChange}
           />
+          <Checkbox
+            label={t('form.equalize_pension')}
+            id="equalizePension"
+            checked={b2bData.equalizePension}
+            onChange={handleB2bChange}
+            disabled={!uopData.wynagrodzenie_brutto}
+          />
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>

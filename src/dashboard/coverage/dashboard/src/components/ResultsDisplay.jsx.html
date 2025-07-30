@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">87.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>109/109</span>
+                <span class='fraction'>110/126</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">87.3% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>109/109</span>
+                <span class='fraction'>110/126</span>
             </div>
         
             
@@ -190,7 +190,26 @@
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -288,6 +307,25 @@
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
@@ -417,7 +455,26 @@ const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExc
         &lt;/div&gt;
       )}
 &nbsp;
-      &lt;div className="flex justify-center space-x-4"&gt;
+      {results.<span class="branch-0 cbranch-no" title="branch not covered" >pension_details &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;div className="mt-10 p-6 bg-blue-50 rounded-lg shadow-lg border-t-4 border-blue-300"&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;h3 className="text-2xl font-semibold text-blue-800 mb-4"&gt;{t('pension.analysis_title')}&lt;/h3&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;div className="grid grid-cols-1 md:grid-cols-2 gap-6"&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;h4 className="font-bold text-lg text-gray-700"&gt;{t('pension.comparison_title')}&lt;/h4&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;p&gt;&lt;strong&gt;{t('pension.uop_pension')}:&lt;/strong&gt; {formatCurrency(results.pension_details.uop_pension_monthly)}/mies.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;p&gt;&lt;strong&gt;{t('pension.b2b_pension')}:&lt;/strong&gt; {formatCurrency(results.pension_details.b2b_pension_monthly)}/mies.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;p className="font-bold text-red-600"&gt;&lt;strong&gt;{t('pension.gap_to_cover')}:&lt;/strong&gt; {formatCurrency(results.pension_details.pension_gap_monthly)}/mies.&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;div&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;h4 className="font-bold text-lg text-gray-700"&gt;{t('pension.savings_title')}&lt;/h4&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;p&gt;&lt;strong&gt;{t('pension.required_monthly_savings')}:&lt;/strong&gt; {formatCurrency(results.pension_details.required_monthly_savings)}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;p className="text-green-700 font-semibold"&gt;&lt;strong&gt;{t('pension.invoice_increase')}:&lt;/strong&gt; {formatCurrency(results.pension_details.invoice_increase)}&lt;/p&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;/div&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
+      )}
+&nbsp;
+      &lt;div className="flex justify-center space-x-4 mt-8"&gt;
         &lt;button
           onClick={onExportPdf}
           className="bg-transparent hover:bg-secondary/10 text-secondary font-bold py-2 px-6 border border-secondary rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
@@ -451,7 +508,7 @@ export default ResultsDisplay;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-30T22:20:57.897Z
+                at 2025-07-30T23:05:02.535Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

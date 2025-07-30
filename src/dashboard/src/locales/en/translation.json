@@ -165,5 +165,15 @@
   },
   "checklists": {
     "title": "Checklist Before Switching to B2B"
+  },
+  "pension": {
+    "analysis_title": "Pension Equalization Analysis",
+    "comparison_title": "Projected Pension Comparison",
+    "uop_pension": "UoP Pension",
+    "b2b_pension": "B2B Pension",
+    "gap_to_cover": "Gap to Cover",
+    "savings_title": "Required Private Savings",
+    "required_monthly_savings": "Required Monthly Savings",
+    "invoice_increase": "Required B2B Invoice Increase"
   }
 }

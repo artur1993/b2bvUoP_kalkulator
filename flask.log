@@ -8,13 +8,3 @@
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 349-713-873
-127.0.0.1 - - [31/Jul/2025 00:23:21] "POST /api/calculate HTTP/1.1" 200 -
-127.0.0.1 - - [31/Jul/2025 00:23:21] "POST /api/calculate/break-even-analysis HTTP/1.1" 200 -
-127.0.0.1 - - [31/Jul/2025 00:23:21] "POST /api/calculate/sensitivity-analysis HTTP/1.1" 200 -
-127.0.0.1 - - [31/Jul/2025 00:23:21] "POST /api/calculate/break-even-analysis HTTP/1.1" 200 -
-127.0.0.1 - - [31/Jul/2025 00:23:21] "POST /api/calculate/sensitivity-analysis HTTP/1.1" 200 -
-/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/pdf_generator/generator.py:37: UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.
-  fig1, ax1 = plt.subplots(figsize=(10, 6))
-/home/artur/PycharmProjects/b2v_UoP_kalkulator/src/pdf_generator/generator.py:66: UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.
-  fig2, ax2 = plt.subplots(figsize=(12, 7))
-127.0.0.1 - - [31/Jul/2025 00:23:27] "POST /api/export/pdf/advanced HTTP/1.1" 200 -

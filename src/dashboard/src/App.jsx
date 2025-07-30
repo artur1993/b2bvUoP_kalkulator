@@ -107,6 +107,12 @@ function App() {
     try {
       const data = { b2b: b2bData, uop: uopData, calculation_mode: calculationMode };
       const res = await calculateResults(data);
+      if (res.pension_details) {
+        setB2bData(prevData => ({
+          ...prevData,
+          faktura_miesieczna: prevData.faktura_miesieczna + res.pension_details.invoice_increase
+        }));
+      }
       setResults(res);
     } catch (err) {
       setError('Failed to fetch results. Please try again.');

@@ -7,7 +7,7 @@ const Checkbox = ({ label, id, checked, onChange, ...props }) => {
         type="checkbox"
         id={id}
         name={id}
-        checked={checked}
+        checked={!!checked}
         onChange={onChange}
         className="mr-2 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded transition duration-200"
         {...props}

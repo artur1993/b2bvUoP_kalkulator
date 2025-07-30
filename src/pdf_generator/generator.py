@@ -99,7 +99,8 @@ class PDFReportGenerator:
             "charts": charts,
             "generation_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "t": t,
-            "report_type": report_type
+            "report_type": report_type,
+            "pension_details": data.get('pension_details')
         }
         
         if report_type == 'advanced':

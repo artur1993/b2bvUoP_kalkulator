@@ -475,3 +475,36 @@ def test_serve_existing_static_file_positive(client):
 
     # Clean up the dummy file
     os.remove(dummy_file_path)
+
+def test_calculate_equalize_pension_positive(client):
+    """
+    Test the /api/calculate endpoint with equalizePension set to true.
+    """
+    data = {
+        "b2b": {
+            "faktura_miesieczna": 10000,
+            "koszty_firmowe_miesieczne": 500,
+            "zus_rodzaj": "preferencyjny",
+            "zus_chorobowe": True,
+            "forma_opodatkowania": "liniowy",
+            "ulga_dla_mlodych": False,
+            "urlop_dni": 20,
+            "chorobowe_dni": 5,
+            "przestoje_miesiace": 0,
+            "customBenefits": 0,
+            "companyBenefits": {},
+            "equalizePension": True
+        },
+        "uop": {
+            "wynagrodzenie_brutto": 12000,
+            "koszty_uzyskania_przychodu": 250,
+            "ulga_dla_mlodych": False,
+            "wybrane_benefity": []
+        }
+    }
+    response = client.post('/api/calculate', json=data)
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert "pension_details" in json_data
+    assert json_data["pension_details"] is not None
+    assert "invoice_increase" in json_data["pension_details"]

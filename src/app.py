@@ -8,6 +8,7 @@ import math
 from src.pdf_generator.generator import PDFReportGenerator
 from src.analysis import generate_executive_summary, get_risk_analysis
 from src.calculations import _get_float, calculate_uop_break_even
+from src.pension_calculator import calculate_pension_details
 
 
 
@@ -474,6 +475,13 @@ def calculate():
             break_even_key: break_even_point,
             "komentarze": "Porównanie wygenerowane pomyślnie."
         }
+
+        # Nowa logika do obsługi wyrównania emerytury
+        if b2b_data.get('equalizePension'):
+            uop_gross_salary = _get_float(uop_data, 'wynagrodzenie_brutto', 0)
+            pension_details = calculate_pension_details(uop_gross_salary)
+            response_data['pension_details'] = pension_details
+
         return jsonify(response_data)
     except Exception as e:
         app.logger.exception("Error during calculation:")
@@ -542,6 +550,11 @@ def export_to_advanced_pdf():
     summary = generate_executive_summary(data.get('b2b_results', {}), data.get('uop_results', {}), data.get('break_even_faktura', 0), lang)
     risk_analysis = get_risk_analysis(lang)
     data['analysis'] = {"summary": summary, "risk": risk_analysis}
+
+    if data.get('input_data', {}).get('b2b', {}).get('equalizePension'):
+        uop_gross_salary = data.get('input_data', {}).get('uop', {}).get('wynagrodzenie_brutto', 0)
+        pension_details = calculate_pension_details(uop_gross_salary)
+        data['pension_details'] = pension_details
 
     pdf_bytes = pdf_generator.generate(data, report_type='advanced')
     

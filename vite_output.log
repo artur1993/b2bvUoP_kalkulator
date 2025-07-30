@@ -2,9 +2,8 @@
 > dashboard@0.0.0 dev
 > vite --host
 
-Re-optimizing dependencies because lockfile has changed
 
-  VITE v5.4.19  ready in 378 ms
+  VITE v5.4.19  ready in 356 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.0.101:5173/

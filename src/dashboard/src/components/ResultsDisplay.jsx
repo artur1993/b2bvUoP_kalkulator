@@ -98,7 +98,26 @@ const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExc
         </div>
       )}
 
-      <div className="flex justify-center space-x-4">
+      {results.pension_details && (
+        <div className="mt-10 p-6 bg-blue-50 rounded-lg shadow-lg border-t-4 border-blue-300">
+          <h3 className="text-2xl font-semibold text-blue-800 mb-4">{t('pension.analysis_title')}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-bold text-lg text-gray-700">{t('pension.comparison_title')}</h4>
+              <p><strong>{t('pension.uop_pension')}:</strong> {formatCurrency(results.pension_details.uop_pension_monthly)}/mies.</p>
+              <p><strong>{t('pension.b2b_pension')}:</strong> {formatCurrency(results.pension_details.b2b_pension_monthly)}/mies.</p>
+              <p className="font-bold text-red-600"><strong>{t('pension.gap_to_cover')}:</strong> {formatCurrency(results.pension_details.pension_gap_monthly)}/mies.</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg text-gray-700">{t('pension.savings_title')}</h4>
+              <p><strong>{t('pension.required_monthly_savings')}:</strong> {formatCurrency(results.pension_details.required_monthly_savings)}</p>
+              <p className="text-green-700 font-semibold"><strong>{t('pension.invoice_increase')}:</strong> {formatCurrency(results.pension_details.invoice_increase)}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex justify-center space-x-4 mt-8">
         <button
           onClick={onExportPdf}
           className="bg-transparent hover:bg-secondary/10 text-secondary font-bold py-2 px-6 border border-secondary rounded-lg transition duration-300 ease-in-out transform hover:scale-105"

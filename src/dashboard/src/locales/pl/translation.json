@@ -50,7 +50,8 @@
     "calculate_button": "Porównaj",
     "calculation_mode_title": "Tryb Kalkulacji",
     "uop_to_b2b_mode": "UoP do B2B (Oblicz fakturę B2B, aby zrównać się z UoP)",
-    "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)"
+    "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)",
+    "equalize_pension": "Wyrównaj emeryturę do poziomu UoP"
   },
   "results": {
     "title": "Wyniki Kalkulacji",
@@ -165,5 +166,15 @@
   },
   "checklists": {
     "title": "Checklista Przed Przejściem na B2B"
+  },
+  "pension": {
+    "analysis_title": "Analiza Wyrównania Emerytury",
+    "comparison_title": "Porównanie Prognozowanych Emerytur",
+    "uop_pension": "Emerytura UoP",
+    "b2b_pension": "Emerytura B2B",
+    "gap_to_cover": "Luka do pokrycia",
+    "savings_title": "Wymagane Oszczędności Prywatne",
+    "required_monthly_savings": "Wymagane Miesięczne Oszczędności",
+    "invoice_increase": "Wymagane Zwiększenie Faktury B2B"
   }
 }

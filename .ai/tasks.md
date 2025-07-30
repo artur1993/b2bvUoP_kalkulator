@@ -232,3 +232,23 @@
   - [x] **Sub-task 46.4: Fixed all failing backend tests and ensured all tests pass.**
 - [x] **Task 47: Update Translations**
   - [x] **Sub-task 47.1: Add new translation keys to `en/translation.json` and `pl/translation.json`.**
+
+## Phase 19: Implement Pension Equalization Feature
+
+- [x] **Task 48: Implement Calculation Logic (Backend)**
+  - [x] Create `src/pension_calculator.py`
+  - [x] Integrate with `app.py`
+- [x] **Task 49: Implement User Interface (Frontend)**
+  - [x] Modify `src/App.jsx`
+  - [x] Modify `src/components/CalculatorForm.jsx`
+  - [x] Modify `src/components/ResultsDisplay.jsx`
+- [x] **Task 50: Integrate with PDF Report**
+  - [x] Update `report.html`
+  - [x] Update `generator.py` and `app.py`
+- [x] **Task 51: Implement Test Plan**
+  - [x] Unit Tests for Backend (`tests/unit/test_pension_calculator.py`)
+  - [x] Integration Tests for `app.py`
+  - [x] Component Tests for Frontend (`src/components/CalculatorForm.test.jsx`)
+- [x] **Task 52: Debugging and Fixes**
+  - [x] Fix TypeError in `src/app.py`
+  - [x] Fix i18n translation issue in frontend

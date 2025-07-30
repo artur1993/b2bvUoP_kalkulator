@@ -73,6 +73,18 @@
             {% endif %}
         </section>
 
+        {% if report_type == 'advanced' and pension_details %}
+        <section class="card" style="page-break-before: always;">
+            <h2>{{ t.pension.title | default('Analiza Wyrównania Emerytury') }}</h2>
+            <div class="pension-analysis">
+                <h4>{{ t.pension.comparison_title | default('Porównanie Prognozowanych Emerytur') }}</h4>
+                <p><strong>Emerytura UoP:</strong> {{ pension_details.uop_pension_monthly | format_currency }}/mies.</p>
+                <p><strong>Emerytura B2B:</strong> {{ pension_details.b2b_pension_monthly | format_currency }}/mies.</p>
+                <p class="highlight"><strong>Luka do pokrycia:</strong> {{ pension_details.pension_gap_monthly | format_currency }}/mies.</p>
+                </div>
+        </section>
+        {% endif %}
+
         <!-- Jak to policzyliśmy? -->
         <section class="card" style="page-break-before: always;">
             <h2>
