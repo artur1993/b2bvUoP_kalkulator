@@ -2,40 +2,40 @@
 import unittest
 import json
 import os
-from src.app import DANE, calculate_uop_results
+from src.calculations import DANE, calculate_uop_results
 from src.calculations import _get_float
 
 class TestGetFloat(unittest.TestCase):
 
-    def test_get_float_valid_float(self):
+    def test_get_float_valid_float_positive(self):
         data = {"key": 123.45}
         self.assertEqual(_get_float(data, "key"), 123.45)
 
-    def test_get_float_valid_int(self):
+    def test_get_float_valid_int_positive(self):
         data = {"key": 123}
         self.assertEqual(_get_float(data, "key"), 123.0)
 
-    def test_get_float_valid_string_float(self):
+    def test_get_float_valid_string_float_positive(self):
         data = {"key": "123.45"}
         self.assertEqual(_get_float(data, "key"), 123.45)
 
-    def test_get_float_valid_string_int(self):
+    def test_get_float_valid_string_int_positive(self):
         data = {"key": "123"}
         self.assertEqual(_get_float(data, "key"), 123.0)
 
-    def test_get_float_missing_key(self):
+    def test_get_float_missing_key_negative(self):
         data = {}
         self.assertEqual(_get_float(data, "key"), 0.0)
 
-    def test_get_float_missing_key_with_default(self):
+    def test_get_float_missing_key_with_default_negative(self):
         data = {}
         self.assertEqual(_get_float(data, "key", default=99.9), 99.9)
 
-    def test_get_float_invalid_string(self):
+    def test_get_float_invalid_string_negative(self):
         data = {"key": "abc"}
         self.assertEqual(_get_float(data, "key"), 0.0)
 
-    def test_get_float_none_value(self):
+    def test_get_float_none_value_negative(self):
         data = {"key": None}
         self.assertEqual(_get_float(data, "key"), 0.0)
 

@@ -84,7 +84,7 @@ describe('App', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('alert-message')).toBeInTheDocument();
-      expect(screen.getByText('Failed to fetch results. Please try again.')).toBeInTheDocument();
+      expect(screen.getByText('Failed to fetch results. Please check the console for more details.')).toBeInTheDocument();
     });
   });
 
@@ -214,7 +214,7 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
     await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
-      expect(screen.getByText('Failed to fetch results. Please try again.')).toBeInTheDocument();
+      expect(screen.getByText('Failed to fetch results. Please check the console for more details.')).toBeInTheDocument();
     });
   });
 
@@ -227,7 +227,7 @@ describe('App', () => {
     });
     fireEvent.click(screen.getByTestId('export-excel-button'));
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith('Failed to export Excel.');
+      expect(window.alert).toHaveBeenCalledWith('Failed to export Excel. See console for details.');
     });
   });
 
@@ -240,7 +240,7 @@ describe('App', () => {
     });
     fireEvent.click(screen.getByTestId('export-pdf-button'));
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith('Failed to export PDF.');
+      expect(window.alert).toHaveBeenCalledWith('Failed to export PDF. See console for details.');
     });
   });
 
@@ -253,7 +253,7 @@ describe('App', () => {
     });
     fireEvent.click(screen.getByTestId('export-advanced-pdf-button'));
     await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith('Failed to export advanced PDF.');
+      expect(window.alert).toHaveBeenCalledWith('Failed to export advanced PDF. See console for details.');
     });
   });
 });

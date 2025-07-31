@@ -115,7 +115,8 @@ function App() {
       }
       setResults(res);
     } catch (err) {
-      setError('Failed to fetch results. Please try again.');
+      setError('Failed to fetch results. Please check the console for more details.');
+      console.error('Calculation error:', err);
       
     } finally {
       setLoading(false);
@@ -138,7 +139,7 @@ function App() {
       saveAs(blob, 'Raport_B2B_vs_UoP.pdf');
     } catch (err) {
       console.error('Error exporting PDF:', err);
-      alert('Failed to export PDF.');
+      alert('Failed to export PDF. See console for details.');
     }
   };
 
@@ -149,7 +150,8 @@ function App() {
       saveAs(blob, 'kalkulator_wyniki.xlsx');
     } catch (err) {
       
-      alert('Failed to export Excel.');
+      console.error('Error exporting Excel:', err);
+      alert('Failed to export Excel. See console for details.');
     }
   };
 
@@ -167,7 +169,7 @@ function App() {
       saveAs(blob, 'Raport_Zaawansowany_B2B_vs_UoP.pdf');
     } catch (err) {
       console.error('Error exporting advanced PDF:', err);
-      alert('Failed to export advanced PDF.');
+      alert('Failed to export advanced PDF. See console for details.');
     }
   };
 

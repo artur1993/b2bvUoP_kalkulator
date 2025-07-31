@@ -2,6 +2,7 @@ import unittest
 import os
 import json
 from unittest.mock import MagicMock, patch
+import jinja2 # Import jinja2
 from src.pdf_generator.generator import PDFReportGenerator, format_currency
 
 class PDFGeneratorTestCase(unittest.TestCase):
@@ -48,7 +49,7 @@ class PDFGeneratorTestCase(unittest.TestCase):
         )
 
     @patch('weasyprint.HTML')
-    def test_advanced_report_contains_narrative_calculation(self, mock_html):
+    def test_advanced_report_contains_narrative_calculation_positive(self, mock_html):
         """Sprawdza, czy raport zaawansowany zawiera narracyjną sekcję 'Jak to policzyliśmy?'"""
         mock_html_instance = mock_html.return_value
         mock_html_instance.write_pdf.return_value = b"dummy pdf content"
@@ -71,7 +72,7 @@ class PDFGeneratorTestCase(unittest.TestCase):
         self.assertIn("184 500,00", rendered_html.replace("\xa0", " "))
 
     @patch('weasyprint.HTML')
-    def test_advanced_report_contains_checklist(self, mock_html):
+    def test_advanced_report_contains_checklist_positive(self, mock_html):
         """Sprawdza, czy raport zaawansowany zawiera sekcję z checklistą."""
         mock_html_instance = mock_html.return_value
         mock_html_instance.write_pdf.return_value = b"dummy pdf content"
@@ -93,7 +94,7 @@ class PDFGeneratorTestCase(unittest.TestCase):
         self.assertIn("Zabezpiecz poduszkę finansową", rendered_html)
 
     @patch('weasyprint.HTML')
-    def test_basic_report_does_not_contain_checklist(self, mock_html):
+    def test_basic_report_does_not_contain_checklist_negative(self, mock_html):
         """Sprawdza, czy raport podstawowy NIE zawiera checklisty."""
         mock_html_instance = mock_html.return_value
         mock_html_instance.write_pdf.return_value = b"dummy pdf content"
@@ -109,7 +110,7 @@ class PDFGeneratorTestCase(unittest.TestCase):
         
         self.assertNotIn("Checklista Przed Przejściem na B2B", rendered_html)
 
-    def test_format_currency_filter(self):
+    def test_format_currency_filter_neutral(self):
         """Test the Jinja2 currency formatting filter."""
         self.assertEqual(format_currency(12345.67), "12 345,67 zł")
         self.assertEqual(format_currency(1000), "1 000,00 zł")
@@ -117,7 +118,7 @@ class PDFGeneratorTestCase(unittest.TestCase):
 
     @patch('matplotlib.pyplot.savefig')
     @patch('matplotlib.pyplot.show')
-    def test_generate_charts_basic_report(self, mock_show, mock_savefig):
+    def test_generate_charts_basic_report_positive(self, mock_show, mock_savefig):
         """Test that only the total value chart is generated for a basic report."""
         charts = self.pdf_generator._generate_charts(
             self.mock_data['b2b_results'],
@@ -132,7 +133,7 @@ class PDFGeneratorTestCase(unittest.TestCase):
 
     @patch('matplotlib.pyplot.savefig')
     @patch('matplotlib.pyplot.show')
-    def test_generate_charts_advanced_report(self, mock_show, mock_savefig):
+    def test_generate_charts_advanced_report_positive(self, mock_show, mock_savefig):
         """Test that both charts are generated for an advanced report."""
         charts = self.pdf_generator._generate_charts(
             self.mock_data['b2b_results'],

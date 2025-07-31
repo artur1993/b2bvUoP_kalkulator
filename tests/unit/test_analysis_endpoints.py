@@ -17,7 +17,7 @@ class TestAnalysisEndpoints(unittest.TestCase):
         mock_uop.return_value = {'calkowita_roczna_wartosc': 100000}
 
         request_data = {
-            'b2b': {'faktura_miesieczna': 10000},
+            'b2b': {'faktura_miesieczna': 10000, 'zus_rodzaj': 'pelny', 'forma_opodatkowania': 'liniowy'},
             'uop': {'wynagrodzenie_brutto': 8000}
         }
 
@@ -44,7 +44,9 @@ class TestAnalysisEndpoints(unittest.TestCase):
                 'faktura_miesieczna': 12000,
                 'koszty_firmowe_miesieczne': 1000,
                 'urlop_dni': 20,
-                'przestoje_miesiace': 1
+                'przestoje_miesiace': 1,
+                'zus_rodzaj': 'pelny',
+                'forma_opodatkowania': 'liniowy'
             },
             'uop': {'wynagrodzenie_brutto': 10000}
         }

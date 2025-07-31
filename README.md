@@ -24,7 +24,8 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     - **B2B Checklist**: A practical checklist for individuals transitioning to a B2B contract.
 - **Transparent Methodology**: The PDF report includes a dedicated "How we calculated it?" section that breaks down the key steps of the calculation for both B2B and UoP, ensuring full transparency.
 - **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
-- **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
+  - **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
+  - **Pension Equalization**: For B2B contracts, automatically calculate the additional monthly invoice amount required to invest in a private pension plan (e.g., IKE/IKZE) to match the pension contributions made by the employer in a UoP contract. This provides a more holistic, long-term financial comparison.
 
 ## Installation
 
@@ -111,7 +112,8 @@ The Flask backend is configured to handle Cross-Origin Resource Sharing (CORS) r
 The project follows a standard Flask application structure:
 - `.ai/`: Contains AI-related instructions and session state.
 - `src/`: Main application source code.
-  - `app.py`: The Flask backend with all calculation logic.
+  - `app.py`: The main Flask backend application file.
+  - `calculations.py`: Contains all core calculation logic.
   - `dashboard/`: React frontend application.
     - `src/`: React source code (components, services, etc.).
     - `public/`: Static assets for React.

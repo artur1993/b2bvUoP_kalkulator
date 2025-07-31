@@ -39,7 +39,9 @@ MOCK_DANE = {
     },
     "koszty_uzyskania_przychodu": {
         "standardowe": 250,
-        "podwyzszone": 300
+        "podwyzszone": 300,
+        "standardowe_roczny_limit": 3000,
+        "elevatedowe_roczny_limit": 3600
     },
     "zus_uop_procentowe": {
         "emerytalna": 0.0976,
@@ -197,6 +199,31 @@ class TestCalculations(unittest.TestCase):
         }
         break_even_point = calculate_uop_break_even(b2b_total_value, uop_base_data)
         self.assertEqual(break_even_point, -1)
+
+    def test_calculate_b2b_missing_keys_negative(self):
+        with self.assertRaises(KeyError):
+            calculate_b2b_results({})
+        with self.assertRaises(KeyError):
+            calculate_b2b_results({"faktura_miesieczna": 10000, "koszty_firmowe_miesieczne": 1000})
+        with self.assertRaises(KeyError):
+            calculate_b2b_results({"faktura_miesieczna": 10000, "koszty_firmowe_miesieczne": 1000, "zus_rodzaj": "pelny"})
+
+    def test_calculate_uop_missing_kup_settings_negative(self):
+        # This test now checks for graceful handling of missing 'kup_settings'
+        # instead of expecting a KeyError, because _get_float provides defaults.
+        results = calculate_uop_results({"wynagrodzenie_brutto": 8000})
+        self.assertIsInstance(results, dict)
+        self.assertIn('roczny_podatek', results)
+
+    def test_calculate_uop_negative_salary_negative(self):
+        results = calculate_uop_results({"wynagrodzenie_brutto": -1000, "kup_settings": {"type": "standard"}})
+        self.assertIsInstance(results, dict)
+        self.assertLess(results['roczne_netto_na_reke'], 0)
+
+    def test_calculate_uop_none_salary_negative(self):
+        results = calculate_uop_results({"wynagrodzenie_brutto": None, "kup_settings": {"type": "standard"}})
+        self.assertIsInstance(results, dict)
+        self.assertGreaterEqual(results['roczne_netto_na_reke'], 0)
 
 if __name__ == '__main__':
     unittest.main()

@@ -32,48 +32,48 @@ class TestAnalysis(unittest.TestCase):
 
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.load')
-    def test_generate_executive_summary_b2b_better(self, mock_json_load, mock_file_open):
+    def test_generate_executive_summary_b2b_better_positive(self, mock_json_load, mock_file_open):
         mock_json_load.return_value = self.mock_data_content
-        b2b_results = {"net_annual_income": 100000}
-        uop_results = {"net_annual_income": 90000}
+        b2b_results = {"calkowita_roczna_wartosc": 100000}
+        uop_results = {"calkowita_roczna_wartosc": 90000}
         summary = generate_executive_summary(b2b_results, uop_results, 0, 'en')
         self.assertEqual(summary["recommendation"], "B2B is better (EN)")
 
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.load')
-    def test_generate_executive_summary_uop_better(self, mock_json_load, mock_file_open):
+    def test_generate_executive_summary_uop_better_positive(self, mock_json_load, mock_file_open):
         mock_json_load.return_value = self.mock_data_content
-        b2b_results = {"net_annual_income": 90000}
-        uop_results = {"net_annual_income": 100000}
+        b2b_results = {"calkowita_roczna_wartosc": 90000}
+        uop_results = {"calkowita_roczna_wartosc": 100000}
         summary = generate_executive_summary(b2b_results, uop_results, 0, 'en')
         self.assertEqual(summary["recommendation"], "UoP is better (EN)")
 
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.load')
-    def test_generate_executive_summary_similar(self, mock_json_load, mock_file_open):
+    def test_generate_executive_summary_similar_positive(self, mock_json_load, mock_file_open):
         mock_json_load.return_value = self.mock_data_content
-        b2b_results = {"net_annual_income": 95000}
-        uop_results = {"net_annual_income": 96000}
+        b2b_results = {"calkowita_roczna_wartosc": 95000}
+        uop_results = {"calkowita_roczna_wartosc": 96000}
         summary = generate_executive_summary(b2b_results, uop_results, 0, 'en')
         self.assertEqual(summary["recommendation"], "Financially similar (EN)")
 
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.load')
-    def test_get_risk_analysis_en(self, mock_json_load, mock_file_open):
+    def test_get_risk_analysis_en_positive(self, mock_json_load, mock_file_open):
         mock_json_load.return_value = self.mock_data_content
         risk_analysis = get_risk_analysis('en')
         self.assertEqual(risk_analysis["zdolnosc_kredytowa_uop"], "Banks prefer UoP (EN)")
 
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.load')
-    def test_get_risk_analysis_pl(self, mock_json_load, mock_file_open):
+    def test_get_risk_analysis_pl_positive(self, mock_json_load, mock_file_open):
         mock_json_load.return_value = self.mock_data_content
         risk_analysis = get_risk_analysis('pl')
         self.assertEqual(risk_analysis["zdolnosc_kredytowa_uop"], "Banki preferują UoP (PL)")
 
     @patch('builtins.open', new_callable=mock_open)
     @patch('json.load')
-    def test_generate_executive_summary_missing_keys(self, mock_json_load, mock_file_open):
+    def test_generate_executive_summary_missing_keys_negative(self, mock_json_load, mock_file_open):
         mock_json_load.return_value = self.mock_data_content
         b2b_results = {}
         uop_results = {}

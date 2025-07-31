@@ -15,4 +15,5 @@ flask.log
 vite_output.log
 vite.log
 src/dashboard/coverage/
+htmlcov/
 

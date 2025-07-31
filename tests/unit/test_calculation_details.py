@@ -1,7 +1,7 @@
 import unittest
 import json
 import os
-from src.app import calculate_b2b_results, calculate_uop_results, DANE
+from src.calculations import calculate_b2b_results, calculate_uop_results, DANE
 
 class TestCalculationDetails(unittest.TestCase):
 

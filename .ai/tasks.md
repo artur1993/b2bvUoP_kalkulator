@@ -252,3 +252,23 @@
 - [x] **Task 52: Debugging and Fixes**
   - [x] Fix TypeError in `src/app.py`
   - [x] Fix i18n translation issue in frontend
+
+## Phase 20: Code Refactoring and Quality Improvement
+
+- [x] **Task 53: Centralize Calculation Logic**
+  - [x] Ensure `src/calculations.py` is the single source of truth for all calculation logic.
+  - [x] Refactor `src/app.py` to import and use calculation functions from `src/calculations.py`.
+  - [x] Remove duplicated calculation functions from `src/app.py`.
+  - [x] Run all tests to verify that the refactoring did not introduce regressions.
+
+- [x] **Task 54: Enhance Logging**
+  - [x] **Backend:** Add `INFO` and `DEBUG` level logs in `src/app.py` endpoints to record incoming request parameters.
+  - [x] **Frontend:** Uncomment and enhance `console.error` calls in `src/dashboard/src/services/api.js` and `src/dashboard/src/App.jsx` to provide more context on failed API requests.
+
+- [x] **Task 55: Update Documentation**
+  - [x] Update `README.md` to include a description of the "Pension Equalization" feature.
+  - [x] Add comprehensive docstrings to all public functions in `src/app.py`, `src/calculations.py`, and `src/analysis.py`, explaining their purpose, parameters, and return values.
+
+- [x] **Task 56: Clean Up Project**
+  - [x] Verify if `tests/e2e/calculator.spec.js` and `tests/e2e/calculator_e2e.spec.js` are redundant and delete them if confirmed.
+  - [x] Perform a project-wide search for unnecessary commented-out code blocks and remove them.

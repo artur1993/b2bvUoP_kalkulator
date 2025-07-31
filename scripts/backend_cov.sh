@@ -41,26 +41,33 @@ echo "Procentowe pokrycie funkcji: ${FUNCTION_PERCENTAGE}%"
 # --- Podsumowanie Klasyfikacji ---
 echo ""
 echo "--- Podsumowanie klasyfikacji testów ---"
-all_tests=$(pytest --color=no --collect-only -q | grep "::test_")
-positive_tests=$(echo "$all_tests" | grep "_positive" | wc -l)
-negative_tests=$(echo "$all_tests" | grep "_negative" | wc -l)
-neutral_tests=$(echo "$all_tests" | grep "_neutral" | wc -l)
-total_tests=$((positive_tests + negative_tests + neutral_tests))
+all_tests_output=$(pytest --color=no --collect-only -q | grep "::test_")
+total_tests=$(echo "$all_tests_output" | wc -l)
+
+positive_tests=$(echo "$all_tests_output" | grep "_positive" | wc -l)
+negative_tests=$(echo "$all_tests_output" | grep "_negative" | wc -l)
+neutral_tests=$(echo "$all_tests_output" | grep "_neutral" | wc -l)
+
+labeled_tests=$((positive_tests + negative_tests + neutral_tests))
+unlabeled_tests=$((total_tests - labeled_tests))
 
 echo "Testy pozytywne: $positive_tests"
 echo "Testy negatywne: $negative_tests"
 echo "Testy neutralne: $neutral_tests"
+echo "Testy nieoznaczone: $unlabeled_tests"
 echo "Wszystkie testy: $total_tests"
 
 if [ "$total_tests" -gt 0 ]; then
     positive_ratio=$(awk "BEGIN {printf \"%.2f\", ($positive_tests / $total_tests) * 100}")
     negative_ratio=$(awk "BEGIN {printf \"%.2f\", ($negative_tests / $total_tests) * 100}")
     neutral_ratio=$(awk "BEGIN {printf \"%.2f\", ($neutral_tests / $total_tests) * 100}")
+    unlabeled_ratio=$(awk "BEGIN {printf \"%.2f\", ($unlabeled_tests / $total_tests) * 100}")
 
     echo "Stosunek testów:"
     echo "  Pozytywne: ${positive_ratio}%"
     echo "  Negatywne: ${negative_ratio}%"
     echo "  Neutralne: ${neutral_ratio}%"
+    echo "  Nieoznaczone: ${unlabeled_ratio}%"
 fi
 
 # --- Wygenerowanie Tabeli Podsumowującej ---
