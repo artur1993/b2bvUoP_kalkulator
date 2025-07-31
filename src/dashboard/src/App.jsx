@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import CalculatorForm from './components/CalculatorForm';
 import ResultsDisplay from './components/ResultsDisplay';
@@ -11,6 +11,27 @@ import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
 import { calculateResults, exportToExcel, exportToPdf, exportToAdvancedPdf } from './services/api';
 import { saveAs } from 'file-saver';
+import { insuranceProfiles, insuranceModules } from './data/insuranceOptions';
+
+const calculateTotalInsuranceCost = (selections, b2bMonthlyInvoice) => {
+  let totalCost = 0;
+  for (const moduleId in selections) {
+    const config = selections[moduleId];
+    const module = insuranceModules[moduleId];
+    if (config.enabled && module) {
+      const option = module.options[config.level];
+      let cost = 0;
+      if (module.type === 'dynamic') {
+        const annualIncome = b2bMonthlyInvoice * 12;
+        cost = (annualIncome * option.multiplier) / 12;
+      } else {
+        cost = option.cost;
+      }
+      totalCost += cost;
+    }
+  }
+  return totalCost;
+};
 
 function App() {
   const { i18n } = useTranslation();
@@ -36,6 +57,12 @@ function App() {
       otherBenefits: { enabled: false, value: 0 },
     },
   });
+  const [baseBusinessCosts, setBaseBusinessCosts] = useState(500); // User-inputted cost
+  const [insuranceConfig, setInsuranceConfig] = useState({
+    enabled: true, // Configurator is enabled by default
+    activeProfile: 'standard',
+    selections: insuranceProfiles.standard
+  });
 
   const [uopData, setUopData] = useState({
     wynagrodzenie_brutto: 8000,
@@ -50,7 +77,9 @@ function App() {
 
   const handleB2bChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name.startsWith('companyBenefits.')) {
+    if (name === 'koszty_firmowe_miesieczne') {
+      setBaseBusinessCosts(value);
+    } else if (name.startsWith('companyBenefits.')) {
       const [benefitType, field] = name.split('.').slice(1);
       setB2bData((prevData) => ({
         ...prevData,
@@ -96,6 +125,18 @@ function App() {
       }));
     }
   };
+
+  useEffect(() => {
+    let totalInsuranceCost = 0;
+    if (insuranceConfig.enabled) {
+      totalInsuranceCost = calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.faktura_miesieczna);
+    }
+    
+    setB2bData(prevData => ({
+      ...prevData,
+      koszty_firmowe_miesieczne: Number(baseBusinessCosts) + totalInsuranceCost
+    }));
+  }, [insuranceConfig, baseBusinessCosts, b2bData.faktura_miesieczna]);
 
   const handleCalculationModeChange = (e) => {
     setCalculationMode(e.target.value);
@@ -157,6 +198,30 @@ function App() {
 
   const handleExportAdvancedPdf = async () => {
     if (!results) return;
+
+    // Prepare detailed insurance data for the report
+    const insuranceDetailsForReport = {
+      ...insuranceConfig,
+      totalMonthlyCost: calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.faktura_miesieczna),
+      breakdown: Object.entries(insuranceConfig.selections)
+        .filter(([, config]) => config.enabled)
+        .map(([moduleId, config]) => {
+          const module = insuranceModules[moduleId];
+          const option = module.options[config.level];
+          const cost = module.type === 'dynamic' 
+            ? (b2bData.faktura_miesieczna * 12 * option.multiplier) / 12 
+            : option.cost;
+          
+          return {
+            name: module.name,
+            level: config.level,
+            cost: cost,
+            details: option.details || '',
+            uop_comparison: option.uop_comparison || ''
+          };
+        })
+    };
+
     try {
       const data = {
         b2b_results: results.b2b_results,
@@ -164,6 +229,7 @@ function App() {
         input_data: { b2b: b2bData, uop: uopData },
         language: i18n.language,
         break_even_faktura: results.break_even_faktura,
+        insurance_details: insuranceDetailsForReport, // <-- NEW OBJECT
       };
       const blob = await exportToAdvancedPdf(data);
       saveAs(blob, 'Raport_Zaawansowany_B2B_vs_UoP.pdf');
@@ -187,6 +253,8 @@ function App() {
             loading={loading}
             calculationMode={calculationMode}
             handleCalculationModeChange={handleCalculationModeChange}
+            insuranceConfig={insuranceConfig}
+            setInsuranceConfig={setInsuranceConfig}
           />
 
           {loading && <SkeletonLoader />}

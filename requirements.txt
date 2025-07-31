@@ -5,3 +5,4 @@ fpdf2
 pytest-flask
 Flask-Cors
 matplotlib
+pypdf

@@ -256,4 +256,18 @@ describe('App', () => {
       expect(window.alert).toHaveBeenCalledWith('Failed to export advanced PDF. See console for details.');
     });
   });
+
+  it('updates business costs when insurance configuration changes', async () => {
+    render(<App />);
+    const businessCostsInput = screen.getByLabelText('Monthly Business Costs (PLN)');
+    const initialBusinessCosts = parseFloat(businessCostsInput.value);
+
+    // Simulate changing insurance profile to minimal
+    fireEvent.click(screen.getByRole('button', { name: /minimal/i }));
+
+    await waitFor(() => {
+      const newBusinessCosts = parseFloat(businessCostsInput.value);
+      expect(newBusinessCosts).not.toEqual(initialBusinessCosts);
+    });
+  });
 });

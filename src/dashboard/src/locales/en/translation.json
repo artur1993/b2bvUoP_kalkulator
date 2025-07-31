@@ -76,8 +76,13 @@
     "break_even_uop_subtitle": "(This is the monthly UoP gross salary needed to match the total annual value of the B2B contract)",
     "export_pdf_basic": "Download Basic Report",
     "export_pdf_advanced": "Download Advanced Report",
-    "export_excel": "Export to Excel"
+    "export_excel": "Export to Excel",
+    "lost_revenue_tooltip": "Lost revenue is the amount B2B loses when not working (vacation, sick leave, downtime).",
+    "loading": "Loading"
   },
+  "currency_pln": "PLN",
+  "b2b": "B2B",
+  "uop": "UoP",
   "charts": {
     "total_comparison_title": "Total Annual Value Comparison",
     "b2b_breakdown_title": "B2B Annual Value Breakdown",
@@ -175,5 +180,42 @@
     "savings_title": "Required Private Savings",
     "required_monthly_savings": "Required Monthly Savings",
     "invoice_increase": "Required B2B Invoice Increase"
+  },
+  "insurance": {
+    "title": "B2B Insurance Configurator",
+    "intro": "The table below shows the selected insurance configuration and its monthly cost.",
+    "module": "Module",
+    "level": "Level",
+    "monthly_cost": "Monthly Cost",
+    "total_monthly_cost": "Total Monthly Insurance Cost",
+    "total_cost": "Total Cost",
+    "profiles": {
+      "minimal": "Minimal",
+      "standard": "Standard",
+      "premium": "Premium",
+      "custom": "Custom"
+    },
+    "modules": {
+      "income_protection": "Income Protection Insurance",
+      "professional_liability": "Professional Liability Insurance",
+      "private_health": "Private Health Insurance",
+      "equipment": "Equipment Insurance",
+      "zus_voluntary": "Voluntary ZUS",
+      "legal_protection": "Legal Protection",
+      "cyber_insurance": "Cyber Insurance"
+    },
+    "options": {
+        "basic": "Basic",
+        "standard": "Standard",
+        "premium": "Premium",
+        "uop_equivalent": "UoP Equivalent",
+        "enabled": "Enabled"
+    },
+    "profile": "Profile",
+    "active_modules": "Active Modules",
+    "insurance": "Insurance",
+    "selected_level": "Selected Level",
+    "coverage_details": "Coverage Details",
+    "uop_comparison": "Comparison with UoP"
   }
 }

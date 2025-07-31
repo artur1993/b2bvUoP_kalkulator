@@ -6,6 +6,70 @@ from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
 import matplotlib.pyplot as plt
 
+# Insurance Modules data (mirroring frontend for calculation)
+insurance_modules = {
+    "income_protection": {
+        "name": "Ubezpieczenie od utraty dochodu",
+        "type": "dynamic",
+        "options": {
+            "basic": {"coverage": 50, "multiplier": 0.008},
+            "standard": {"coverage": 65, "multiplier": 0.012},
+            "uop_equivalent": {"coverage": 80, "multiplier": 0.015},
+            "premium": {"coverage": 100, "multiplier": 0.020}
+        }
+    },
+    "professional_liability": {
+        "name": "OC zawodowe",
+        "type": "fixed",
+        "options": {
+            "basic": {"cost": 33.33},
+            "standard": {"cost": 66.67},
+            "premium": {"cost": 125}
+        }
+    },
+    "private_health": {
+        "name": "Prywatne zdrowotne",
+        "type": "fixed",
+        "options": {
+            "basic": {"cost": 150},
+            "standard": {"cost": 300},
+            "premium": {"cost": 500}
+        }
+    },
+    "equipment": {
+        "name": "Ubezpieczenie sprzętu",
+        "type": "fixed",
+        "options": {
+            "basic": {"cost": 50},
+            "standard": {"cost": 100},
+            "premium": {"cost": 200}
+        }
+    },
+    "zus_voluntary": {
+        "name": "ZUS dobrowolne",
+        "type": "fixed",
+        "options": {
+            "enabled": {"cost": 34.30}
+        }
+    },
+    "legal_protection": {
+        "name": "Ochrona prawna",
+        "type": "fixed",
+        "options": {
+            "basic": {"cost": 30},
+            "standard": {"cost": 60}
+        }
+    },
+    "cyber_insurance": {
+        "name": "Ubezpieczenie cyber",
+        "type": "fixed",
+        "options": {
+            "basic": {"cost": 50},
+            "standard": {"cost": 100}
+        }
+    }
+}
+
 # A simple Jinja2 filter to format numbers as Polish currency
 def format_currency(value):
     if not isinstance(value, (int, float)):
@@ -23,6 +87,27 @@ class PDFReportGenerator:
             'en': json.load(open('src/dashboard/src/locales/en/translation.json', encoding='utf-8')),
             'pl': json.load(open('src/dashboard/src/locales/pl/translation.json', encoding='utf-8'))
         }
+
+    def _calculate_module_cost(self, module_id, insurance_selections, b2b_monthly_invoice):
+        config = insurance_selections.get(module_id)
+        module = insurance_modules.get(module_id)
+        if config and config.get('enabled') and module:
+            option = module['options'].get(config['level'])
+            if option:
+                if module['type'] == 'dynamic':
+                    annual_income = b2b_monthly_invoice * 12
+                    return (annual_income * option['multiplier']) / 12
+                else:
+                    return option['cost']
+        return 0
+
+    def _calculate_all_insurance_costs(self, insurance_config, b2b_monthly_invoice):
+        costs = {}
+        if insurance_config and insurance_config.get('enabled'):
+            selections = insurance_config.get('selections', {})
+            for module_id in selections:
+                costs[module_id] = self._calculate_module_cost(module_id, selections, b2b_monthly_invoice)
+        return costs
 
     def _generate_charts(self, b2b_results, uop_results, t, report_type='basic'):
         # --- Chart Style Configuration ---
@@ -105,6 +190,15 @@ class PDFReportGenerator:
         
         if report_type == 'advanced':
             template_data['analysis'] = data.get('analysis', {})
+            template_data['insurance_details'] = data.get('insurance_details')
+            template_data['total_insurance_cost'] = data.get('total_insurance_cost')
+            
+            # Calculate individual insurance module costs
+            b2b_monthly_invoice = data.get('input_data', {}).get('b2b', {}).get('faktura_miesieczna', 0)
+            template_data['insurance_costs'] = self._calculate_all_insurance_costs(
+                data.get('insurance_details'), b2b_monthly_invoice
+            )
+
             # Add checklist data for advanced reports
             with open('dane_wejsciowe_kalkulator.json', 'r', encoding='utf-8') as f:
                 input_data = json.load(f)

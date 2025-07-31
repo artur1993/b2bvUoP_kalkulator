@@ -272,3 +272,12 @@
 - [x] **Task 56: Clean Up Project**
   - [x] Verify if `tests/e2e/calculator.spec.js` and `tests/e2e/calculator_e2e.spec.js` are redundant and delete them if confirmed.
   - [x] Perform a project-wide search for unnecessary commented-out code blocks and remove them.
+
+## Phase 21: B2B Insurance Configurator
+
+- [x] **Task 57: Implement B2B Insurance Configurator**
+  - [x] **Sub-task 57.1: Create the Data Structure and State Management (Frontend)**
+  - [x] **Sub-task 57.2: Implement the Configurator Component (Frontend)**
+  - [x] **Sub-task 57.3: Integrate Logic with the Main Calculator**
+  - [x] **Sub-task 57.4: Extend the Advanced PDF Report**
+  - [x] **Sub-task 57.5: Implement a Comprehensive Testing Plan**

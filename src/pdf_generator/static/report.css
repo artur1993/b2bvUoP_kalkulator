@@ -186,3 +186,33 @@ h3 {
     margin-right: 10px;
     font-size: 16pt;
 }
+
+/* Insurance Details Section */
+.insurance-summary {
+    background-color: #f3f4f6;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+.details-table th, .details-table td {
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+.details-table th {
+    background-color: #4b5563;
+    color: white;
+}
+.details-table td.cost {
+    text-align: right;
+    font-weight: bold;
+    white-space: nowrap;
+}

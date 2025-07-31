@@ -1,0 +1,117 @@
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { insuranceModules, insuranceProfiles } from '../data/insuranceOptions';
+import Checkbox from './Checkbox';
+import Select from './Select';
+
+const InsuranceConfigurator = ({ insuranceConfig, setInsuranceConfig, b2bMonthlyInvoice }) => {
+  const { t } = useTranslation();
+  const [totalCost, setTotalCost] = useState(0);
+
+  const calculateModuleCost = (moduleId, selections, b2bMonthlyInvoice) => {
+    const config = selections[moduleId];
+    const module = insuranceModules[moduleId];
+    if (config.enabled && module) {
+      const option = module.options[config.level];
+      if (module.type === 'dynamic') {
+        const annualIncome = b2bMonthlyInvoice * 12;
+        return (annualIncome * option.multiplier) / 12;
+      } else {
+        return option.cost;
+      }
+    }
+    return 0;
+  };
+
+  const calculateTotalCost = (selections) => {
+    let cost = 0;
+    for (const moduleId in selections) {
+      cost += calculateModuleCost(moduleId, selections, b2bMonthlyInvoice);
+    }
+    return cost;
+  };
+
+  useEffect(() => {
+    const newTotalCost = calculateTotalCost(insuranceConfig.selections);
+    setTotalCost(newTotalCost);
+  }, [insuranceConfig, b2bMonthlyInvoice]);
+
+  const handleProfileChange = (profileName) => {
+    setInsuranceConfig(prev => ({
+      ...prev,
+      activeProfile: profileName,
+      selections: insuranceProfiles[profileName]
+    }));
+  };
+
+  const handleSelectionChange = (moduleId, field, value) => {
+    setInsuranceConfig(prev => ({
+      ...prev,
+      activeProfile: 'custom',
+      selections: {
+        ...prev.selections,
+        [moduleId]: {
+          ...prev.selections[moduleId],
+          [field]: value
+        }
+      }
+    }));
+  };
+
+  return (
+    <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
+      <legend className="text-lg font-semibold text-gray-700 px-2">{t('insurance.title')}</legend>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex space-x-2">
+          {['minimal', 'standard', 'premium'].map(profile => (
+            <button 
+              key={profile}
+              onClick={() => handleProfileChange(profile)}
+              className={`px-4 py-2 rounded-md text-sm font-medium ${insuranceConfig.activeProfile === profile ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}>
+              {t(`insurance.profiles.${profile}`)}
+            </button>
+          ))}
+        </div>
+        <div className="text-lg font-semibold">
+          {t('insurance.total_cost')}: {totalCost.toFixed(2)} PLN
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Object.entries(insuranceModules).map(([id, module]) => (
+          <div key={id} className="border border-gray-200 p-3 rounded-md">
+            <div className="module-header">
+              <div className="module-title-wrapper">
+                <Checkbox
+                  label={module.name}
+                  id={`insurance.${id}.enabled`}
+                  checked={insuranceConfig.selections[id]?.enabled || false}
+                  onChange={(e) => handleSelectionChange(id, 'enabled', e.target.checked)}
+                />
+                <span className="info-tooltip" data-tooltip-content={module.tooltip}>
+                  ℹ️
+                </span>
+              </div>
+              {insuranceConfig.selections[id]?.enabled && (
+                <span className="module-cost">
+                  {calculateModuleCost(id, insuranceConfig.selections, b2bMonthlyInvoice).toFixed(2)} zł/mies.
+                </span>
+              )}
+            </div>
+            {insuranceConfig.selections[id]?.enabled && (
+              <Select
+                id={`insurance.${id}.level`}
+                value={insuranceConfig.selections[id].level}
+                onChange={(e) => handleSelectionChange(id, 'level', e.target.value)}
+                options={Object.keys(module.options).map(key => ({ value: key, label: t(`insurance.options.${key}`, key) }))}
+                className="mt-2"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </fieldset>
+  );
+};
+
+export default InsuranceConfigurator;

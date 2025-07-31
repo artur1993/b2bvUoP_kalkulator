@@ -77,8 +77,13 @@
     "break_even_uop_subtitle": "(Jest to kwota miesięcznego wynagrodzenia brutto UoP potrzebna do zrównania się z całkowitą roczną wartością umowy B2B)",
     "export_pdf_basic": "Pobierz Raport Podstawowy",
     "export_pdf_advanced": "Pobierz Raport Zaawansowany",
-    "export_excel": "Eksportuj do Excel"
+    "export_excel": "Eksportuj do Excel",
+    "lost_revenue_tooltip": "Utracony przychód to kwota, którą B2B traci, gdy nie pracuje (urlop, chorobowe, przestoje).",
+    "loading": "Ładowanie"
   },
+  "currency_pln": "PLN",
+  "b2b": "B2B",
+  "uop": "UoP",
   "charts": {
     "total_comparison_title": "Porównanie Całkowitej Rocznej Wartości",
     "b2b_breakdown_title": "Składowe Rocznej Wartości B2B",
@@ -176,5 +181,42 @@
     "savings_title": "Wymagane Oszczędności Prywatne",
     "required_monthly_savings": "Wymagane Miesięczne Oszczędności",
     "invoice_increase": "Wymagane Zwiększenie Faktury B2B"
+  },
+  "insurance": {
+    "title": "Konfigurator Ubezpieczenia B2B",
+    "intro": "Poniższa tabela przedstawia wybraną konfigurację ubezpieczeń i jej miesięczny koszt.",
+    "module": "Moduł",
+    "level": "Poziom",
+    "monthly_cost": "Koszt miesięczny",
+    "total_monthly_cost": "Całkowity miesięczny koszt ubezpieczenia",
+    "total_cost": "Całkowity koszt",
+    "profiles": {
+      "minimal": "Minimalny",
+      "standard": "Standardowy",
+      "premium": "Premium",
+      "custom": "Własny"
+    },
+    "modules": {
+      "income_protection": "Ubezpieczenie od utraty dochodu",
+      "professional_liability": "OC zawodowe",
+      "private_health": "Prywatne zdrowotne",
+      "equipment": "Ubezpieczenie sprzętu",
+      "zus_voluntary": "ZUS dobrowolne",
+      "legal_protection": "Ochrona prawna",
+      "cyber_insurance": "Ubezpieczenie cyber"
+    },
+    "options": {
+        "basic": "Podstawowy",
+        "standard": "Standardowy",
+        "premium": "Premium",
+        "uop_equivalent": "Ekwiwalent UoP",
+        "enabled": "Włączone"
+    },
+    "profile": "Profil",
+    "active_modules": "Aktywne Moduły",
+    "insurance": "Ubezpieczenie",
+    "selected_level": "Wybrany Poziom",
+    "coverage_details": "Szczegóły Pokrycia",
+    "uop_comparison": "Porównanie z UoP"
   }
 }

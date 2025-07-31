@@ -19,6 +19,7 @@ This tool provides a detailed and accurate financial comparison, taking into acc
 - **Internationalized PDF Reports**: The generated PDF report is fully translated into the language selected in the UI (English or Polish).
 - **Advanced PDF Report**: Generate a comprehensive, multi-page PDF report with a professional design, including:
     - **Executive Summary & Risk Analysis**: High-level insights and risk assessment.
+    - **Detailed Insurance Section**: A dedicated section in the advanced report that breaks down the selected B2B insurance package. It details each active module, its coverage level, specific details (e.g., sum insured), a direct comparison to UoP standards, and the monthly cost, providing a clear and transparent view of the protection being purchased.
     - **Narrative Calculation Methodology**: A clear, step-by-step "waterfall" breakdown of how the final B2B net income is calculated.
     - **Advanced Charts**: Includes a bar chart for overall comparison and a waterfall chart visualizing the B2B cash flow.
     - **B2B Checklist**: A practical checklist for individuals transitioning to a B2B contract.
@@ -26,6 +27,7 @@ This tool provides a detailed and accurate financial comparison, taking into acc
 - **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
   - **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
   - **Pension Equalization**: For B2B contracts, automatically calculate the additional monthly invoice amount required to invest in a private pension plan (e.g., IKE/IKZE) to match the pension contributions made by the employer in a UoP contract. This provides a more holistic, long-term financial comparison.
+  - **Interactive B2B Insurance Configurator**: Build a custom insurance package (Income Protection, Professional Liability, Health, etc.) with pre-configured profiles (Minimal, Standard, Premium) or detailed customization. The total monthly cost is automatically added to your B2B business expenses for a more realistic financial comparison, and the selected package is detailed in the advanced PDF report.
 
 ## Installation
 
