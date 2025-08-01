@@ -1,10 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../utils/test-utils';
 import '@testing-library/jest-dom';
 import InsuranceConfigurator from './InsuranceConfigurator';
-import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n';
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('InsuranceConfigurator', () => {
@@ -26,13 +23,11 @@ describe('InsuranceConfigurator', () => {
 
   beforeEach(() => {
     render(
-      <I18nextProvider i18n={i18n}>
         <InsuranceConfigurator 
           insuranceConfig={initialConfig} 
           setInsuranceConfig={mockSetInsuranceConfig} 
           b2bMonthlyInvoice={10000} 
         />
-      </I18nextProvider>
     );
   });
 
@@ -54,9 +49,12 @@ describe('InsuranceConfigurator', () => {
     expect(cyberCost).toBeNull();
 
     // Check for tooltip
-    const tooltipIcon = ocZawodowe.closest('.module-title-wrapper').querySelector('.info-tooltip');
+    const tooltipIcon = ocZawodowe.closest('.module-title-wrapper').querySelector('span.cursor-pointer');
     expect(tooltipIcon).toBeInTheDocument();
-    expect(tooltipIcon).toHaveAttribute('data-tooltip-content');
+    fireEvent.mouseEnter(tooltipIcon);
+    const tooltipText = await screen.findByText(/W UoP Twoja odpowiedzialność za błędy jest ograniczona/);
+    expect(tooltipText).toBeInTheDocument();
+    fireEvent.mouseLeave(tooltipIcon);
   });
 
   test('updates module cost on interaction', async () => {

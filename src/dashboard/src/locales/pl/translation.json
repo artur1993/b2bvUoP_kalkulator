@@ -39,7 +39,11 @@
     "kup_elevated": "Podwyższone (300 zł/mies.)",
     "kup_creative_50": "Autorskie (50%)",
     "kup_none": "Brak",
-    "creative_work_percentage": "Procent Pracy Twórczej (%)",
+    "kup_standard_tooltip": "Standardowe koszty uzyskania przychodu dla pracowników (250 zł/miesiąc, 3000 zł/rok).",
+    "kup_elevated_tooltip": "Podwyższone koszty uzyskania przychodu dla pracowników dojeżdżających z innej miejscowości (300 zł/miesiąc, 3600 zł/rok).",
+    "kup_creative_50_tooltip": "50% koszty uzyskania przychodu dla pracy twórczej, do rocznego limitu 120 000 zł.",
+    "kup_none_tooltip": "Brak zastosowanych kosztów uzyskania przychodu.",
+    "creative_work_percentage": "Procent pracy twórczej (%)",
     "tax_deductible_costs": "Roczne Koszty Uzyskania Przychodu (PLN)",
     "selected_benefits": "Wybrane Benefity",
     "benefit_medical": "Opieka Medyczna",
@@ -51,7 +55,9 @@
     "calculation_mode_title": "Tryb Kalkulacji",
     "uop_to_b2b_mode": "UoP do B2B (Oblicz fakturę B2B, aby zrównać się z UoP)",
     "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)",
-    "equalize_pension": "Wyrównaj emeryturę do poziomu UoP"
+    "equalize_pension": "Wyrównaj emeryturę do poziomu UoP",
+    "kup_tooltip": "Koszty uzyskania przychodów (KUP) to wydatki poniesione w celu osiągnięcia przychodów. Standardowe KUP dla pracowników wynoszą 250 zł/mies. (3000 zł rocznie). Dla pracowników dojeżdżających z innej miejscowości wynoszą 300 zł/mies. (3600 zł rocznie). Twórcy mogą korzystać z 50% KUP, ale nie więcej niż 120 000 zł rocznie.",
+    "equalize_pension_tooltip": "Automatycznie oblicza dodatkową kwotę, którą należy doliczyć do faktury B2B, aby sfinansować prywatny plan emerytalny (np. IKE/IKZE) i wyrównać przyszłą emeryturę do poziomu prognozowanego z umowy o pracę. Założenia: 4.5% rocznej stopy zwrotu, 30 lat oszczędzania."
   },
   "results": {
     "title": "Wyniki Kalkulacji",
@@ -123,7 +129,8 @@
     "impact_on_net_annual": "Wpływ na Roczną Różnicę Netto (PLN)",
     "koszty_firmowe_miesieczne": "Miesięczne Koszty Firmowe",
     "urlop_dni": "Dni Urlopu",
-    "przestoje_miesiace": "Miesiące Przestoju"
+    "przestoje_miesiace": "Miesiące Przestoju",
+    "vacation_days": "Dni Urlopu"
   },
   "report": {
     "input_summary_title": "Podsumowanie Parametrów Wejściowych",

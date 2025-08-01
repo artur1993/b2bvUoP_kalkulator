@@ -1,25 +1,25 @@
-import '../../setupTests.js';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+import { render, screen, fireEvent, waitFor } from '../utils/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CalculatorForm from './CalculatorForm';
 import React, { useState } from 'react';
-import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
+
 
 describe('CalculatorForm', () => {
   const mockOnCalculate = vi.fn();
   const mockOnExport = vi.fn();
 
   const initialB2bData = {
-    faktura_miesieczna: 0,
-    koszty_firmowe_miesieczne: 0,
-    zus_rodzaj: 'mala_firma',
-    zus_chorobowe: false,
-    forma_opodatkowania: 'liniowy',
-    ulga_dla_mlodych: false,
-    urlop_dni: 0,
-    chorobowe_dni: 0,
-    przestoje_miesiace: 0,
+    monthly_invoice_amount: 0,
+    monthly_business_costs: 0,
+    zus_type: 'preferential',
+    sickness_insurance: false,
+    tax_form: 'flat_tax',
+    youth_relief: false,
+    vacation_days: 0,
+    sick_days: 0,
+    stoppage_months: 0,
     customBenefits: 0,
     companyBenefits: {
       paidVacationDays: { enabled: false, days: 0, value: 0 },
@@ -33,10 +33,10 @@ describe('CalculatorForm', () => {
   };
 
   const initialUopData = {
-    wynagrodzenie_brutto: 0,
-    kup_settings: { type: 'standard', creative_work_percentage: 70 },
-    ulga_dla_mlodych: false,
-    wybrane_benefity: [],
+    monthly_gross_salary: 0,
+    deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
+    youth_relief: false,
+    selected_benefits: [],
   };
 
   // Test Wrapper component to manage state
@@ -78,19 +78,19 @@ describe('CalculatorForm', () => {
 
     const handleUopChange = (e) => {
       const { name, value, type, checked } = e.target;
-      if (name === 'wybrane_benefity') {
+      if (name === 'selected_benefits') {
         setUopData(prev => ({
           ...prev,
-          wybrane_benefity: checked
-            ? [...prev.wybrane_benefity, value]
-            : prev.wybrane_benefity.filter(benefit => benefit !== value),
+          selected_benefits: checked
+            ? [...prev.selected_benefits, value]
+            : prev.selected_benefits.filter(benefit => benefit !== value),
         }));
-      } else if (name.startsWith('kup_settings.')) {
+      } else if (name.startsWith('deductible_cost_settings.')) {
         const field = name.split('.')[1];
         setUopData(prev => ({
           ...prev,
-          kup_settings: {
-            ...prev.kup_settings,
+          deductible_cost_settings: {
+            ...prev.deductible_cost_settings,
             [field]: value,
           },
         }));
@@ -126,7 +126,6 @@ describe('CalculatorForm', () => {
 
   const renderComponent = (b2b = initialB2bData, uop = initialUopData) => {
     render(
-      <I18nextProvider i18n={i18n}>
         <TestWrapper
           initialB2b={b2b}
           initialUop={uop}
@@ -134,7 +133,6 @@ describe('CalculatorForm', () => {
           onExport={mockOnExport}
           loading={false}
         />
-      </I18nextProvider>
     );
   };
 
@@ -146,7 +144,7 @@ describe('CalculatorForm', () => {
     expect(screen.getByLabelText('Monthly Business Costs (PLN)')).toBeInTheDocument();
     expect(screen.getByLabelText('ZUS Type')).toBeInTheDocument();
     expect(screen.getByLabelText('Taxation Form')).toBeInTheDocument();
-    expect(screen.getByLabelText('Youth Tax Relief')).toBeInTheDocument();
+    expect(screen.getByTestId('youth-relief-b2b')).toBeInTheDocument();
     expect(screen.getByLabelText('Annual Vacation Days (unpaid)')).toBeInTheDocument();
     expect(screen.getByLabelText('Annual Sick Days (unpaid)')).toBeInTheDocument();
     expect(screen.getByLabelText('Months of Stoppage/No Projects')).toBeInTheDocument();
@@ -155,7 +153,7 @@ describe('CalculatorForm', () => {
     // Check for UoP fields
     expect(screen.getByLabelText('Gross Monthly Salary (PLN)')).toBeInTheDocument();
     expect(screen.getByLabelText('Type of Tax-Deductible Costs')).toBeInTheDocument();
-    expect(screen.getByLabelText('Youth Tax Relief')).toBeInTheDocument();
+    expect(screen.getByTestId('youth-relief-uop')).toBeInTheDocument();
     expect(screen.getByLabelText('Medical Care')).toBeInTheDocument();
     expect(screen.getByLabelText('Sport Card')).toBeInTheDocument();
 
@@ -166,13 +164,13 @@ describe('CalculatorForm', () => {
   it('updates B2B input fields correctly', async () => {
     renderComponent();
     const fakturaInput = screen.getByLabelText('Monthly Invoice (PLN)');
-    fireEvent.change(fakturaInput, { target: { name: 'faktura_miesieczna', value: '15000' } });
+    fireEvent.change(fakturaInput, { target: { name: 'monthly_invoice_amount', value: '15000' } });
     await waitFor(() => {
       expect(fakturaInput).toHaveValue(15000);
     });
 
     const costsInput = screen.getByLabelText('Monthly Business Costs (PLN)');
-    fireEvent.change(costsInput, { target: { name: 'koszty_firmowe_miesieczne', value: '500' } });
+    fireEvent.change(costsInput, { target: { name: 'monthly_business_costs', value: '500' } });
     await waitFor(() => {
       expect(costsInput).toHaveValue(500);
     });
@@ -181,7 +179,7 @@ describe('CalculatorForm', () => {
   it('updates UoP input fields correctly', async () => {
     renderComponent();
     const wynagrodzenieInput = screen.getByLabelText('Gross Monthly Salary (PLN)');
-    fireEvent.change(wynagrodzenieInput, { target: { name: 'wynagrodzenie_brutto', value: '8000' } });
+    fireEvent.change(wynagrodzenieInput, { target: { name: 'monthly_gross_salary', value: '8000' } });
     await waitFor(() => {
       expect(wynagrodzenieInput).toHaveValue(8000);
     });
@@ -274,19 +272,19 @@ describe('CalculatorForm', () => {
   it('shows/hides creative work percentage input based on KUP type selection', async () => {
     renderComponent();
     const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
-    const creativePercentageLabel = 'Creative Work Percentage (%)';
+    const creativePercentageLabel = i18n.t('form.creative_work_percentage');
 
     // Initially, creative work percentage input should not be visible
     expect(screen.queryByLabelText(creativePercentageLabel)).not.toBeInTheDocument();
 
     // Select '50% Creative Work Costs'
-    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'autorskie_50' } });
+    fireEvent.change(kupSelect, { target: { name: 'deductible_cost_settings.type', value: 'author_50' } });
     await waitFor(() => {
       expect(screen.getByLabelText(creativePercentageLabel)).toBeInTheDocument();
     });
 
     // Select 'Standard' again
-    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'standard' } });
+    fireEvent.change(kupSelect, { target: { name: 'deductible_cost_settings.type', value: 'standard' } });
     await waitFor(() => {
       expect(screen.queryByLabelText(creativePercentageLabel)).not.toBeInTheDocument();
     });
@@ -295,20 +293,20 @@ describe('CalculatorForm', () => {
   it('updates KUP settings in state correctly', async () => {
     const TestWrapperWithState = () => {
       const [uopData, setUopData] = useState({
-        wynagrodzenie_brutto: 8000,
-        kup_settings: { type: 'standard', creative_work_percentage: 70 },
-        ulga_dla_mlodych: false,
-        wybrane_benefity: [],
+        monthly_gross_salary: 8000,
+        deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
+        youth_relief: false,
+        selected_benefits: [],
       });
 
       const handleUopChange = (e) => {
         const { name, value } = e.target;
-        if (name.startsWith('kup_settings.')) {
+        if (name.startsWith('deductible_cost_settings.')) {
           const field = name.split('.')[1];
           setUopData(prev => ({
             ...prev,
-            kup_settings: {
-              ...prev.kup_settings,
+            deductible_cost_settings: {
+              ...prev.deductible_cost_settings,
               [field]: value,
             },
           }));
@@ -316,7 +314,6 @@ describe('CalculatorForm', () => {
       };
 
       return (
-        <I18nextProvider i18n={i18n}>
           <CalculatorForm
             b2bData={initialB2bData}
             uopData={uopData}
@@ -329,20 +326,19 @@ describe('CalculatorForm', () => {
             insuranceConfig={{ activeProfile: 'standard', selections: {} }}
             setInsuranceConfig={() => {}}
           />
-        </I18nextProvider>
       );
     };
 
     render(<TestWrapperWithState />);
 
     const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
-    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'autorskie_50' } });
+    fireEvent.change(kupSelect, { target: { name: 'deductible_cost_settings.type', value: 'author_50' } });
     await waitFor(() => {
-      expect(kupSelect).toHaveValue('autorskie_50');
+      expect(kupSelect).toHaveValue('author_50');
     });
 
     const creativePercentageInput = screen.getByLabelText('Creative Work Percentage (%)');
-    fireEvent.change(creativePercentageInput, { target: { name: 'kup_settings.creative_work_percentage', value: '85' } });
+    fireEvent.change(creativePercentageInput, { target: { name: 'deductible_cost_settings.creative_work_percentage', value: '85' } });
     await waitFor(() => {
       expect(creativePercentageInput).toHaveValue(85);
     });
@@ -359,7 +355,7 @@ describe('CalculatorForm', () => {
     const uopSalaryInput = screen.getByLabelText(i18n.t('form.gross_salary'));
     const equalizePensionCheckbox = screen.getByLabelText(i18n.t('form.equalize_pension'));
 
-    fireEvent.change(uopSalaryInput, { target: { name: 'wynagrodzenie_brutto', value: '12000' } });
+    fireEvent.change(uopSalaryInput, { target: { name: 'monthly_gross_salary', value: '12000' } });
 
     await waitFor(() => {
       expect(equalizePensionCheckbox).not.toBeDisabled();
@@ -371,7 +367,7 @@ describe('CalculatorForm', () => {
     const uopSalaryInput = screen.getByLabelText(i18n.t('form.gross_salary'));
     const equalizePensionCheckbox = screen.getByLabelText(i18n.t('form.equalize_pension'));
 
-    fireEvent.change(uopSalaryInput, { target: { name: 'wynagrodzenie_brutto', value: '12000' } });
+    fireEvent.change(uopSalaryInput, { target: { name: 'monthly_gross_salary', value: '12000' } });
     await waitFor(() => { /* wait for state update */ });
 
     fireEvent.click(equalizePensionCheckbox);

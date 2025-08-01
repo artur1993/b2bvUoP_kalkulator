@@ -4,27 +4,28 @@ import Input from './Input';
 import Select from './Select';
 import Checkbox from './Checkbox';
 import InsuranceConfigurator from './InsuranceConfigurator';
+import Tooltip from './Tooltip';
 
-const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleCalculate, loading, calculationMode, handleCalculationModeChange, insuranceConfig, setInsuranceConfig }) => {
+const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleAgeChange, handleCalculate, loading, calculationMode, handleCalculationModeChange, insuranceConfig, setInsuranceConfig }) => {
   const { t } = useTranslation();
 
   const zusOptions = [
-    { value: 'mala_firma', label: t('form.zus_preferential') },
-    { value: 'duza_firma', label: t('form.zus_full') },
+    { value: 'preferential', label: t('form.zus_preferential') },
+    { value: 'full', label: t('form.zus_full') },
   ];
 
   const taxFormOptions = [
-    { value: 'ryczalt_IT', label: t('form.tax_flat_it') },
-    { value: 'liniowy', label: t('form.tax_linear') },
-    { value: 'skala', label: t('form.tax_scale') },
+    { value: 'lump_sum_it', label: t('form.tax_flat_it') },
+    { value: 'flat_tax', label: t('form.tax_linear') },
+    { value: 'tax_scale', label: t('form.tax_scale') },
     { value: 'ip_box', label: t('form.tax_ip_box') },
   ];
 
   const benefitOptions = [
-    { value: 'opieka_medyczna', label: t('form.benefit_medical') },
-    { value: 'karta_sportowa', label: t('form.benefit_sport') },
-    { value: 'ubezpieczenie_na_zycie', label: t('form.benefit_life') },
-    { value: 'szkolenia', label: t('form.benefit_training') },
+    { value: 'medical_care', label: t('form.benefit_medical') },
+    { value: 'sport_card', label: t('form.benefit_sport') },
+    { value: 'life_insurance', label: t('form.benefit_life') },
+    { value: 'training_budget', label: t('form.benefit_training') },
     { value: 'ppk', label: t('form.benefit_ppk') },
   ];
 
@@ -61,6 +62,19 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
         </div>
       </div>
 
+      {/* Age Input */}
+      <div className="md:col-span-2 bg-white p-6 rounded-lg shadow mb-8">
+        <Input
+          label={t('form.age')}
+          id="age"
+          name="age"
+          type="number"
+          value={b2bData.age} // Assuming age is the same for both, simplifies state
+          onChange={handleAgeChange}
+          data-testid="age-input"
+        />
+      </div>
+
       {/* B2B Section */}
       <div className="bg-gray-50 p-6 rounded-lg shadow">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6" data-testid="b2b-form-title">{t('form.b2b_title')}</h2>
@@ -68,80 +82,93 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
           <Input
             label={t('form.monthly_invoice')}
-            id="faktura_miesieczna"
+            id="monthly_invoice_amount"
+            name="monthly_invoice_amount"
             type="number"
-            value={b2bData.faktura_miesieczna}
+            value={b2bData.monthly_invoice_amount}
             onChange={handleB2bChange}
           />
           <Input
             label={t('form.business_costs')}
-            id="koszty_firmowe_miesieczne"
+            id="monthly_business_costs"
+            name="monthly_business_costs"
             type="number"
-            value={b2bData.koszty_firmowe_miesieczne}
+            value={b2bData.monthly_business_costs}
             onChange={handleB2bChange}
           />
           <Select
             label={t('form.zus_type')}
-            id="zus_rodzaj"
-            value={b2bData.zus_rodzaj}
+            id="zus_type"
+            name="zus_type"
+            value={b2bData.zus_type}
             onChange={handleB2bChange}
             options={zusOptions}
           />
           <Checkbox
             label={t('form.voluntary_sick_leave')}
-            id="zus_chorobowe"
-            checked={b2bData.zus_chorobowe}
+            id="sickness_insurance"
+            name="sickness_insurance"
+            checked={b2bData.sickness_insurance}
             onChange={handleB2bChange}
           />
           <Select
             label={t('form.tax_form')}
-            id="forma_opodatkowania"
-            value={b2bData.forma_opodatkowania}
+            id="tax_form"
+            name="tax_form"
+            value={b2bData.tax_form}
             onChange={handleB2bChange}
             options={taxFormOptions}
           />
           <Checkbox
             label={t('form.youth_relief')}
-            id="ulga_dla_mlodych"
-            checked={b2bData.ulga_dla_mlodych}
+            id="youth_relief"
+            name="youth_relief"
+            checked={b2bData.youth_relief}
             onChange={handleB2bChange}
+            data-testid="youth-relief-b2b"
           />
-          <Checkbox
-            label={t('form.equalize_pension')}
-            id="equalizePension"
-            checked={b2bData.equalizePension}
-            onChange={handleB2bChange}
-            disabled={!uopData.wynagrodzenie_brutto}
-          />
+          <Tooltip text={t('form.equalize_pension_tooltip')}>
+            <Checkbox
+              label={t('form.equalize_pension')}
+              id="equalizePension"
+              name="equalizePension"
+              checked={b2bData.equalizePension}
+              onChange={handleB2bChange}
+              disabled={!uopData.monthly_gross_salary}
+            />
+          </Tooltip>
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>
           <Input
             label={t('form.unpaid_vacation')}
-            id="urlop_dni"
+            id="vacation_days"
+            name="vacation_days"
             type="number"
-            value={b2bData.urlop_dni}
+            value={b2bData.vacation_days}
             onChange={handleB2bChange}
           />
           <Input
             label={t('form.unpaid_sick')}
-            id="chorobowe_dni"
+            id="sick_days"
+            name="sick_days"
             type="number"
-            value={b2bData.chorobowe_dni}
+            value={b2bData.sick_days}
             onChange={handleB2bChange}
           />
           <Input
             label={t('form.stoppage_months')}
-            id="przestoje_miesiace"
+            id="stoppage_months"
+            name="stoppage_months"
             type="number"
-            value={b2bData.przestoje_miesiace}
+            value={b2bData.stoppage_months}
             onChange={handleB2bChange}
           />
         </fieldset>
         <InsuranceConfigurator 
             insuranceConfig={insuranceConfig} 
             setInsuranceConfig={setInsuranceConfig} 
-            b2bMonthlyInvoice={b2bData.faktura_miesieczna} 
+            b2bMonthlyInvoice={b2bData.monthly_invoice_amount} 
         />
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.benefits')}</legend>
@@ -290,40 +317,52 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
           <Input
             label={t('form.gross_salary')}
-            id="wynagrodzenie_brutto"
+            id="monthly_gross_salary"
+            name="monthly_gross_salary"
             type="number"
-            value={uopData.wynagrodzenie_brutto}
+            value={uopData.monthly_gross_salary}
             onChange={handleUopChange}
           />
-          <Select
-            label={t('form.kup_type')}
-            id="kup_settings.type"
-            name="kup_settings.type"
-            value={uopData.kup_settings.type}
-            onChange={handleUopChange}
-            options={[
-              { value: 'standard', label: t('form.kup_standard') },
-              { value: 'elevated', label: t('form.kup_elevated') },
-              { value: 'autorskie_50', label: t('form.kup_creative_50') },
-              { value: 'brak', label: t('form.kup_none') },
-            ]}
-          />
-          {uopData.kup_settings.type === 'autorskie_50' && (
+          <div className="flex items-center">
+            <Select
+              label={t('form.kup_type')}
+              id="deductible_cost_settings.type"
+              name="deductible_cost_settings.type"
+              value={uopData.deductible_cost_settings.type}
+              onChange={handleUopChange}
+              options={[
+                { value: 'standard', label: t('form.kup_standard') },
+                { value: 'elevated', label: t('form.kup_elevated') },
+                { value: 'author_50', label: t('form.kup_creative_50') },
+                { value: 'none', label: t('form.kup_none') },
+              ]}
+            />
+            <Tooltip text={t(`form.kup_${uopData.deductible_cost_settings.type}_tooltip`)}>
+              <span className="ml-2 text-gray-500 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </span>
+            </Tooltip>
+          </div>
+          {uopData.deductible_cost_settings.type === 'author_50' && (
             <Input
               label={t('form.creative_work_percentage')}
-              id="kup_settings.creative_work_percentage"
-              name="kup_settings.creative_work_percentage"
+              id="deductible_cost_settings.creative_work_percentage"
+              name="deductible_cost_settings.creative_work_percentage"
               type="number"
-              value={uopData.kup_settings.creative_work_percentage}
+              value={uopData.deductible_cost_settings.creative_work_percentage}
               onChange={handleUopChange}
               className="ml-4 mt-2"
             />
           )}
           <Checkbox
             label={t('form.youth_relief')}
-            id="ulga_dla_mlodych"
-            checked={uopData.ulga_dla_mlodych}
+            id="youth_relief"
+            name="youth_relief"
+            checked={uopData.youth_relief}
             onChange={handleUopChange}
+            data-testid="youth-relief-uop"
           />
         </fieldset>
 
@@ -335,9 +374,9 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
               key={option.value}
               label={option.label}
               id={option.value}
-              name="wybrane_benefity"
+              name="selected_benefits"
               value={option.value}
-              checked={uopData.wybrane_benefity.includes(option.value)}
+              checked={uopData.selected_benefits.includes(option.value)}
               onChange={handleUopChange}
             />
           ))}
@@ -349,6 +388,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
           onClick={handleCalculate}
           disabled={loading}
           className="w-full md:w-auto bg-primary hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
+          aria-label={t('form.calculate_button')}
         >
           {loading ? 'Calculating...' : t('form.calculate_button')}
         </button>

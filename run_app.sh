@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Activate virtual environment
+. .venv/bin/activate
+
 echo "Starting B2B vs UoP Calculator..."
 
 # Start Flask Backend in the background

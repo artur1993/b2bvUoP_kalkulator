@@ -1,10 +1,11 @@
 import json
-from flask import Flask, request, jsonify, send_from_directory, send_file
+from flask import Flask, request, jsonify, send_from_directory, send_file, g
 from flask_cors import CORS
 from openpyxl import Workbook
 import io
 import os
 import logging
+import time
 from logging.handlers import RotatingFileHandler
 from src.pdf_generator.generator import PDFReportGenerator
 from src.analysis import generate_executive_summary, get_risk_analysis
@@ -18,6 +19,7 @@ from src.calculations import (
     calculate_sensitivity_analysis
 )
 from src.pension_calculator import calculate_pension_details
+from src.validation import validate_calculation_request
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,6 +40,12 @@ pdf_generator = PDFReportGenerator(
     static_path=os.path.join(BASE_DIR, 'src/pdf_generator/static')
 )
 
+@app.errorhandler(Exception)
+def handle_global_error(e):
+    """Global error handler to log all unhandled exceptions."""
+    app.logger.exception(f"Unhandled Exception: {e}")
+    return jsonify({"error": "An unexpected server error occurred."}), 500
+
 @app.route('/api/calculate/break-even-analysis', methods=['POST'])
 def break_even_analysis():
     """Endpoint for break-even analysis chart data."""
@@ -47,6 +55,7 @@ def break_even_analysis():
         app.logger.debug(f"Break-even analysis request data: {data}")
         uop_data = data.get('uop', {})
         b2b_base_data = data.get('b2b', {})
+
         analysis_results = calculate_break_even_analysis(uop_data, b2b_base_data)
         return jsonify(analysis_results)
     except Exception as e:
@@ -62,52 +71,53 @@ def sensitivity_analysis():
         app.logger.debug(f"Sensitivity analysis request data: {data}")
         base_b2b_data = data.get('b2b', {})
         base_uop_data = data.get('uop', {})
+
         analysis_results = calculate_sensitivity_analysis(base_b2b_data, base_uop_data)
         return jsonify(analysis_results)
     except Exception as e:
         app.logger.exception("Error during sensitivity analysis:")
         return jsonify({"error": str(e)}), 500
 
+
+
 @app.route('/api/calculate', methods=['POST'])
+@validate_calculation_request
 def calculate():
     """Main endpoint to calculate and compare B2B vs. UoP earnings."""
     try:
-        request_data = request.get_json()
-        app.logger.info(f"Received calculation request with mode: {request_data.get('calculation_mode')}")
-        app.logger.debug(f"Full request data: {request_data}")
-        
-        b2b_data = request_data.get('b2b', {})
-        uop_data = request_data.get('uop', {})
+        request_data = g.validated_data
+
+
+        # Initialize b2b_data and uop_data from request_data
+        b2b_data = request_data.get('b2b', {}).copy()
+        uop_data = request_data.get('uop', {}).copy()
         calculation_mode = request_data.get('calculation_mode', 'uop_to_b2b')
 
-        if not b2b_data or not uop_data:
-            app.logger.warning("Calculation request missing 'b2b' or 'uop' data.")
-            return jsonify({"error": "Missing 'b2b' or 'uop' data in request."}), 400
+        app.logger.info(f"Received calculation request with mode: {request_data.get('calculation_mode')}")
+        app.logger.debug(f"Full request data: {request_data}")
 
         b2b_results = calculate_b2b_results(b2b_data)
         uop_results = calculate_uop_results(uop_data)
         
         break_even_point = -1
+        break_even_key = "break_even_invoice_amount" # Default value
         if calculation_mode == 'uop_to_b2b':
-            break_even_point = calculate_break_even(uop_results['calkowita_roczna_wartosc'], b2b_data)
-            break_even_key = "break_even_faktura"
+            break_even_point = calculate_break_even(uop_results['total_annual_value'], b2b_data)
+            break_even_key = "break_even_invoice_amount"
         elif calculation_mode == 'b2b_to_uop':
-            break_even_point = calculate_uop_break_even(b2b_results['calkowita_roczna_wartosc'], uop_data)
-            break_even_key = "break_even_wynagrodzenie_brutto"
-        else:
-            app.logger.warning(f"Invalid calculation_mode provided: {calculation_mode}")
-            return jsonify({"error": "Invalid calculation_mode provided."}), 400
+            break_even_point = calculate_uop_break_even(b2b_results['total_annual_value'], uop_data)
+            break_even_key = "break_even_gross_salary"
 
         response_data = {
             "b2b_results": b2b_results,
             "uop_results": uop_results,
             break_even_key: break_even_point,
-            "komentarze": "Porównanie wygenerowane pomyślnie."
+            "comments": "Comparison generated successfully."
         }
 
         if b2b_data.get('equalizePension'):
             app.logger.info("Equalize pension requested.")
-            uop_gross_salary = _get_float(uop_data, 'wynagrodzenie_brutto', 0)
+            uop_gross_salary = _get_float(uop_data, 'monthly_gross_salary', 0)
             pension_details = calculate_pension_details(uop_gross_salary)
             response_data['pension_details'] = pension_details
 
@@ -115,6 +125,10 @@ def calculate():
     except Exception as e:
         app.logger.exception("Error during calculation:")
         return jsonify({"error": str(e) if app.debug else "An internal server error occurred."}), 500
+
+        
+
+        
 
 @app.route('/api/export/excel', methods=['POST'])
 def export_to_excel():
@@ -134,9 +148,9 @@ def export_to_excel():
         sheet['B1'] = "B2B"
         sheet['C1'] = "UoP"
 
-        sheet['A2'] = "Całkowita roczna wartość"
-        sheet['B2'] = b2b_results.get('calkowita_roczna_wartosc')
-        sheet['C2'] = uop_results.get('calkowita_roczna_wartosc')
+        sheet['A2'] = "Total Annual Value"
+        sheet['B2'] = b2b_results.get('total_annual_value')
+        sheet['C2'] = uop_results.get('total_annual_value')
 
         buffer = io.BytesIO()
         workbook.save(buffer)
@@ -176,6 +190,7 @@ def export_to_pdf():
 @app.route('/api/export/pdf/advanced', methods=['POST'])
 def export_to_advanced_pdf():
     """Exports an advanced, multi-page PDF report."""
+    start_time = time.time()
     try:
         data = request.get_json()
         app.logger.info("Received request to export to Advanced PDF.")
@@ -183,12 +198,12 @@ def export_to_advanced_pdf():
         if not data: return {"error": "Invalid request body"}, 400
         
         lang = data.get('language', 'en')
-        summary = generate_executive_summary(data.get('b2b_results', {}), data.get('uop_results', {}), data.get('break_even_faktura', 0), lang)
+        summary = generate_executive_summary(data.get('b2b_results', {}), data.get('uop_results', {}), data.get('break_even_invoice', 0), lang)
         risk_analysis = get_risk_analysis(lang)
         data['analysis'] = {"summary": summary, "risk": risk_analysis}
 
         if data.get('input_data', {}).get('b2b', {}).get('equalizePension'):
-            uop_gross_salary = data.get('input_data', {}).get('uop', {}).get('wynagrodzenie_brutto', 0)
+            uop_gross_salary = data.get('input_data', {}).get('uop', {}).get('monthly_gross_salary', 0)
             pension_details = calculate_pension_details(uop_gross_salary)
             data['pension_details'] = pension_details
 
@@ -196,6 +211,10 @@ def export_to_advanced_pdf():
         
         buffer = io.BytesIO(pdf_bytes)
         buffer.seek(0)
+        
+        end_time = time.time()
+        app.logger.info(f"Advanced PDF export took {end_time - start_time:.2f} seconds.")
+        
         return send_file(buffer, as_attachment=True, download_name="Raport_Zaawansowany_B2B_vs_UoP.pdf", mimetype='application/pdf')
     except Exception as e:
         app.logger.exception("Error exporting to Advanced PDF:")

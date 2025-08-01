@@ -17,8 +17,26 @@ class TestAnalysisEndpoints(unittest.TestCase):
         mock_uop.return_value = {'calkowita_roczna_wartosc': 100000}
 
         request_data = {
-            'b2b': {'faktura_miesieczna': 10000, 'zus_rodzaj': 'pelny', 'forma_opodatkowania': 'liniowy'},
-            'uop': {'wynagrodzenie_brutto': 8000}
+            'b2b': {
+                'monthly_invoice_amount': 10000,
+                'monthly_business_costs': 1500,
+                'zus_type': 'full',
+                'tax_form': 'flat_tax',
+                'sickness_insurance': True,
+                'age': 30,
+                'youth_relief': False,
+                'vacation_days': 26,
+                'stoppage_months': 1,
+                'customBenefits': 500,
+                'companyBenefits': {},
+                'equalizePension': False
+            },
+            'uop': {
+                'monthly_gross_salary': 8000,
+                'age': 30,
+                'youth_relief': False,
+                'deductible_cost_settings': {'type': 'standard'}
+            }
         }
 
         response = self.app.post('/api/calculate/break-even-analysis', json=request_data)
@@ -41,14 +59,25 @@ class TestAnalysisEndpoints(unittest.TestCase):
 
         request_data = {
             'b2b': {
-                'faktura_miesieczna': 12000,
-                'koszty_firmowe_miesieczne': 1000,
-                'urlop_dni': 20,
-                'przestoje_miesiace': 1,
-                'zus_rodzaj': 'pelny',
-                'forma_opodatkowania': 'liniowy'
+                'monthly_invoice_amount': 12000,
+                'monthly_business_costs': 1000,
+                'vacation_days': 20,
+                'stoppage_months': 1,
+                'zus_type': 'full',
+                'tax_form': 'flat_tax',
+                'sickness_insurance': True,
+                'age': 30,
+                'youth_relief': False,
+                'customBenefits': 0,
+                'companyBenefits': {},
+                'equalizePension': False
             },
-            'uop': {'wynagrodzenie_brutto': 10000}
+            'uop': {
+                'monthly_gross_salary': 10000,
+                'age': 30,
+                'youth_relief': False,
+                'deductible_cost_settings': {'type': 'standard'}
+            }
         }
 
         response = self.app.post('/api/calculate/sensitivity-analysis', json=request_data)
@@ -61,7 +90,7 @@ class TestAnalysisEndpoints(unittest.TestCase):
         # Check the structure of the first element
         self.assertIn('parameter', data[0])
         self.assertIn('impact', data[0])
-        self.assertIn(data[0]['parameter'], ['koszty_firmowe_miesieczne', 'urlop_dni', 'przestoje_miesiace'])
+        self.assertIn(data[0]['parameter'], ['monthly_business_costs', 'vacation_days', 'stoppage_months'])
 
 if __name__ == '__main__':
     unittest.main()

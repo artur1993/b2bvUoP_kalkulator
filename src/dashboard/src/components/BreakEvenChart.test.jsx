@@ -1,17 +1,16 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '../utils/test-utils';
 import BreakEvenChart from './BreakEvenChart';
-import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n';
 import * as api from '../services/api';
 import { vi } from 'vitest';
 
 vi.mock('../services/api');
 vi.mock('react-chartjs-2', () => ({
-    Line: () => <div data-testid="mock-line-chart" />,
+  Line: (props) => <div data-testid="mock-line-chart" {...props} />,
 }));
 
-const mockB2bData = { faktura_miesieczna: 10000 };
+
+const mockB2bData = { monthly_invoice_amount: 10000 };
 const mockUopData = { wynagrodzenie_brutto: 8000 };
 
 describe('BreakEvenChart', () => {
@@ -21,28 +20,19 @@ describe('BreakEvenChart', () => {
             { b2b_rate: 15000, net_difference: 10000 },
         ]);
 
-        render(
-            <I18nextProvider i18n={i18n}>
-                <BreakEvenChart b2b={mockB2bData} uop={mockUopData} />
-            </I18nextProvider>
-        );
+        render(<BreakEvenChart b2b={mockB2bData} uop={mockUopData} results={{}} />);
 
-        await waitFor(() => {
-            expect(screen.getByTestId('mock-line-chart')).toBeInTheDocument();
-        });
+        expect(await screen.findByTestId('mock-line-chart')).toBeInTheDocument();
     });
 
     test('shows no data message if api returns empty array', async () => {
         api.calculateBreakEvenAnalysis.mockResolvedValue([]);
 
-        render(
-            <I18nextProvider i18n={i18n}>
-                <BreakEvenChart b2b={mockB2bData} uop={mockUopData} />
-            </I18nextProvider>
-        );
+        render(<BreakEvenChart b2b={mockB2bData} uop={mockUopData} results={{}} />);
 
         await waitFor(() => {
             expect(screen.queryByTestId('mock-line-chart')).not.toBeInTheDocument();
         });
+        expect(await screen.findByText('no_data')).toBeInTheDocument();
     });
 });

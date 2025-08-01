@@ -6,13 +6,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE_PATH = os.path.join(BASE_DIR, 'dane_wejsciowe_kalkulator.json')
 
 with open(DATA_FILE_PATH, 'r', encoding='utf-8') as f:
-    DANE = json.load(f)
+    CALCULATION_DATA = json.load(f)
 
-DANE['zus_uop_procentowe'] = {
-    "emerytalna": 0.0976, "rentowa": 0.0150, "chorobowa": 0.0245, "zdrowotna": 0.09
+CALCULATION_DATA['uop_zus_rates'] = {
+    "pension": 0.0976, "disability": 0.0150, "sickness": 0.0245, "health": 0.09
 }
-DANE['ulga_dla_mlodych_limit'] = 85528
-DANE['progi_podatkowe']['kwota_zmniejszajaca_podatek'] = 3600
+CALCULATION_DATA['youth_relief_limit'] = 85528
+CALCULATION_DATA['tax_thresholds']['tax_reducing_amount'] = 3600
 
 def _get_float(data, key, default=0.0):
     """Safely gets a float value from a dictionary, returning a default if conversion fails."""
@@ -31,139 +31,136 @@ def calculate_b2b_results(b2b_data):
     Returns:
         dict: A dictionary with detailed B2B calculation results.
     """
-    faktura_miesieczna = _get_float(b2b_data, 'faktura_miesieczna')
-    faktura_rocznie = faktura_miesieczna * 12
-    koszty_firmowe_miesieczne = _get_float(b2b_data, 'koszty_firmowe_miesieczne')
-    koszty_rocznie = koszty_firmowe_miesieczne * 12
+    monthly_invoice_amount = _get_float(b2b_data, 'monthly_invoice_amount')
+    annual_invoice_amount = monthly_invoice_amount * 12
+    monthly_business_costs = _get_float(b2b_data, 'monthly_business_costs')
+    annual_business_costs = monthly_business_costs * 12
 
     # ZUS
-    zus_type = b2b_data['zus_rodzaj']
-    if zus_type == 'mala_firma':
-        zus_type = 'preferencyjny'
-    elif zus_type == 'duza_firma':
-        zus_type = 'pelny'
-    zus_details = DANE['zus_2025'][zus_type]
+    zus_type = b2b_data.get('zus_type', 'full')
+    zus_details = CALCULATION_DATA['zus_2025'][zus_type]
     
-    skladki_zus_emerytalna = zus_details.get('emerytalna', 0) * 12
-    skladki_zus_rentowa = zus_details.get('rentowa', 0) * 12
-    skladki_zus_wypadkowa = zus_details.get('wypadkowa', 0) * 12
-    skladki_zus_fundusz_pracy = zus_details.get('fundusz_pracy', 0) * 12
-    skladki_zus_chorobowa = zus_details.get('chorobowa', 0) * 12 if b2b_data.get('zus_chorobowe') else 0
+    # pension = pension, disability = disability, accident = accident, sickness = sickness, health = health, labor_fund = labor_fund
+    pension_insurance_contribution = zus_details.get('pension', 0) * 12
+    disability_insurance_contribution = zus_details.get('disability', 0) * 12
+    accident_insurance_contribution = zus_details.get('accident', 0) * 12
+    labor_fund_contribution = zus_details.get('labor_fund', 0) * 12
+    sickness_insurance_contribution = zus_details.get('sickness', 0) * 12 if b2b_data.get('sickness_insurance') else 0
     
-    skladki_spoleczne_rocznie = skladki_zus_emerytalna + skladki_zus_rentowa + skladki_zus_wypadkowa + skladki_zus_fundusz_pracy + skladki_zus_chorobowa
-    skladka_zdrowotna_rocznie = zus_details['zdrowotna'] * 12
-    wszystkie_skladki_zus = skladki_spoleczne_rocznie + skladka_zdrowotna_rocznie
+    annual_social_contributions = pension_insurance_contribution + disability_insurance_contribution + accident_insurance_contribution + labor_fund_contribution + sickness_insurance_contribution
+    annual_health_contribution = zus_details['health'] * 12
+    total_zus_contributions = annual_social_contributions + annual_health_contribution
 
-    dochod_brutto = faktura_rocznie - koszty_rocznie
+    gross_income = annual_invoice_amount - annual_business_costs
 
-    # Podatek
-    forma = b2b_data['forma_opodatkowania']
-    podatek_roczny = 0
+    # Tax
+    tax_form = b2b_data.get('tax_form', 'flat_tax')
+    annual_tax = 0
     
-    if forma == 'ryczalt_IT':
-        podstawa_opodatkowania = faktura_rocznie
-        podatek_roczny = round(podstawa_opodatkowania * DANE['progi_podatkowe']['ryczalt_IT'])
+    if tax_form == 'lump_sum_it':
+        tax_base = annual_invoice_amount
+        annual_tax = round(tax_base * CALCULATION_DATA['tax_thresholds']['lump_sum_it'])
     else:
-        podstawa_do_opodatkowania = dochod_brutto - skladki_spoleczne_rocznie
+        taxable_base = gross_income - annual_social_contributions
         
-        if forma == 'liniowy':
-            zdrowotna_do_odliczenia = min(skladka_zdrowotna_rocznie, 12900)
-            podstawa_do_opodatkowania -= zdrowotna_do_odliczenia
-        elif forma == 'skala':
-            podstawa_do_opodatkowania -= skladka_zdrowotna_rocznie
-        elif forma == 'ip_box':
-            podstawa_do_opodatkowania -= skladka_zdrowotna_rocznie
+        if tax_form == 'flat_tax':
+            health_contribution_deductible = min(annual_health_contribution, 12900)
+            taxable_base -= health_contribution_deductible
+        elif tax_form == 'tax_scale':
+            taxable_base -= annual_health_contribution
+        elif tax_form == 'ip_box':
+            taxable_base -= annual_health_contribution
 
-        podstawa_zaokraglona = round(podstawa_do_opodatkowania)
+        rounded_taxable_base = round(taxable_base)
         
-        kwota_wolna = DANE['progi_podatkowe']['kwota_wolna']
-        prog = DANE['progi_podatkowe']['skala'][0]['dochod']
-        podatek_prog_1 = 0
-        podatek_prog_2 = 0
+        tax_free_amount = CALCULATION_DATA['tax_thresholds']['tax_free_amount']
+        tax_threshold = CALCULATION_DATA['tax_thresholds']['tax_scale'][0]['income']
+        tax_first_threshold = 0
+        tax_second_threshold = 0
 
-        if forma == 'liniowy':
-            podatek_roczny = math.ceil(podstawa_zaokraglona * DANE['progi_podatkowe']['liniowy'])
-        elif forma == 'skala':
-            if podstawa_zaokraglona <= kwota_wolna:
-                podatek_roczny = 0
-            elif podstawa_zaokraglona <= prog:
-                podatek_prog_1 = math.ceil((podstawa_zaokraglona - kwota_wolna) * DANE['progi_podatkowe']['skala'][0]['stawka'])
-                podatek_roczny = podatek_prog_1
+        if tax_form == 'flat_tax':
+            annual_tax = math.ceil(rounded_taxable_base * CALCULATION_DATA['tax_thresholds']['flat_tax'])
+        elif tax_form == 'tax_scale':
+            if rounded_taxable_base <= tax_free_amount:
+                annual_tax = 0
+            elif rounded_taxable_base <= tax_threshold:
+                tax_first_threshold = math.ceil((rounded_taxable_base - tax_free_amount) * CALCULATION_DATA['tax_thresholds']['tax_scale'][0]['rate'])
+                annual_tax = tax_first_threshold
             else:
-                podatek_prog_1 = math.ceil((prog - kwota_wolna) * DANE['progi_podatkowe']['skala'][0]['stawka'])
-                podatek_prog_2 = math.ceil((podstawa_zaokraglona - prog) * DANE['progi_podatkowe']['skala'][1]['stawka'])
-                podatek_roczny = podatek_prog_1 + podatek_prog_2
+                tax_first_threshold = math.ceil((tax_threshold - tax_free_amount) * CALCULATION_DATA['tax_thresholds']['tax_scale'][0]['rate'])
+                tax_second_threshold = math.ceil((rounded_taxable_base - tax_threshold) * CALCULATION_DATA['tax_thresholds']['tax_scale'][1]['rate'])
+                annual_tax = tax_first_threshold + tax_second_threshold
             
-            kwota_zmniejszajaca_podatek = skladka_zdrowotna_rocznie * (7.75 / 9)
-            podatek_roczny = math.ceil(max(0, podatek_roczny - kwota_zmniejszajaca_podatek))
-        elif forma == 'ip_box':
-            podatek_roczny = math.ceil(podstawa_zaokraglona * DANE['progi_podatkowe']['ip_box'])
-            kwota_zmniejszajaca_podatek = skladka_zdrowotna_rocznie * (7.75 / 9)
-            podatek_roczny = math.ceil(max(0, podatek_roczny - kwota_zmniejszajaca_podatek))
+            tax_deductible_amount = annual_health_contribution * (7.75 / 9)
+            annual_tax = math.ceil(max(0, annual_tax - tax_deductible_amount))
+        elif tax_form == 'ip_box':
+            annual_tax = math.ceil(rounded_taxable_base * CALCULATION_DATA['tax_thresholds']['ip_box'])
+            tax_deductible_amount = annual_health_contribution * (7.75 / 9)
+            annual_tax = math.ceil(max(0, annual_tax - tax_deductible_amount))
 
-    if b2b_data.get('ulga_dla_mlodych', False) and faktura_rocznie <= DANE['ulga_dla_mlodych_limit']:
-        podatek_roczny = 0
+    if b2b_data.get('youth_relief', False) and annual_invoice_amount <= CALCULATION_DATA['youth_relief_limit']:
+        annual_tax = 0
 
-    stawka_dzienna = faktura_miesieczna / DANE['dane_ogolne']['dni_robocze_miesiecznie']
+    daily_rate = monthly_invoice_amount / CALCULATION_DATA['general_data']['working_days_monthly']
     
-    custom_benefits_rocznie = float(b2b_data.get('customBenefits', 0))
+    annual_custom_benefits = float(b2b_data.get('customBenefits', 0))
 
     company_benefits = b2b_data.get('companyBenefits', {})
-    wartosc_benefitow_od_firmy = 0
+    annual_company_benefits_value = 0
     for key, benefit in company_benefits.items():
         if benefit.get('enabled', False):
             if key == 'paidVacationDays':
-                wartosc_benefitow_od_firmy += float(benefit.get('days', 0)) * stawka_dzienna
+                annual_company_benefits_value += float(benefit.get('days', 0)) * daily_rate
             elif key == 'paidSickDays':
-                wartosc_benefitow_od_firmy += float(benefit.get('days', 0)) * stawka_dzienna * 0.8
+                annual_company_benefits_value += float(benefit.get('days', 0)) * daily_rate * 0.8
             else:
-                wartosc_benefitow_od_firmy += float(benefit.get('value', 0))
+                annual_company_benefits_value += float(benefit.get('value', 0))
 
     paid_vacation_days = float(company_benefits.get('paidVacationDays', {}).get('days', 0)) if company_benefits.get('paidVacationDays', {}).get('enabled') else 0
     paid_sick_days = float(company_benefits.get('paidSickDays', {}).get('days', 0)) if company_benefits.get('paidSickDays', {}).get('enabled') else 0
     
-    unpaid_vacation_days = max(0, int(_get_float(b2b_data, 'urlop_dni')) - paid_vacation_days)
-    unpaid_sick_days = max(0, int(_get_float(b2b_data, 'chorobowe_dni', 0)) - paid_sick_days) 
+    unpaid_vacation_days = max(0, int(_get_float(b2b_data, 'vacation_days')) - paid_vacation_days)
+    unpaid_sick_days = max(0, int(_get_float(b2b_data, 'sick_days', 0)) - paid_sick_days) 
 
-    utracony_przychod_urlop = unpaid_vacation_days * stawka_dzienna
-    utracony_przychod_chorobowe = unpaid_sick_days * stawka_dzienna * 0.8
-    utracony_przychod_przestoje = _get_float(b2b_data, 'przestoje_miesiace') * faktura_miesieczna
+    lost_revenue_vacation = unpaid_vacation_days * daily_rate
+    lost_revenue_sickness = unpaid_sick_days * daily_rate * 0.8
+    lost_revenue_stoppage = _get_float(b2b_data, 'stoppage_months') * monthly_invoice_amount
     
-    calkowity_utracony_przychod = utracony_przychod_urlop + utracony_przychod_chorobowe + utracony_przychod_przestoje
+    total_lost_revenue = lost_revenue_vacation + lost_revenue_sickness + lost_revenue_stoppage
 
-    dochod_netto_rocznie = dochod_brutto - wszystkie_skladki_zus - podatek_roczny - calkowity_utracony_przychod
+    annual_net_income = gross_income - total_zus_contributions - annual_tax - total_lost_revenue
     
-    calkowita_wartosc_b2b = dochod_netto_rocznie + wartosc_benefitow_od_firmy + custom_benefits_rocznie
+    total_b2b_value = annual_net_income + annual_company_benefits_value + annual_custom_benefits
 
     calculation_steps = {
-        'Przychód roczny': faktura_rocznie,
-        'Koszty firmowe roczne': koszty_rocznie,
-        'Dochód (przed ZUS)': dochod_brutto,
-        'skladki_zus_emerytalna': skladki_zus_emerytalna,
-        'skladki_zus_rentowa': skladki_zus_rentowa,
-        'skladki_zus_chorobowa': skladki_zus_chorobowa,
-        'skladki_zus_wypadkowa': skladki_zus_wypadkowa,
-        'skladki_zus_fundusz_pracy': skladki_zus_fundusz_pracy,
-        'skladka_zdrowotna': skladka_zdrowotna_rocznie,
-        'Podstawa do opodatkowania': podstawa_do_opodatkowania if 'podstawa_do_opodatkowania' in locals() else podstawa_opodatkowania,
-        'podatek_prog_1': podatek_prog_1 if 'podatek_prog_1' in locals() else (podatek_roczny if forma != 'skala' else 0),
-        'podatek_prog_2': podatek_prog_2 if 'podatek_prog_2' in locals() else 0,
-        'kwota_zmniejszajaca_podatek': kwota_zmniejszajaca_podatek if 'kwota_zmniejszajaca_podatek' in locals() else 0,
-        'Roczny podatek': podatek_roczny,
-        'Utracony przychód': calkowity_utracony_przychod
+        'annual_revenue': annual_invoice_amount,
+        'annual_business_costs': annual_business_costs,
+        'gross_income': gross_income,
+        'pension_insurance_contribution': pension_insurance_contribution,
+        'disability_insurance_contribution': disability_insurance_contribution,
+        'sickness_insurance_contribution': sickness_insurance_contribution,
+        'accident_insurance_contribution': accident_insurance_contribution,
+        'labor_fund_contribution': labor_fund_contribution,
+        'annual_health_contribution': annual_health_contribution,
+        'taxable_base': taxable_base if 'taxable_base' in locals() else tax_base,
+        'tax_first_threshold': tax_first_threshold if 'tax_first_threshold' in locals() else (annual_tax if tax_form != 'tax_scale' else 0),
+        'tax_second_threshold': tax_second_threshold if 'tax_second_threshold' in locals() else 0,
+        'tax_deductible_amount': tax_deductible_amount if 'tax_deductible_amount' in locals() else 0,
+        'annual_tax': annual_tax,
+        'total_lost_revenue': total_lost_revenue
     }
 
     results = {
-        "roczny_przychod": faktura_rocznie,
-        "roczne_koszty_firmowe": koszty_rocznie,
-        "roczny_zus": wszystkie_skladki_zus,
-        "roczny_podatek": podatek_roczny,
-        "roczny_utracony_przychod": calkowity_utracony_przychod,
-        "roczne_netto_na_reke": dochod_netto_rocznie,
-        "roczna_wartosc_benefitow_od_firmy": wartosc_benefitow_od_firmy,
-        "roczna_wartosc_wlasnych_korzysci": custom_benefits_rocznie,
-        "calkowita_roczna_wartosc": calkowita_wartosc_b2b,
-        "miesieczne_netto": calkowita_wartosc_b2b / 12
+        "annual_revenue": annual_invoice_amount,
+        "annual_business_costs": annual_business_costs,
+        "annual_zus": total_zus_contributions,
+        "annual_tax": annual_tax,
+        "annual_lost_revenue": total_lost_revenue,
+        "annual_net_income": annual_net_income,
+        "annual_company_benefits_value": annual_company_benefits_value,
+        "annual_custom_benefits_value": annual_custom_benefits,
+        "total_annual_value": total_b2b_value,
+        "monthly_net_income": total_b2b_value / 12
     }
     results['steps'] = calculation_steps
     return results
@@ -178,145 +175,145 @@ def calculate_uop_results(uop_data):
     Returns:
         dict: A dictionary with detailed UoP calculation results.
     """
-    wynagrodzenie_brutto_miesiecznie = _get_float(uop_data, 'wynagrodzenie_brutto')
-    kup_settings = uop_data.get('kup_settings', {'type': 'standard', 'creative_work_percentage': 0})
-    kup_type = kup_settings.get('type', 'standard')
-    creative_percentage = _get_float(kup_settings, 'creative_work_percentage', 0) / 100
+    monthly_gross_salary = _get_float(uop_data, 'monthly_gross_salary')
+    deductible_cost_settings = uop_data.get('deductible_cost_settings', {'type': 'standard', 'creative_work_percentage': 0})
+    deductible_cost_type = deductible_cost_settings.get('type', 'standard')
+    creative_work_percentage = _get_float(deductible_cost_settings, 'creative_work_percentage', 0) / 100
 
-    brutto_rocznie = wynagrodzenie_brutto_miesiecznie * 12
-    zus_uop = DANE['zus_uop_procentowe']
-    limit_kup_autorskie = DANE['progi_podatkowe']['limit_kup_autorskie']
+    annual_gross_salary = monthly_gross_salary * 12
+    uop_zus_rates = CALCULATION_DATA['uop_zus_rates']
+    author_costs_limit = CALCULATION_DATA['tax_thresholds']['author_tax_deductible_costs_limit']
 
-    roczne_skladki_spoleczne = 0
-    roczna_skladka_zdrowotna = 0
-    roczne_koszty_uzyskania = 0
-    roczna_podstawa_opodatkowania = 0
-    roczny_podatek = 0
+    annual_social_contributions = 0
+    annual_health_contribution = 0
+    annual_deductible_costs = 0
+    annual_tax_base = 0
+    annual_tax = 0
     
-    roczne_skladki_zus_emerytalna = 0
-    roczne_skladki_zus_rentowa = 0
-    roczne_skladki_zus_chorobowa = 0
+    annual_pension_contribution = 0
+    annual_disability_contribution = 0
+    annual_sickness_contribution = 0
 
     steps = {'monthly_calculations': []}
-    skumulowane_kup_autorskie = 0
+    cumulative_author_costs = 0
 
     for month in range(1, 13):
-        miesieczna_skladka_emerytalna = wynagrodzenie_brutto_miesiecznie * zus_uop['emerytalna']
-        miesieczna_skladka_rentowa = wynagrodzenie_brutto_miesiecznie * zus_uop['rentowa']
-        miesieczna_skladka_chorobowa = wynagrodzenie_brutto_miesiecznie * zus_uop['chorobowa']
-        miesieczne_skladki_spoleczne = miesieczna_skladka_emerytalna + miesieczna_skladka_rentowa + miesieczna_skladka_chorobowa
+        monthly_pension_contribution = monthly_gross_salary * uop_zus_rates['pension']
+        monthly_disability_contribution = monthly_gross_salary * uop_zus_rates['disability']
+        monthly_sickness_contribution = monthly_gross_salary * uop_zus_rates['sickness']
+        monthly_social_contributions = monthly_pension_contribution + monthly_disability_contribution + monthly_sickness_contribution
         
-        roczne_skladki_zus_emerytalna += miesieczna_skladka_emerytalna
-        roczne_skladki_zus_rentowa += miesieczna_skladka_rentowa
-        roczne_skladki_zus_chorobowa += miesieczna_skladka_chorobowa
+        annual_pension_contribution += monthly_pension_contribution
+        annual_disability_contribution += monthly_disability_contribution
+        annual_sickness_contribution += monthly_sickness_contribution
 
-        podstawa_zdrowotnej = wynagrodzenie_brutto_miesiecznie - miesieczne_skladki_spoleczne
-        miesieczna_skladka_zdrowotna = podstawa_zdrowotnej * zus_uop['zdrowotna']
+        health_contribution_base = monthly_gross_salary - monthly_social_contributions
+        monthly_health_contribution = health_contribution_base * uop_zus_rates['health']
 
-        miesieczne_kup = 0
-        if kup_type == 'standard':
-            miesieczne_kup = DANE['koszty_uzyskania_przychodu']['standardowe']
-        elif kup_type == 'elevated':
-            miesieczne_kup = DANE['koszty_uzyskania_przychodu']['podwyzszone']
-        elif kup_type == 'autorskie_50':
-            if skumulowane_kup_autorskie < limit_kup_autorskie:
-                przychodu_tworczego = wynagrodzenie_brutto_miesiecznie * creative_percentage
-                skladki_od_tworczego = przychodu_tworczego * (zus_uop['emerytalna'] + zus_uop['rentowa'] + zus_uop['chorobowa'])
-                podstawa_kup_autorskich = przychodu_tworczego - skladki_od_tworczego
+        monthly_deductible_costs = 0
+        if deductible_cost_type == 'standard':
+            monthly_deductible_costs = CALCULATION_DATA['tax_deductible_costs']['standard']
+        elif deductible_cost_type == 'elevated':
+            monthly_deductible_costs = CALCULATION_DATA['tax_deductible_costs']['elevated']
+        elif deductible_cost_type == 'author_50':
+            if cumulative_author_costs < author_costs_limit:
+                creative_income = monthly_gross_salary * creative_work_percentage
+                contributions_from_creative = creative_income * (uop_zus_rates['pension'] + uop_zus_rates['disability'] + uop_zus_rates['sickness'])
+                author_costs_base = creative_income - contributions_from_creative
                 
-                potencjalne_kup = podstawa_kup_autorskich * 0.5
+                potential_author_costs = author_costs_base * 0.5
                 
-                if skumulowane_kup_autorskie + potencjalne_kup > limit_kup_autorskie:
-                    kup_autorskie = limit_kup_autorskie - skumulowane_kup_autorskie
-                    kup_standardowe = DANE['koszty_uzyskania_przychodu']['standardowe']
-                    miesieczne_kup = kup_autorskie + kup_standardowe
-                    skumulowane_kup_autorskie = limit_kup_autorskie
+                if cumulative_author_costs + potential_author_costs > author_costs_limit:
+                    author_costs = author_costs_limit - cumulative_author_costs
+                    standard_costs = CALCULATION_DATA['tax_deductible_costs']['standard']
+                    monthly_deductible_costs = author_costs + standard_costs
+                    cumulative_author_costs = author_costs_limit
                 else:
-                    miesieczne_kup = potencjalne_kup
-                    skumulowane_kup_autorskie += potencjalne_kup
+                    monthly_deductible_costs = potential_author_costs
+                    cumulative_author_costs += potential_author_costs
             else:
-                miesieczne_kup = DANE['koszty_uzyskania_przychodu']['standardowe']
+                monthly_deductible_costs = CALCULATION_DATA['tax_deductible_costs']['standard']
         
-        if kup_type in ['standard', 'elevated']:
-             limit_roczny = DANE['koszty_uzyskania_przychodu'][f"{kup_type}owe_roczny_limit"]
-             if roczne_koszty_uzyskania + miesieczne_kup > limit_roczny:
-                 miesieczne_kup = max(0, limit_roczny - roczne_koszty_uzyskania)
-        elif kup_type == 'brak':
-            miesieczne_kup = 0
+        if deductible_cost_type in ['standard', 'elevated']:
+             annual_limit = CALCULATION_DATA['tax_deductible_costs'][f"{deductible_cost_type}_annual_limit"]
+             if annual_deductible_costs + monthly_deductible_costs > annual_limit:
+                 monthly_deductible_costs = max(0, annual_limit - annual_deductible_costs)
+        elif deductible_cost_type == 'none': # none
+            monthly_deductible_costs = 0
 
-        podstawa_opodatkowania_miesieczna = max(0, math.floor(wynagrodzenie_brutto_miesiecznie - miesieczne_skladki_spoleczne - miesieczne_kup))
+        monthly_tax_base = max(0, math.floor(monthly_gross_salary - monthly_social_contributions - monthly_deductible_costs))
         
-        roczne_skladki_spoleczne += miesieczne_skladki_spoleczne
-        roczna_skladka_zdrowotna += miesieczna_skladka_zdrowotna
-        roczne_koszty_uzyskania += miesieczne_kup
-        roczna_podstawa_opodatkowania += podstawa_opodatkowania_miesieczna
+        annual_social_contributions += monthly_social_contributions
+        annual_health_contribution += monthly_health_contribution
+        annual_deductible_costs += monthly_deductible_costs
+        annual_tax_base += monthly_tax_base
         
         steps['monthly_calculations'].append({
             'month': month,
-            'brutto': wynagrodzenie_brutto_miesiecznie,
-            'skladki_spoleczne': miesieczne_skladki_spoleczne,
-            'skladka_zdrowotna': miesieczna_skladka_zdrowotna,
-            'kup': miesieczne_kup,
-            'podstawa_opodatkowania': podstawa_opodatkowania_miesieczna
+            'gross_salary': monthly_gross_salary,
+            'social_contributions': monthly_social_contributions,
+            'health_contribution': monthly_health_contribution,
+            'deductible_costs': monthly_deductible_costs,
+            'tax_base': monthly_tax_base
         })
 
-    kwota_wolna = DANE['progi_podatkowe']['kwota_wolna']
-    prog = DANE['progi_podatkowe']['skala'][0]['dochod']
-    podatek_prog_1 = 0
-    podatek_prog_2 = 0
+    tax_free_amount = CALCULATION_DATA['tax_thresholds']['tax_free_amount']
+    tax_threshold = CALCULATION_DATA['tax_thresholds']['tax_scale'][0]['income']
+    tax_first_threshold = 0
+    tax_second_threshold = 0
     
-    if roczna_podstawa_opodatkowania > kwota_wolna:
-        if roczna_podstawa_opodatkowania <= prog:
-            podatek_prog_1 = (roczna_podstawa_opodatkowania - kwota_wolna) * DANE['progi_podatkowe']['skala'][0]['stawka']
-            roczny_podatek = podatek_prog_1
+    if annual_tax_base > tax_free_amount:
+        if annual_tax_base <= tax_threshold:
+            tax_first_threshold = (annual_tax_base - tax_free_amount) * CALCULATION_DATA['tax_thresholds']['tax_scale'][0]['rate']
+            annual_tax = tax_first_threshold
         else:
-            podatek_prog_1 = (prog - kwota_wolna) * DANE['progi_podatkowe']['skala'][0]['stawka']
-            podatek_prog_2 = (roczna_podstawa_opodatkowania - prog) * DANE['progi_podatkowe']['skala'][1]['stawka']
-            roczny_podatek = podatek_prog_1 + podatek_prog_2
+            tax_first_threshold = (tax_threshold - tax_free_amount) * CALCULATION_DATA['tax_thresholds']['tax_scale'][0]['rate']
+            tax_second_threshold = (annual_tax_base - tax_threshold) * CALCULATION_DATA['tax_thresholds']['tax_scale'][1]['rate']
+            annual_tax = tax_first_threshold + tax_second_threshold
     
-    kwota_zmniejszajaca_podatek = DANE['progi_podatkowe']['kwota_zmniejszajaca_podatek']
-    roczny_podatek -= kwota_zmniejszajaca_podatek
-    roczny_podatek = math.ceil(max(0, roczny_podatek))
+    tax_deductible_amount = CALCULATION_DATA['tax_thresholds']['tax_reducing_amount']
+    annual_tax -= tax_deductible_amount
+    annual_tax = math.ceil(max(0, annual_tax))
 
-    if uop_data.get('ulga_dla_mlodych', False) and brutto_rocznie <= DANE['ulga_dla_mlodych_limit']:
-        roczny_podatek = 0
+    if uop_data.get('youth_relief', False) and annual_gross_salary <= CALCULATION_DATA['youth_relief_limit']:
+        annual_tax = 0
 
-    netto_rocznie_na_reke = brutto_rocznie - roczne_skladki_spoleczne - roczna_skladka_zdrowotna - roczny_podatek
+    annual_net_income_on_hand = annual_gross_salary - annual_social_contributions - annual_health_contribution - annual_tax
     
-    wartosc_benefitow = sum(DANE['benefity'][b] for b in uop_data.get('wybrane_benefity', []) if b in DANE['benefity'] and b != 'ppk')
-    if 'ppk' in uop_data.get('wybrane_benefity', []):
-        wartosc_benefitow += brutto_rocznie * DANE['benefity']['ppk']
+    benefits_value = sum(CALCULATION_DATA['benefits'][b] for b in uop_data.get('selected_benefits', []) if b in CALCULATION_DATA['benefits'] and b != 'ppk')
+    if 'ppk' in uop_data.get('selected_benefits', []):
+        benefits_value += annual_gross_salary * CALCULATION_DATA['benefits']['ppk']
         
-    stawka_dzienna = wynagrodzenie_brutto_miesiecznie / DANE['dane_ogolne']['dni_robocze_miesiecznie']
-    wartosc_dni_wolnych = DANE['dni_wolne_uop']['urlop_wypoczynkowy']['dni'] * stawka_dzienna
+    daily_rate = monthly_gross_salary / CALCULATION_DATA['general_data']['working_days_monthly']
+    paid_days_off_value = CALCULATION_DATA['uop_days_off']['vacation']['days'] * daily_rate
     
-    calkowita_wartosc_uop = netto_rocznie_na_reke + wartosc_benefitow + wartosc_dni_wolnych
+    total_uop_value = annual_net_income_on_hand + benefits_value + paid_days_off_value
 
     steps.update({
-        'Roczne wynagrodzenie brutto': brutto_rocznie,
-        'skladki_zus_emerytalna': roczne_skladki_zus_emerytalna,
-        'skladki_zus_rentowa': roczne_skladki_zus_rentowa,
-        'skladki_zus_chorobowa': roczne_skladki_zus_chorobowa,
-        'skladka_zdrowotna': roczna_skladka_zdrowotna,
-        'Koszty uzyskania przychodu': roczne_koszty_uzyskania,
-        'Podstawa do opodatkowania': roczna_podstawa_opodatkowania,
-        'podatek_prog_1': podatek_prog_1,
-        'podatek_prog_2': podatek_prog_2,
-        'kwota_zmniejszajaca_podatek': kwota_zmniejszajaca_podatek,
-        'Roczny podatek': roczny_podatek,
-        'Wartość benefitów': wartosc_benefitow,
-        'Wartość płatnych dni wolnych': wartosc_dni_wolnych
+        'annual_gross_salary': annual_gross_salary,
+        'annual_pension_contribution': annual_pension_contribution,
+        'annual_disability_contribution': annual_disability_contribution,
+        'annual_sickness_contribution': annual_sickness_contribution,
+        'annual_health_contribution': annual_health_contribution,
+        'annual_deductible_costs': annual_deductible_costs,
+        'annual_tax_base': annual_tax_base,
+        'tax_first_threshold': tax_first_threshold,
+        'tax_second_threshold': tax_second_threshold,
+        'tax_deductible_amount': tax_deductible_amount,
+        'annual_tax': annual_tax,
+        'benefits_value': benefits_value,
+        'paid_days_off_value': paid_days_off_value
     })
 
     results = {
-        "roczne_brutto": brutto_rocznie,
-        "roczny_zus": roczne_skladki_spoleczne + roczna_skladka_zdrowotna,
-        "roczny_podatek": roczny_podatek,
-        "roczna_wartosc_benefitow": wartosc_benefitow,
-        "roczna_wartosc_platnych_dni_wolnych": wartosc_dni_wolnych,
-        "roczne_netto_na_reke": netto_rocznie_na_reke,
-        "calkowita_roczna_wartosc": calkowita_wartosc_uop,
-        "miesieczne_netto": calkowita_wartosc_uop / 12,
+        "annual_gross_salary": annual_gross_salary,
+        "annual_zus": annual_social_contributions + annual_health_contribution,
+        "annual_tax": annual_tax,
+        "annual_benefits_value": benefits_value,
+        "annual_paid_days_off_value": paid_days_off_value,
+        "annual_net_income": annual_net_income_on_hand,
+        "total_annual_value": total_uop_value,
+        "monthly_net_income": total_uop_value / 12,
     }
     results['steps'] = steps
     return results
@@ -332,15 +329,15 @@ def calculate_break_even(uop_total_value, b2b_base_data):
     Returns:
         float: The monthly B2B invoice amount needed to break even, or -1 if not found.
     """
-    start_range = int(_get_float(b2b_base_data, 'faktura_miesieczna', 10000) * 0.5)
+    start_range = int(_get_float(b2b_base_data, 'monthly_invoice_amount', 10000) * 0.5)
     end_range = 100000
     
-    for faktura_miesieczna_test in range(start_range, end_range, 100):
+    for test_monthly_invoice in range(start_range, end_range, 100):
         test_data = b2b_base_data.copy()
-        test_data['faktura_miesieczna'] = faktura_miesieczna_test
-        b2b_res = calculate_b2b_results(test_data)
-        if b2b_res['calkowita_roczna_wartosc'] >= uop_total_value:
-            return faktura_miesieczna_test
+        test_data['monthly_invoice_amount'] = test_monthly_invoice
+        b2b_results = calculate_b2b_results(test_data)
+        if b2b_results['total_annual_value'] >= uop_total_value:
+            return test_monthly_invoice
     return -1
 
 def calculate_uop_break_even(b2b_total_value, uop_base_data):
@@ -354,20 +351,20 @@ def calculate_uop_break_even(b2b_total_value, uop_base_data):
     Returns:
         float: The monthly UoP gross salary needed to break even, or -1 if not found.
     """
-    start_range = int(_get_float(uop_base_data, 'wynagrodzenie_brutto', 5000) * 0.5)
+    start_range = int(_get_float(uop_base_data, 'monthly_gross_salary', 5000) * 0.5)
     end_range = 50000
 
-    for wynagrodzenie_brutto_test in range(start_range, end_range, 100):
+    for test_gross_salary in range(start_range, end_range, 100):
         test_data = uop_base_data.copy()
-        test_data['wynagrodzenie_brutto'] = wynagrodzenie_brutto_test
-        uop_res = calculate_uop_results(test_data)
-        if uop_res['calkowita_roczna_wartosc'] >= b2b_total_value:
-            return wynagrodzenie_brutto_test
+        test_data['monthly_gross_salary'] = test_gross_salary
+        uop_results = calculate_uop_results(test_data)
+        if uop_results['total_annual_value'] >= b2b_total_value:
+            return test_gross_salary
     return -1
 
 def get_calculation_data():
     """Returns the loaded calculation data."""
-    return DANE
+    return CALCULATION_DATA
 
 def calculate_break_even_analysis(uop_data, b2b_base_data):
     """
@@ -380,20 +377,20 @@ def calculate_break_even_analysis(uop_data, b2b_base_data):
     Returns:
         list: A list of dictionaries with B2B rates and net differences.
     """
-    wynagrodzenie_brutto_uop = _get_float(uop_data, 'wynagrodzenie_brutto')
+    uop_gross_salary = _get_float(uop_data, 'monthly_gross_salary')
     uop_results = calculate_uop_results(uop_data)
 
     analysis_results = []
-    start_b2b_rate = wynagrodzenie_brutto_uop - 5000
-    end_b2b_rate = wynagrodzenie_brutto_uop + 15000
+    start_b2b_rate = uop_gross_salary - 5000
+    end_b2b_rate = uop_gross_salary + 15000
 
     for b2b_rate in range(int(start_b2b_rate), int(end_b2b_rate), 500):
         b2b_data = b2b_base_data.copy()
-        b2b_data['faktura_miesieczna'] = b2b_rate
+        b2b_data['monthly_invoice_amount'] = b2b_rate
         
         b2b_results = calculate_b2b_results(b2b_data)
         
-        net_difference = b2b_results['calkowita_roczna_wartosc'] - uop_results['calkowita_roczna_wartosc']
+        net_difference = b2b_results['total_annual_value'] - uop_results['total_annual_value']
         analysis_results.append({
             "b2b_rate": b2b_rate,
             "net_difference": net_difference
@@ -416,9 +413,9 @@ def calculate_sensitivity_analysis(base_b2b_data, base_uop_data):
     base_uop_results = calculate_uop_results(base_uop_data)
 
     sensitivity_params = {
-        'koszty_firmowe_miesieczne': 0.20,
-        'urlop_dni': 5,
-        'przestoje_miesiace': 1
+        'monthly_business_costs': 0.20,
+        'vacation_days': 5,
+        'stoppage_months': 1
     }
 
     analysis_results = []
@@ -431,7 +428,7 @@ def calculate_sensitivity_analysis(base_b2b_data, base_uop_data):
             min_data[param] = _get_float(min_data, param) - change
 
         min_b2b_results = calculate_b2b_results(min_data)
-        min_net_difference = min_b2b_results['calkowita_roczna_wartosc'] - base_uop_results['calkowita_roczna_wartosc']
+        min_net_difference = min_b2b_results['total_annual_value'] - base_uop_results['total_annual_value']
 
         max_data = base_b2b_data.copy()
         if isinstance(change, float):
@@ -440,7 +437,7 @@ def calculate_sensitivity_analysis(base_b2b_data, base_uop_data):
             max_data[param] = _get_float(max_data, param) + change
 
         max_b2b_results = calculate_b2b_results(max_data)
-        max_net_difference = max_b2b_results['calkowita_roczna_wartosc'] - base_uop_results['calkowita_roczna_wartosc']
+        max_net_difference = max_b2b_results['total_annual_value'] - base_uop_results['total_annual_value']
         
         impact = max_net_difference - min_net_difference
 

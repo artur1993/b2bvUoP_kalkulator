@@ -2,7 +2,7 @@
 import unittest
 import json
 import os
-from src.calculations import DANE, calculate_uop_results
+from src.calculations import CALCULATION_DATA, calculate_uop_results
 from src.calculations import _get_float
 
 class TestGetFloat(unittest.TestCase):
@@ -43,53 +43,40 @@ class TestUopKupLogic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # Load the main data file to ensure consistency with the app
-        global DANE
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        DATA_FILE_PATH = os.path.join(BASE_DIR, 'dane_wejsciowe_kalkulator.json')
-        with open(DATA_FILE_PATH, 'r', encoding='utf-8') as f:
-            DANE_loaded = json.load(f)
-        
-        # Manually add data that is normally added at app startup
-        DANE.update(DANE_loaded)
-        DANE['zus_uop_procentowe'] = {
-            "emerytalna": 0.0976, "rentowa": 0.0150, "chorobowa": 0.0245, "zdrowotna": 0.09
-        }
-        DANE['ulga_dla_mlodych_limit'] = 85528
-        DANE['progi_podatkowe']['kwota_zmniejszajaca_podatek'] = 3600
+        pass
 
 
     def test_kup_standard_positive(self):
         """Test standard KUP (250 PLN/month) calculation."""
         uop_data = {
-            'wynagrodzenie_brutto': 10000,
-            'kup_settings': {'type': 'standard'}
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'standard'}
         }
         results = calculate_uop_results(uop_data)
         # 250 * 12 = 3000
-        self.assertAlmostEqual(results['steps']['Koszty uzyskania przychodu'], 3000, places=2)
+        self.assertAlmostEqual(results['steps']['annual_deductible_costs'], 3000, places=2)
         # Based on external calculation for this specific case
-        self.assertAlmostEqual(results['roczne_netto_na_reke'], 89362.68, places=2)
-        self.assertAlmostEqual(results['roczny_podatek'], 4866.00, places=2)
+        self.assertAlmostEqual(results['annual_net_income'], 89362.68, places=2)
+        self.assertAlmostEqual(results['annual_tax'], 4866.00, places=2)
 
     def test_kup_elevated_positive(self):
         """Test elevated KUP (300 PLN/month) calculation."""
         uop_data = {
-            'wynagrodzenie_brutto': 10000,
-            'kup_settings': {'type': 'elevated'}
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'elevated'}
         }
         results = calculate_uop_results(uop_data)
         # 300 * 12 = 3600
-        self.assertAlmostEqual(results['steps']['Koszty uzyskania przychodu'], 3600, places=2)
+        self.assertAlmostEqual(results['steps']['annual_deductible_costs'], 3600, places=2)
         # Based on external calculation for this specific case
-        self.assertAlmostEqual(results['roczne_netto_na_reke'], 89434.68, places=2)
-        self.assertAlmostEqual(results['roczny_podatek'], 4794.00, places=2)
+        self.assertAlmostEqual(results['annual_net_income'], 89434.68, places=2)
+        self.assertAlmostEqual(results['annual_tax'], 4794.00, places=2)
 
     def test_kup_creative_below_limit_positive(self):
         """Test 50% creative KUP below the annual limit."""
         uop_data = {
-            'wynagrodzenie_brutto': 20000,
-            'kup_settings': {'type': 'autorskie_50', 'creative_work_percentage': 80}
+            'monthly_gross_salary': 20000,
+            'deductible_cost_settings': {'type': 'author_50', 'creative_work_percentage': 80}
         }
         results = calculate_uop_results(uop_data)
 
@@ -99,15 +86,15 @@ class TestUopKupLogic(unittest.TestCase):
         # Base for KUP: 16000 - 2193.6 = 13806.4
         # Monthly KUP: 13806.4 * 0.5 = 6903.2
         # Annual KUP: 6903.2 * 12 = 82838.4 (below 120000 limit)
-        self.assertAlmostEqual(results['steps']['Koszty uzyskania przychodu'], 82838.4, places=2)
-        self.assertAlmostEqual(results['roczne_netto_na_reke'], 179897.36, places=2)
-        self.assertAlmostEqual(results['roczny_podatek'], 8560.00, places=2)
+        self.assertAlmostEqual(results['steps']['annual_deductible_costs'], 82838.4, places=2)
+        self.assertAlmostEqual(results['annual_net_income'], 179897.36, places=2)
+        self.assertAlmostEqual(results['annual_tax'], 8560.00, places=2)
 
     def test_kup_creative_exceeding_limit_positive(self):
         """Test 50% creative KUP when exceeding the annual limit."""
         uop_data = {
-            'wynagrodzenie_brutto': 30000,
-            'kup_settings': {'type': 'autorskie_50', 'creative_work_percentage': 80}
+            'monthly_gross_salary': 30000,
+            'deductible_cost_settings': {'type': 'author_50', 'creative_work_percentage': 80}
         }
         results = calculate_uop_results(uop_data)
 
@@ -118,26 +105,26 @@ class TestUopKupLogic(unittest.TestCase):
         # KUP for 12th month = remaining creative KUP + standard KUP (250) = 6097.2 + 250 = 6347.2
         # Total annual KUP = (10354.8 * 11) + 6347.2 = 113902.8 + 6347.2 = 120250
 
-        self.assertAlmostEqual(results['steps']['Koszty uzyskania przychodu'], 120250, places=2)
-        self.assertAlmostEqual(results['roczne_netto_na_reke'], 252960.04, places=2)
-        self.assertAlmostEqual(results['roczny_podatek'], 29726.00, places=2)
+        self.assertAlmostEqual(results['steps']['annual_deductible_costs'], 120250, places=2)
+        self.assertAlmostEqual(results['annual_net_income'], 252960.04, places=2)
+        self.assertAlmostEqual(results['annual_tax'], 29726.00, places=2)
 
         # Verify monthly KUP values
         monthly_calculations = results['steps']['monthly_calculations']
-        self.assertAlmostEqual(monthly_calculations[0]['kup'], 10354.8, places=2)
-        self.assertAlmostEqual(monthly_calculations[10]['kup'], 10354.8, places=2)
-        self.assertAlmostEqual(monthly_calculations[11]['kup'], 6347.2, places=2)
+        self.assertAlmostEqual(monthly_calculations[0]['deductible_costs'], 10354.8, places=2)
+        self.assertAlmostEqual(monthly_calculations[10]['deductible_costs'], 10354.8, places=2)
+        self.assertAlmostEqual(monthly_calculations[11]['deductible_costs'], 6347.2, places=2)
 
     def test_kup_none_positive(self):
         """Test calculation with no KUP."""
         uop_data = {
-            'wynagrodzenie_brutto': 10000,
-            'kup_settings': {'type': 'brak'}
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'none'}
         }
         results = calculate_uop_results(uop_data)
-        self.assertAlmostEqual(results['steps']['Koszty uzyskania przychodu'], 0, places=2)
-        self.assertAlmostEqual(results['roczne_netto_na_reke'], 89002.68, places=2)
-        self.assertAlmostEqual(results['roczny_podatek'], 5226.00, places=2)
+        self.assertAlmostEqual(results['steps']['annual_deductible_costs'], 0, places=2)
+        self.assertAlmostEqual(results['annual_net_income'], 89002.68, places=2)
+        self.assertAlmostEqual(results['annual_tax'], 5226.00, places=2)
 
 if __name__ == '__main__':
     unittest.main()

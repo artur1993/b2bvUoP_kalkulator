@@ -3,7 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { insuranceModules, insuranceProfiles } from '../data/insuranceOptions';
 import Checkbox from './Checkbox';
 import Select from './Select';
+import Tooltip from './Tooltip';
 
+/**
+ * A component for configuring a B2B insurance package.
+ * It allows users to select pre-defined profiles or customize their own package.
+ * @param {object} props - The component props.
+ * @param {object} props.insuranceConfig - The current insurance configuration state.
+ * @param {function} props.setInsuranceConfig - The function to update the insurance configuration state.
+ * @param {number} props.b2bMonthlyInvoice - The monthly B2B invoice amount, used for dynamic cost calculations.
+ */
 const InsuranceConfigurator = ({ insuranceConfig, setInsuranceConfig, b2bMonthlyInvoice }) => {
   const { t } = useTranslation();
   const [totalCost, setTotalCost] = useState(0);
@@ -67,7 +76,9 @@ const InsuranceConfigurator = ({ insuranceConfig, setInsuranceConfig, b2bMonthly
             <button 
               key={profile}
               onClick={() => handleProfileChange(profile)}
-              className={`px-4 py-2 rounded-md text-sm font-medium ${insuranceConfig.activeProfile === profile ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}>
+              className={`px-4 py-2 rounded-md text-sm font-medium ${insuranceConfig.activeProfile === profile ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`}
+              aria-label={`${t('insurance.profiles.' + profile)} profile`}
+            >
               {t(`insurance.profiles.${profile}`)}
             </button>
           ))}
@@ -88,9 +99,13 @@ const InsuranceConfigurator = ({ insuranceConfig, setInsuranceConfig, b2bMonthly
                   checked={insuranceConfig.selections[id]?.enabled || false}
                   onChange={(e) => handleSelectionChange(id, 'enabled', e.target.checked)}
                 />
-                <span className="info-tooltip" data-tooltip-content={module.tooltip}>
-                  ℹ️
-                </span>
+                <Tooltip text={t(module.tooltip, { ns: 'insurance' })}>
+                  <span className="ml-2 text-gray-500 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                  </span>
+                </Tooltip>
               </div>
               {insuranceConfig.selections[id]?.enabled && (
                 <span className="module-cost">

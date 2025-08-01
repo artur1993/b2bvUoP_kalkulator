@@ -7,6 +7,9 @@ A simple web application to compare the net income between B2B and Standard Empl
 This tool provides a detailed and accurate financial comparison, taking into account taxes, social security (ZUS), benefits, and paid time off, based on the regulations for 2025.
 
 ### Key Features
+- **Code and Convention Refinements**: The backend codebase has been refactored to use consistent English variable names, and server-side validation has been enhanced for better security and robustness.
+- **Interactive Tooltips**: Provides helpful context and explanations for various input fields and complex concepts, improving user understanding and usability.
+- **Accessibility Enhancements**: Implemented ARIA attributes and other best practices to improve accessibility for users with disabilities.
 - **Advanced B2B Options**: Customize your B2B calculation with company-provided benefits (paid leave, healthcare, training budget) and your own custom tax-deductible benefits.
 - **Multiple Tax Forms**: Supports all common tax forms for B2B in Poland: Ryczałt 12% (IT), Liniowy 19%, Skala Podatkowa, and IP Box 5%.
 - **Comprehensive Visualizations**: 
@@ -132,3 +135,43 @@ The project follows a standard Flask application structure:
   - `generate_coverage_summary.sh`: Script for generating a summary table of coverage.
 - `package.json`: Node.js project configuration and scripts (for root level, e.g., Playwright).
 - `playwright.config.js`: Playwright E2E test configuration.
+
+### API Documentation
+
+The core of the backend is the `/api/calculate` endpoint, which performs all the financial comparisons.
+
+**Endpoint:** `POST /api/calculate`
+
+**Description:**
+Accepts a JSON object with B2B and UoP contract parameters and returns a detailed financial comparison, including net income, taxes, social security contributions, and a break-even analysis.
+
+**Request Payload Example:**
+```json
+{
+  "b2b": {
+    "monthly_invoice_amount": 20000,
+    "tax_form": "lump_sum_it",
+    "zus_type": "full",
+    "sickness_insurance": true,
+    "vat": true,
+    "monthly_business_costs": 500,
+    "stoppage_months": 0,
+    "vacation_days": 0,
+    "age": 30,
+    "youth_relief": false,
+    "customBenefits": 0,
+    "companyBenefits": {}
+  },
+  "uop": {
+    "monthly_gross_salary": 15000,
+    "deductible_cost_settings": {"type": "standard"},
+    "selected_benefits": [],
+    "age": 30,
+    "youth_relief": false
+  },
+  "calculation_mode": "uop_to_b2b"
+}
+```
+
+**Response:**
+The endpoint returns a JSON object containing the `b2b_results`, `uop_results`, and the calculated break-even point (`break_even_invoice_amount` or `break_even_gross_salary`).

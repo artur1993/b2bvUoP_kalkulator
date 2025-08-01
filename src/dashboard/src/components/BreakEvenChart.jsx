@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useTranslation } from 'react-i18next';
@@ -6,18 +6,20 @@ import { calculateBreakEvenAnalysis } from '../services/api';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const BreakEvenChart = ({ b2b, uop }) => {
+const BreakEvenChart = forwardRef(({ b2b, uop, results }, ref) => {
     const { t } = useTranslation();
     const [chartData, setChartData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (!results) return;
+
         const fetchData = async () => {
             try {
                 setLoading(true);
                 const data = await calculateBreakEvenAnalysis({ b2b, uop });
-                const labels = data.map(d => d.b2b_rate);
-                const values = data.map(d => d.net_difference);
+                const labels = data.map(item => item.b2b_rate);
+                const values = data.map(item => item.net_difference);
 
                 setChartData({
                     labels,
@@ -40,13 +42,13 @@ const BreakEvenChart = ({ b2b, uop }) => {
         if (b2b && uop) {
             fetchData();
         }
-    }, [b2b, uop, t]);
+    }, [b2b, uop, t, results]);
 
     if (loading) {
         return <div>{t('loading')}</div>;
     }
 
-    if (!chartData) {
+    if (!chartData || chartData.labels.length === 0) {
         return <div>{t('no_data')}</div>;
     }
 
@@ -83,9 +85,9 @@ const BreakEvenChart = ({ b2b, uop }) => {
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-            <Line data={chartData} options={options} />
+            <Line data={chartData} options={options} ref={ref} />
         </div>
     );
-};
+});
 
 export default BreakEvenChart;

@@ -1,64 +1,64 @@
 {
-  "progi_podatkowe": {
-    "skala": [
-      { "dochod": 120000, "stawka": 0.12 },
-      { "dochod": "powyzej", "stawka": 0.32 }
+  "tax_thresholds": {
+    "tax_scale": [
+      { "income": 120000, "rate": 0.12 },
+      { "income": "powyzej", "rate": 0.32 }
     ],
-    "kwota_wolna": 30000,
-    "liniowy": 0.19,
-    "ryczalt_IT": 0.12,
+    "tax_free_amount": 30000,
+    "flat_tax": 0.19,
+    "lump_sum_it": 0.12,
     "ip_box": 0.05,
-    "limit_kup_autorskie": 120000
+    "author_tax_deductible_costs_limit": 120000
   },
-  "koszty_uzyskania_przychodu": {
-    "standardowe": 250,
-    "standardowe_roczny_limit": 3000,
-    "podwyzszone": 300,
-    "elevatedowe_roczny_limit": 3600
+  "tax_deductible_costs": {
+    "standard": 250,
+    "standard_annual_limit": 3000,
+    "elevated": 300,
+    "elevated_annual_limit": 3600
   },
   "zus_2025": {
-    "ulga_na_start": {
-      "emerytalna": 0.0,
-      "rentowa": 0.0,
-      "wypadkowa": 0.0,
-      "chorobowa": 0.0,
-      "zdrowotna": 418.86
+    "start_relief": {
+      "pension": 0.0,
+      "disability": 0.0,
+      "accident": 0.0,
+      "sickness": 0.0,
+      "health": 418.86
     },
-    "preferencyjny": {
-      "emerytalna": 314.09,
-      "rentowa": 129.45,
-      "wypadkowa": 31.53,
-      "chorobowa": 87.05,
-      "zdrowotna": 418.86
+    "preferential": {
+      "pension": 314.09,
+      "disability": 129.45,
+      "accident": 31.53,
+      "sickness": 87.05,
+      "health": 418.86
     },
-    "pelny": {
-      "emerytalna": 1202.40,
-      "rentowa": 492.54,
-      "wypadkowa": 103.77,
-      "chorobowa": 146.03,
+    "full": {
+      "pension": 1202.40,
+      "disability": 492.54,
+      "accident": 103.77,
+      "sickness": 146.03,
       "fundusz_pracy": 146.03,
-      "zdrowotna": 418.86
+      "health": 418.86
     }
   },
-  "benefity": {
-    "opieka_medyczna": 2400,
-    "karta_sportowa": 1800,
-    "budzet_szkoleniowy": 3000,
+  "benefits": {
+    "medical_care": 2400,
+    "sport_card": 1800,
+    "training_budget": 3000,
     "ppk": 0.02,
-    "sprzet": 4000
+    "equipment": 4000
   },
-  "dni_wolne_uop": {
-    "urlop_wypoczynkowy": { "dni": 26, "procent_platnosci": 1.0 },
-    "chorobowe": { "dni": 33, "procent_platnosci": 0.8 },
-    "macierzynski": { "dni": 140, "procent_platnosci": 1.0 },
-    "ojcowski": { "dni": 14, "procent_platnosci": 1.0 },
-    "opieka_nad_dzieckiem": { "dni": 2, "procent_platnosci": 1.0 },
-    "oddanie_krwi": { "dni": 2, "procent_platnosci": 1.0 },
-    "opieka_krotkoterminowa": { "dni": 5, "procent_platnosci": 1.0 }
+  "uop_days_off": {
+    "vacation": { "days": 26, "payment_percentage": 1.0 },
+    "sick_leave": { "days": 33, "payment_percentage": 0.8 },
+    "maternity": { "days": 140, "payment_percentage": 1.0 },
+    "paternity": { "days": 14, "payment_percentage": 1.0 },
+    "child_care": { "days": 2, "payment_percentage": 1.0 },
+    "blood_donation": { "days": 2, "payment_percentage": 1.0 },
+    "short_term_care": { "days": 5, "payment_percentage": 1.0 }
   },
-  "dane_ogolne": {
-    "dni_robocze_rocznie": 252,
-    "dni_robocze_miesiecznie": 21
+  "general_data": {
+    "working_days_annually": 252,
+    "working_days_monthly": 21
   },
   "analiza_ryzyka": {
     "pl": {

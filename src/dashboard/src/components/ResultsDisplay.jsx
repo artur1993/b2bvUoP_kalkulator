@@ -16,17 +16,17 @@ const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExc
   if (!results) return null;
 
   const { b2b_results, uop_results } = results;
-  const break_even_faktura = results.break_even_faktura;
-  const break_even_wynagrodzenie_brutto = results.break_even_wynagrodzenie_brutto;
+  const break_even_invoice_amount = results.break_even_invoice_amount;
+  const break_even_gross_salary = results.break_even_gross_salary;
 
   let breakEvenText = '';
   let breakEvenSubtitle = '';
 
-  if (calculationMode === 'uop_to_b2b' && break_even_faktura !== -1) {
-    breakEvenText = t('results.break_even_b2b_title') + ': ' + formatCurrency(break_even_faktura);
+  if (calculationMode === 'uop_to_b2b' && break_even_invoice_amount !== -1) {
+    breakEvenText = t('results.break_even_b2b_title') + ': ' + formatCurrency(break_even_invoice_amount);
     breakEvenSubtitle = t('results.break_even_b2b_subtitle');
-  } else if (calculationMode === 'b2b_to_uop' && break_even_wynagrodzenie_brutto !== -1) {
-    breakEvenText = t('results.break_even_uop_title') + ': ' + formatCurrency(break_even_wynagrodzenie_brutto);
+  } else if (calculationMode === 'b2b_to_uop' && break_even_gross_salary !== -1) {
+    breakEvenText = t('results.break_even_uop_title') + ': ' + formatCurrency(break_even_gross_salary);
     breakEvenSubtitle = t('results.break_even_uop_subtitle');
   }
 
@@ -44,11 +44,11 @@ const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExc
             <span>{t('form.b2b_title')}</span>
           </h3>
           <ul className="space-y-2 text-gray-700">
-            <li><span className="font-medium">{t('results.annual_revenue')}:</span> {formatCurrency(b2b_results.roczny_przychod)}</li>
-            <li><span className="font-medium">{t('results.annual_costs')}:</span> {formatCurrency(b2b_results.roczne_koszty_firmowe)}</li>
-            <li><span className="font-medium">{t('results.annual_zus')}:</span> {formatCurrency(b2b_results.roczny_zus)}</li>
-            <li><span className="font-medium">{t('results.annual_tax')}:</span> {formatCurrency(b2b_results.roczny_podatek)}</li>
-            <li><span className="font-medium">{t('results.lost_revenue')}:</span> {formatCurrency(b2b_results.roczny_utracony_przychod)}
+            <li><span className="font-medium">{t('results.annual_revenue')}:</span> {formatCurrency(b2b_results.annual_revenue)}</li>
+            <li><span className="font-medium">{t('results.annual_costs')}:</span> {formatCurrency(b2b_results.annual_business_costs)}</li>
+            <li><span className="font-medium">{t('results.annual_zus')}:</span> {formatCurrency(b2b_results.annual_zus)}</li>
+            <li><span className="font-medium">{t('results.annual_tax')}:</span> {formatCurrency(b2b_results.annual_tax)}</li>
+            <li><span className="font-medium">{t('results.lost_revenue')}:</span> {formatCurrency(b2b_results.annual_lost_revenue)}
               <span className="relative group ml-1">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block text-gray-400 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9.247a.75.75 0 01.968-.024L12 11.625l2.804-2.402a.75.75 0 11.944 1.168L12.5 13.5l3.197 2.74a.75.75 0 11-.944 1.168L12 15.375l-2.804 2.402a.75.75 0 01-1.168-.944L11.5 13.5l-3.197-2.74a.75.75 0 01.024-.968z" />
@@ -58,11 +58,11 @@ const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExc
                 </span>
               </span>
             </li>
-            <li><span className="font-medium">{t('results.net_income')}:</span> {formatCurrency(b2b_results.roczne_netto_na_reke)}</li>
-            <li><span className="font-medium">{t('results.company_benefits_value')}:</span> {formatCurrency(b2b_results.roczna_wartosc_benefitow_od_firmy)}</li>
-            <li><span className="font-medium">{t('results.custom_benefits_value')}:</span> {formatCurrency(b2b_results.roczna_wartosc_wlasnych_korzysci)}</li>
-            <li className="text-2xl font-bold text-accent mt-4"><span className="font-medium text-gray-800">{t('results.total_b2b_value')}:</span> {formatCurrency(b2b_results.calkowita_roczna_wartosc)}</li>
-            <li className="text-lg font-semibold text-accent"><span className="font-medium text-gray-800">{t('results.monthly_net')}:</span> {formatCurrency(b2b_results.miesieczne_netto)}</li>
+            <li><span className="font-medium">{t('results.net_income')}:</span> {formatCurrency(b2b_results.annual_net_income)}</li>
+            <li><span className="font-medium">{t('results.company_benefits_value')}:</span> {formatCurrency(b2b_results.annual_company_benefits_value)}</li>
+            <li><span className="font-medium">{t('results.custom_benefits_value')}:</span> {formatCurrency(b2b_results.annual_custom_benefits_value)}</li>
+            <li className="text-2xl font-bold text-accent mt-4"><span className="font-medium text-gray-800">{t('results.total_b2b_value')}:</span> {formatCurrency(b2b_results.total_annual_value)}</li>
+            <li className="text-lg font-semibold text-accent"><span className="font-medium text-gray-800">{t('results.monthly_net')}:</span> {formatCurrency(b2b_results.monthly_net_income)}</li>
           </ul>
         </div>
 
@@ -75,20 +75,20 @@ const ResultsDisplay = ({ results, onExportPdf, onExportAdvancedPdf, onExportExc
             <span>{t('form.uop_title')}</span>
           </h3>
           <ul className="space-y-2 text-gray-700">
-            <li><span className="font-medium">{t('results.annual_gross')}:</span> {formatCurrency(uop_results.roczne_brutto)}</li>
-            <li><span className="font-medium">{t('results.annual_zus')}:</span> {formatCurrency(uop_results.roczny_zus)}</li>
-            <li><span className="font-medium">{t('results.annual_tax')}:</span> {formatCurrency(uop_results.roczny_podatek)}</li>
-            <li><span className="font-medium">{t('results.net_income')}:</span> {formatCurrency(uop_results.roczne_netto_na_reke)}</li>
-            <li><span className="font-medium">{t('results.uop_benefits_value')}:</span> {formatCurrency(uop_results.roczna_wartosc_benefitow)}</li>
-            <li><span className="font-medium">{t('results.paid_days_off_value')}:</span> {formatCurrency(uop_results.roczna_wartosc_platnych_dni_wolnych)}</li>
-            <li className="text-2xl font-bold text-accent mt-4"><span className="font-medium text-gray-800">{t('results.total_uop_value')}:</span> {formatCurrency(uop_results.calkowita_roczna_wartosc)}</li>
-            <li className="text-lg font-semibold text-accent"><span className="font-medium text-gray-800">{t('results.monthly_net')}:</span> {formatCurrency(uop_results.miesieczne_netto)}</li>
+            <li><span className="font-medium">{t('results.annual_gross')}:</span> {formatCurrency(uop_results.annual_gross_salary)}</li>
+            <li><span className="font-medium">{t('results.annual_zus')}:</span> {formatCurrency(uop_results.annual_zus)}</li>
+            <li><span className="font-medium">{t('results.annual_tax')}:</span> {formatCurrency(uop_results.annual_tax)}</li>
+            <li><span className="font-medium">{t('results.net_income')}:</span> {formatCurrency(uop_results.annual_net_income)}</li>
+            <li><span className="font-medium">{t('results.uop_benefits_value')}:</span> {formatCurrency(uop_results.annual_benefits_value)}</li>
+            <li><span className="font-medium">{t('results.paid_days_off_value')}:</span> {formatCurrency(uop_results.annual_paid_days_off_value)}</li>
+            <li className="text-2xl font-bold text-accent mt-4"><span className="font-medium text-gray-800">{t('results.total_uop_value')}:</span> {formatCurrency(uop_results.total_annual_value)}</li>
+            <li className="text-lg font-semibold text-accent"><span className="font-medium text-gray-800">{t('results.monthly_net')}:</span> {formatCurrency(uop_results.monthly_net_income)}</li>
           </ul>
         </div>
       </div>
 
       {breakEvenText && (
-        <div className="text-center bg-yellow-50 p-4 rounded-lg shadow-md mb-8">
+        <div data-testid="break-even-section" className="text-center bg-yellow-50 p-4 rounded-lg shadow-md mb-8">
           <p className="text-xl font-bold text-yellow-800">
             {breakEvenText}
           </p>

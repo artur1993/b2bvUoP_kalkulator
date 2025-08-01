@@ -1,17 +1,15 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '../utils/test-utils';
 import SensitivityChart from './SensitivityChart';
-import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n';
 import * as api from '../services/api';
 import { vi } from 'vitest';
 
 vi.mock('../services/api');
 vi.mock('react-chartjs-2', () => ({
-    Bar: () => <div data-testid="mock-bar-chart" />,
+  Bar: (props) => <div data-testid="mock-bar-chart" {...props} />,
 }));
 
-const mockB2bData = { faktura_miesieczna: 10000 };
+const mockB2bData = { monthly_invoice_amount: 10000 };
 const mockUopData = { wynagrodzenie_brutto: 8000 };
 
 describe('SensitivityChart', () => {
@@ -21,28 +19,19 @@ describe('SensitivityChart', () => {
             { parameter: 'urlop_dni', impact: -2000 },
         ]);
 
-        render(
-            <I18nextProvider i18n={i18n}>
-                <SensitivityChart b2b={mockB2bData} uop={mockUopData} />
-            </I18nextProvider>
-        );
+        render(<SensitivityChart b2b={mockB2bData} uop={mockUopData} results={{}} />);
 
-        await waitFor(() => {
-            expect(screen.getByTestId('mock-bar-chart')).toBeInTheDocument();
-        });
+        expect(await screen.findByTestId('mock-bar-chart')).toBeInTheDocument();
     });
 
     test('shows no data message if api returns empty array', async () => {
         api.calculateSensitivityAnalysis.mockResolvedValue([]);
 
-        render(
-            <I18nextProvider i18n={i18n}>
-                <SensitivityChart b2b={mockB2bData} uop={mockUopData} />
-            </I18nextProvider>
-        );
+        render(<SensitivityChart b2b={mockB2bData} uop={mockUopData} results={{}} />);
 
         await waitFor(() => {
             expect(screen.queryByTestId('mock-bar-chart')).not.toBeInTheDocument();
         });
+        expect(await screen.findByText('no_data')).toBeInTheDocument();
     });
 });

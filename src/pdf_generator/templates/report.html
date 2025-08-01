@@ -11,7 +11,7 @@
     <section class="title-page">
         <h1>{{ t.header.title }}</h1>
         <p class="subtitle">{{ t.header.subtitle }}</p>
-        <p style="margin-top: 50px;"><strong>{{ t.report.generated_for | default('Wygenerowano dla') }}:</strong> {{ input_data.b2b.faktura_miesieczna | format_currency }} vs {{ input_data.uop.wynagrodzenie_brutto | format_currency }}</p>
+        <p style="margin-top: 50px;"><strong>{{ t.report.generated_for | default('Wygenerowano dla') }}:</strong> {{ input_data.b2b.monthly_invoice_amount | format_currency }} vs {{ input_data.uop.wynagrodzenie_brutto | format_currency }}</p>
         <p><strong>{{ t.report.footer_generated_on | default('Data') }}:</strong> {{ generation_date }}</p>
     </section>
 

@@ -39,6 +39,10 @@
     "kup_elevated": "Elevated (300 PLN/month)",
     "kup_creative_50": "50% Creative Work Costs",
     "kup_none": "None",
+    "kup_standard_tooltip": "Standard tax-deductible costs for employees (250 PLN/month, 3000 PLN/year).",
+    "kup_elevated_tooltip": "Elevated tax-deductible costs for employees commuting from another town (300 PLN/month, 3600 PLN/year).",
+    "kup_creative_50_tooltip": "50% tax-deductible costs for creative work, up to an annual limit of 120,000 PLN.",
+    "kup_none_tooltip": "No tax-deductible costs applied.",
     "creative_work_percentage": "Creative Work Percentage (%)",
     "tax_deductible_costs": "Annual Tax-Deductible Costs (PLN)",
     "selected_benefits": "Selected Benefits",
@@ -50,7 +54,9 @@
     "calculate_button": "Calculate Comparison",
     "calculation_mode_title": "Calculation Mode",
     "uop_to_b2b_mode": "UoP to B2B (Calculate B2B invoice to match UoP)",
-    "b2b_to_uop_mode": "B2B to UoP (Calculate UoP salary to match B2B)"
+    "b2b_to_uop_mode": "B2B to UoP (Calculate UoP salary to match B2B)",
+    "kup_tooltip": "Tax-deductible costs (KUP) are expenses incurred to generate revenue. Standard KUP for employees is 250 PLN/month (3000 PLN/year). For employees commuting from another town, it is 300 PLN/month (3600 PLN/year). Creators can benefit from 50% KUP, but not more than 120,000 PLN per year.",
+    "equalize_pension_tooltip": "Automatically calculates the additional amount to add to the B2B invoice to fund a private pension plan (e.g., IKE/IKZE) and equalize the future pension to the level projected from an employment contract. Assumptions: 4.5% annual rate of return, 30 years of savings."
   },
   "results": {
     "title": "Calculation Results",
@@ -122,7 +128,8 @@
     "impact_on_net_annual": "Impact on Annual Net Difference (PLN)",
     "koszty_firmowe_miesieczne": "Monthly Business Costs",
     "urlop_dni": "Vacation Days",
-    "przestoje_miesiace": "Stoppage Months"
+    "przestoje_miesiace": "Stoppage Months",
+    "vacation_days": "Vacation Days"
   },
   "report": {
     "input_summary_title": "Input Parameters Summary",

@@ -6,12 +6,14 @@ import { calculateSensitivityAnalysis } from '../services/api';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const SensitivityChart = ({ b2b, uop }) => {
+const SensitivityChart = React.forwardRef(({ b2b, uop, results }, ref) => {
     const { t } = useTranslation();
     const [chartData, setChartData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        if (!results) return;
+
         const fetchData = async () => {
             try {
                 setLoading(true);
@@ -19,8 +21,8 @@ const SensitivityChart = ({ b2b, uop }) => {
                 // Sort data by impact
                 data.sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact));
 
-                const labels = data.map(d => t(`sensitivity.${d.parameter}`));
-                const values = data.map(d => d.impact);
+                const labels = data.map(item => t(`sensitivity.${item.parameter}`));
+                const values = data.map(item => item.impact);
 
                 setChartData({
                     labels,
@@ -44,13 +46,13 @@ const SensitivityChart = ({ b2b, uop }) => {
         if (b2b && uop) {
             fetchData();
         }
-    }, [b2b, uop, t]);
+    }, [b2b, uop, t, results]);
 
     if (loading) {
         return <div>{t('loading')}</div>;
     }
 
-    if (!chartData) {
+    if (!chartData || chartData.labels.length === 0) {
         return <div>{t('no_data')}</div>;
     }
 
@@ -78,9 +80,9 @@ const SensitivityChart = ({ b2b, uop }) => {
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-            <Bar data={chartData} options={options} />
+            <Bar ref={ref} data={chartData} options={options} />
         </div>
     );
-};
+});
 
 export default SensitivityChart;

@@ -9,7 +9,9 @@ const handleError = (error, context) => {
 
 export const calculateResults = async (data) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/calculate`, data);
+    const url = `${API_BASE_URL}/calculate`;
+    console.log('Sending calculation request to:', url);
+    const response = await axios.post(url, data);
     return response.data;
   } catch (error) {
     handleError(error, 'calculateResults');

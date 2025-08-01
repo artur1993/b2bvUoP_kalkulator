@@ -5,8 +5,8 @@ import React from 'react';
 
 // Mock react-chartjs-2 components
 vi.mock('react-chartjs-2', () => ({
-  Bar: vi.fn(() => null), // Mock Bar component to return null
-  Pie: vi.fn(() => null), // Mock Pie component to return null
+  Bar: (props) => <div data-testid="mock-bar-chart" {...props} />,
+  Pie: (props) => <div data-testid="mock-pie-chart" {...props} />,
 }));
 
 // Mock chart.js register

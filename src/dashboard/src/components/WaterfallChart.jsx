@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { useTranslation } from 'react-i18next';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const WaterfallChart = ({ results }) => {
+const WaterfallChart = forwardRef(({ results }, ref) => {
     const { t } = useTranslation();
     const [contractType, setContractType] = useState('b2b'); // 'b2b' or 'uop'
 
@@ -22,74 +22,74 @@ const WaterfallChart = ({ results }) => {
 
         if (type === 'b2b') {
             const {
-                'Przychód roczny': przychod,
-                'Koszty firmowe roczne': koszty,
-                skladki_zus_emerytalna,
-                skladki_zus_rentowa,
-                skladki_zus_chorobowa,
-                skladka_zdrowotna,
-                podatek_prog_1,
-                podatek_prog_2,
-                'Utracony przychód': utraconyPrzychod
+                annual_revenue,
+                annual_business_costs,
+                pension_insurance_contribution,
+                disability_insurance_contribution,
+                sickness_insurance_contribution,
+                accident_insurance_contribution,
+                labor_fund_contribution,
+                annual_health_contribution,
+                tax_first_threshold,
+                tax_second_threshold,
+                total_lost_revenue
             } = steps;
 
             labels.push(t('waterfall.gross_income'));
-            data.push([0, przychod]);
-            cumulative = przychod;
+            data.push([0, annual_revenue]);
+            cumulative = annual_revenue;
 
             labels.push(t('waterfall.costs'));
-            data.push([cumulative - koszty, cumulative]);
-            cumulative -= koszty;
+            data.push([cumulative - annual_business_costs, cumulative]);
+            cumulative -= annual_business_costs;
             
-            const zusTotal = skladki_zus_emerytalna + skladki_zus_rentowa + skladki_zus_chorobowa;
+            const zusTotal = pension_insurance_contribution + disability_insurance_contribution + sickness_insurance_contribution + accident_insurance_contribution + labor_fund_contribution;
             labels.push(t('waterfall.zus_contributions'));
             data.push([cumulative - zusTotal, cumulative]);
             cumulative -= zusTotal;
 
             labels.push(t('waterfall.health_contribution'));
-            data.push([cumulative - skladka_zdrowotna, cumulative]);
-            cumulative -= skladka_zdrowotna;
+            data.push([cumulative - annual_health_contribution, cumulative]);
+            cumulative -= annual_health_contribution;
 
-            const taxTotal = podatek_prog_1 + podatek_prog_2;
+            const taxTotal = tax_first_threshold + tax_second_threshold;
             labels.push(t('waterfall.tax'));
             data.push([cumulative - taxTotal, cumulative]);
             cumulative -= taxTotal;
             
             labels.push(t('waterfall.lost_revenue'));
-            data.push([cumulative - utraconyPrzychod, cumulative]);
-            cumulative -= utraconyPrzychod;
+            data.push([cumulative - total_lost_revenue, cumulative]);
+            cumulative -= total_lost_revenue;
 
             labels.push(t('waterfall.net_income'));
             data.push([0, cumulative]);
 
         } else { // UoP
             const {
-                'Roczne wynagrodzenie brutto': brutto,
-                skladki_zus_emerytalna,
-                skladki_zus_rentowa,
-                skladki_zus_chorobowa,
-                skladka_zdrowotna,
-                podatek_prog_1,
-                podatek_prog_2,
+                annual_gross_salary,
+                annual_pension_contribution,
+                annual_disability_contribution,
+                annual_sickness_contribution,
+                annual_health_contribution,
+                annual_tax
             } = steps;
 
             labels.push(t('waterfall.gross_salary'));
-            data.push([0, brutto]);
-            cumulative = brutto;
+            data.push([0, annual_gross_salary]);
+            cumulative = annual_gross_salary;
 
-            const zusTotal = skladki_zus_emerytalna + skladki_zus_rentowa + skladki_zus_chorobowa;
+            const zusTotal = annual_pension_contribution + annual_disability_contribution + annual_sickness_contribution;
             labels.push(t('waterfall.zus_contributions'));
             data.push([cumulative - zusTotal, cumulative]);
             cumulative -= zusTotal;
 
             labels.push(t('waterfall.health_contribution'));
-            data.push([cumulative - skladka_zdrowotna, cumulative]);
-            cumulative -= skladka_zdrowotna;
+            data.push([cumulative - annual_health_contribution, cumulative]);
+            cumulative -= annual_health_contribution;
 
-            const taxTotal = podatek_prog_1 + podatek_prog_2;
             labels.push(t('waterfall.tax'));
-            data.push([cumulative - taxTotal, cumulative]);
-            cumulative -= taxTotal;
+            data.push([cumulative - annual_tax, cumulative]);
+            cumulative -= annual_tax;
 
             labels.push(t('waterfall.net_income'));
             data.push([0, cumulative]);
@@ -152,9 +152,9 @@ const WaterfallChart = ({ results }) => {
                     {t('uop')}
                 </button>
             </div>
-            <Bar data={chartData} options={options} />
+            <Bar data={chartData} options={options} ref={ref} />
         </div>
     );
-};
+});
 
 export default WaterfallChart;

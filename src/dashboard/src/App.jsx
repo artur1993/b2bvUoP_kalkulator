@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import CalculatorForm from './components/CalculatorForm';
 import ResultsDisplay from './components/ResultsDisplay';
@@ -35,17 +35,20 @@ const calculateTotalInsuranceCost = (selections, b2bMonthlyInvoice) => {
 
 function App() {
   const { i18n } = useTranslation();
-  const [calculationMode, setCalculationMode] = useState('uop_to_b2b'); // 'uop_to_b2b' or 'b2b_to_uop'
+  const [calculationMode, setCalculationMode] = useState('uop_to_b2b');
+  const [age, setAge] = useState(30);
+
   const [b2bData, setB2bData] = useState({
-    faktura_miesieczna: 10000,
-    koszty_firmowe_miesieczne: 500,
-    zus_rodzaj: 'mala_firma',
-    zus_chorobowe: false,
-    forma_opodatkowania: 'ryczalt_IT',
-    ulga_dla_mlodych: false,
-    urlop_dni: 20,
-    chorobowe_dni: 5,
-    przestoje_miesiace: 0,
+    monthly_invoice_amount: 10000,
+    monthly_business_costs: 500,
+    zus_type: 'preferential',
+    sickness_insurance: false,
+    tax_form: 'lump_sum_it',
+    youth_relief: false,
+    vacation_days: 20,
+    sick_days: 5,
+    stoppage_months: 0,
+    age: 30,
     customBenefits: 0,
     companyBenefits: {
       paidVacationDays: { enabled: false, days: 0 },
@@ -57,27 +60,38 @@ function App() {
       otherBenefits: { enabled: false, value: 0 },
     },
   });
-  const [baseBusinessCosts, setBaseBusinessCosts] = useState(500); // User-inputted cost
+
+  const [baseBusinessCosts, setBaseBusinessCosts] = useState(500);
+
   const [insuranceConfig, setInsuranceConfig] = useState({
-    enabled: true, // Configurator is enabled by default
+    enabled: true,
     activeProfile: 'standard',
     selections: insuranceProfiles.standard
   });
 
   const [uopData, setUopData] = useState({
-    wynagrodzenie_brutto: 8000,
-    kup_settings: { type: 'standard', creative_work_percentage: 70 },
-    ulga_dla_mlodych: false,
-    wybrane_benefity: [],
+    monthly_gross_salary: 8000,
+    deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
+    youth_relief: false,
+    selected_benefits: [],
+    age: 30,
   });
 
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const comparisonChartRef = useRef(null);
+  const b2bStackedBarRef = useRef(null);
+  const uopStackedBarRef = useRef(null);
+  const waterfallChartRef = useRef(null);
+  const breakEvenChartRef = useRef(null);
+  const sensitivityChartRef = useRef(null);
+
   const handleB2bChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === 'koszty_firmowe_miesieczne') {
+    
+    if (name === 'monthly_business_costs') {
       setBaseBusinessCosts(value);
     } else if (name.startsWith('companyBenefits.')) {
       const [benefitType, field] = name.split('.').slice(1);
@@ -102,19 +116,19 @@ function App() {
   const handleUopChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === 'wybrane_benefity') {
+    if (name === 'selected_benefits') {
       setUopData((prevData) => ({
         ...prevData,
-        wybrane_benefity: checked
-          ? [...prevData.wybrane_benefity, value]
-          : prevData.wybrane_benefity.filter((benefit) => benefit !== value),
+        selected_benefits: checked
+          ? [...prevData.selected_benefits, value]
+          : prevData.selected_benefits.filter((benefit) => benefit !== value),
       }));
-    } else if (name.startsWith('kup_settings.')) {
+    } else if (name.startsWith('deductible_cost_settings.')) {
       const field = name.split('.')[1];
       setUopData((prevData) => ({
         ...prevData,
-        kup_settings: {
-          ...prevData.kup_settings,
+        deductible_cost_settings: {
+          ...prevData.deductible_cost_settings,
           [field]: value,
         },
       }));
@@ -126,17 +140,25 @@ function App() {
     }
   };
 
+  const handleAgeChange = (e) => {
+    const newAge = parseInt(e.target.value, 10);
+    setAge(newAge);
+    const isYouthReliefApplicable = newAge < 26;
+    setB2bData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
+    setUopData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
+  };
+
   useEffect(() => {
     let totalInsuranceCost = 0;
     if (insuranceConfig.enabled) {
-      totalInsuranceCost = calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.faktura_miesieczna);
+      totalInsuranceCost = calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.monthly_invoice_amount);
     }
     
     setB2bData(prevData => ({
       ...prevData,
-      koszty_firmowe_miesieczne: Number(baseBusinessCosts) + totalInsuranceCost
+      monthly_business_costs: Number(baseBusinessCosts) + totalInsuranceCost
     }));
-  }, [insuranceConfig, baseBusinessCosts, b2bData.faktura_miesieczna]);
+  }, [insuranceConfig, baseBusinessCosts, b2bData.monthly_invoice_amount]);
 
   const handleCalculationModeChange = (e) => {
     setCalculationMode(e.target.value);
@@ -151,10 +173,11 @@ function App() {
       if (res.pension_details) {
         setB2bData(prevData => ({
           ...prevData,
-          faktura_miesieczna: prevData.faktura_miesieczna + res.pension_details.invoice_increase
+          monthly_invoice_amount: prevData.monthly_invoice_amount + res.pension_details.invoice_increase
         }));
       }
       setResults(res);
+      console.log("API Results for charting:", res);
     } catch (err) {
       setError('Failed to fetch results. Please check the console for more details.');
       console.error('Calculation error:', err);
@@ -199,17 +222,27 @@ function App() {
   const handleExportAdvancedPdf = async () => {
     if (!results) return;
 
-    // Prepare detailed insurance data for the report
+    // 1. Generate chart images
+    const charts = {
+      comparison: comparisonChartRef.current?.toBase64Image(),
+      b2bStackedBar: b2bStackedBarRef.current?.toBase64Image(),
+      uopStackedBar: uopStackedBarRef.current?.toBase64Image(),
+      waterfall: waterfallChartRef.current?.toBase64Image(),
+      breakEven: breakEvenChartRef.current?.toBase64Image(),
+      sensitivity: sensitivityChartRef.current?.toBase64Image(),
+    };
+
+    // 2. Prepare detailed insurance data
     const insuranceDetailsForReport = {
       ...insuranceConfig,
-      totalMonthlyCost: calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.faktura_miesieczna),
+      totalMonthlyCost: calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.monthly_invoice_amount),
       breakdown: Object.entries(insuranceConfig.selections)
         .filter(([, config]) => config.enabled)
         .map(([moduleId, config]) => {
           const module = insuranceModules[moduleId];
           const option = module.options[config.level];
           const cost = module.type === 'dynamic' 
-            ? (b2bData.faktura_miesieczna * 12 * option.multiplier) / 12 
+            ? (b2bData.monthly_invoice_amount * 12 * option.multiplier) / 12 
             : option.cost;
           
           return {
@@ -222,15 +255,18 @@ function App() {
         })
     };
 
+    // 3. Prepare all data for the API
     try {
       const data = {
         b2b_results: results.b2b_results,
         uop_results: results.uop_results,
         input_data: { b2b: b2bData, uop: uopData },
         language: i18n.language,
-        break_even_faktura: results.break_even_faktura,
-        insurance_details: insuranceDetailsForReport, // <-- NEW OBJECT
+        break_even_invoice_amount: results.break_even_invoice_amount,
+        insurance_details: insuranceDetailsForReport,
+        charts: charts, // <-- Pass generated charts to API
       };
+      
       const blob = await exportToAdvancedPdf(data);
       saveAs(blob, 'Raport_Zaawansowany_B2B_vs_UoP.pdf');
     } catch (err) {
@@ -249,6 +285,7 @@ function App() {
             uopData={uopData}
             handleB2bChange={handleB2bChange}
             handleUopChange={handleUopChange}
+            handleAgeChange={handleAgeChange}
             handleCalculate={handleCalculate}
             loading={loading}
             calculationMode={calculationMode}
@@ -270,10 +307,15 @@ function App() {
                 calculationMode={calculationMode} 
                 data-testid="results-display" 
               />
-              <ComparisonChart results={results} />
-              <WaterfallChart results={results} />
-              <BreakEvenChart b2b={b2bData} uop={uopData} />
-              <SensitivityChart b2b={b2bData} uop={uopData} />
+              <ComparisonChart 
+                results={results} 
+                comparisonChartRef={comparisonChartRef}
+                b2bStackedBarRef={b2bStackedBarRef}
+                uopStackedBarRef={uopStackedBarRef}
+              />
+              <WaterfallChart results={results} ref={waterfallChartRef} />
+              <BreakEvenChart b2b={b2bData} uop={uopData} results={results} ref={breakEvenChartRef} />
+              <SensitivityChart b2b={b2bData} uop={uopData} results={results} ref={sensitivityChartRef} />
             </div>
           )}
         </div>

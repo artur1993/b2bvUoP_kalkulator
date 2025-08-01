@@ -22,7 +22,7 @@ ChartJS.register(
   ArcElement
 );
 
-const ComparisonChart = ({ results }) => {
+const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBarRef }) => {
   const { t } = useTranslation();
 
   if (!results) return null;
@@ -35,12 +35,12 @@ const ComparisonChart = ({ results }) => {
     datasets: [
       {
         label: t('form.uop_title'),
-        data: [uop_results.calkowita_roczna_wartosc],
+        data: [uop_results.total_annual_value],
         backgroundColor: '#4fd1c5', // secondary
       },
       {
         label: t('form.b2b_title'),
-        data: [b2b_results.calkowita_roczna_wartosc],
+        data: [b2b_results.total_annual_value],
         backgroundColor: '#2c5282', // primary
       },
     ],
@@ -65,37 +65,37 @@ const ComparisonChart = ({ results }) => {
     datasets: [
       {
         label: t('charts.net_income'),
-        data: [b2b_results.roczne_netto_na_reke],
+        data: [b2b_results.annual_net_income],
         backgroundColor: '#4CAF50', // Green
       },
       {
         label: t('charts.zus'),
-        data: [b2b_results.roczny_zus],
+        data: [b2b_results.annual_zus],
         backgroundColor: '#FFC107', // Amber
       },
       {
         label: t('charts.tax'),
-        data: [b2b_results.roczny_podatek],
+        data: [b2b_results.annual_tax],
         backgroundColor: '#FF9800', // Orange
       },
       {
         label: t('charts.business_costs'),
-        data: [b2b_results.roczne_koszty_firmowe],
+        data: [b2b_results.annual_business_costs],
         backgroundColor: '#9E9E9E', // Grey
       },
       {
         label: t('charts.lost_revenue'),
-        data: [b2b_results.roczny_utracony_przychod],
+        data: [b2b_results.annual_lost_revenue],
         backgroundColor: '#F44336', // Red
       },
       {
         label: t('charts.company_benefits'),
-        data: [b2b_results.roczna_wartosc_benefitow_od_firmy],
+        data: [b2b_results.annual_company_benefits_value],
         backgroundColor: '#2196F3', // Blue
       },
       {
         label: t('charts.custom_benefits'),
-        data: [b2b_results.roczna_wartosc_wlasnych_korzysci],
+        data: [b2b_results.annual_custom_benefits_value],
         backgroundColor: '#9C27B0', // Purple
       },
     ],
@@ -128,27 +128,27 @@ const ComparisonChart = ({ results }) => {
     datasets: [
       {
         label: t('charts.net_income'),
-        data: [uop_results.roczne_netto_na_reke],
+        data: [uop_results.annual_net_income],
         backgroundColor: '#4CAF50', // Green
       },
       {
         label: t('charts.zus'),
-        data: [uop_results.roczny_zus],
+        data: [uop_results.annual_zus],
         backgroundColor: '#FFC107', // Amber
       },
       {
         label: t('charts.tax'),
-        data: [uop_results.roczny_podatek],
+        data: [uop_results.annual_tax],
         backgroundColor: '#FF9800', // Orange
       },
       {
         label: t('charts.benefits'),
-        data: [uop_results.roczna_wartosc_benefitow],
+        data: [uop_results.annual_benefits_value],
         backgroundColor: '#2196F3', // Blue
       },
       {
         label: t('charts.paid_days_off'),
-        data: [uop_results.roczna_wartosc_platnych_dni_wolnych],
+        data: [uop_results.annual_paid_days_off_value],
         backgroundColor: '#9C27B0', // Purple
       },
     ],
@@ -179,13 +179,13 @@ const ComparisonChart = ({ results }) => {
     <div className="mt-10 p-6 bg-white rounded-lg shadow-lg" data-testid="comparison-chart-section">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <Bar data={barChartData} options={barChartOptions} />
+          <Bar data={barChartData} options={barChartOptions} ref={barChartRef} />
         </div>
         <div>
-          <Bar data={b2bStackedBarData} options={b2bStackedBarOptions} />
+          <Bar data={b2bStackedBarData} options={b2bStackedBarOptions} ref={b2bStackedBarRef} />
         </div>
         <div>
-          <Bar data={uopStackedBarData} options={uopStackedBarOptions} />
+          <Bar data={uopStackedBarData} options={uopStackedBarOptions} ref={uopStackedBarRef} />
         </div>
       </div>
     </div>

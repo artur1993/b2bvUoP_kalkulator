@@ -1,27 +1,27 @@
-# Nowy plik: src/pension_calculator.py
+# src/pension_calculator.py
 import math
 
-# Założenia i stałe (mogą być przeniesione do pliku konfiguracyjnego)
+# Assumptions and constants (can be moved to a configuration file)
 IKE_LIMIT_2025 = 26019
 IKZE_LIMIT_2025 = 10408
 YEARS_TO_RETIREMENT = 30
 YEARS_IN_RETIREMENT = 20
 ANNUAL_RETURN_RATE = 0.045 # 4.5%
-B2B_NET_FACTOR = 0.70 # Współczynnik netto dla B2B
-UOP_PENSION_RATE = 0.1952 # Składka emerytalna ZUS
+B2B_NET_FACTOR = 0.70 # Net factor for B2B
+UOP_PENSION_RATE = 0.1952 # ZUS pension contribution rate
 B2B_MINIMAL_PENSION_CONTRIBUTION = 610.44
-ZUS_DIVISOR = 264 # Średni wskaźnik ZUS do obliczania emerytury
-CAPITAL_MULTIPLIER = 1.2 # Mnożnik kapitału ZUS
+ZUS_DIVISOR = 264 # Average ZUS indicator for pension calculation
+CAPITAL_MULTIPLIER = 1.2 # ZUS capital multiplier
 
-def calculate_pension_details(uop_gross_salary):
+def calculate_pension_details(uop_monthly_gross_salary):
     """
-    Oblicza prognozowane emerytury, lukę i wymaganą kwotę do zrównania.
+    Calculates projected pensions, the gap, and the amount required to equalize.
     """
-    if not uop_gross_salary or uop_gross_salary <= 0:
+    if not uop_monthly_gross_salary or uop_monthly_gross_salary <= 0:
         return {}
 
-    # 1. Prognozowane emerytury z ZUS
-    uop_pension_capital = (uop_gross_salary * UOP_PENSION_RATE * 12 * YEARS_TO_RETIREMENT * CAPITAL_MULTIPLIER)
+    # 1. Projected ZUS pensions
+    uop_pension_capital = (uop_monthly_gross_salary * UOP_PENSION_RATE * 12 * YEARS_TO_RETIREMENT * CAPITAL_MULTIPLIER)
     uop_pension_monthly = uop_pension_capital / ZUS_DIVISOR
     
     b2b_pension_capital = (B2B_MINIMAL_PENSION_CONTRIBUTION * 12 * YEARS_TO_RETIREMENT * CAPITAL_MULTIPLIER)
@@ -29,10 +29,10 @@ def calculate_pension_details(uop_gross_salary):
     
     pension_gap_monthly = max(0, uop_pension_monthly - b2b_pension_monthly)
 
-    # 2. Wymagany kapitał prywatny
+    # 2. Required private capital
     required_private_capital = pension_gap_monthly * YEARS_IN_RETIREMENT * 12
     
-    # 3. Wymagane miesięczne oszczędności (uproszczony wzór na ratę)
+    # 3. Required monthly savings (simplified installment formula)
     if pension_gap_monthly > 0:
         q = 1 + (ANNUAL_RETURN_RATE / 12)
         n = YEARS_TO_RETIREMENT * 12
@@ -40,7 +40,7 @@ def calculate_pension_details(uop_gross_salary):
     else:
         required_monthly_savings = 0
 
-    # 4. Optymalna alokacja oszczędności (IKE -> IKZE -> Standard)
+    # 4. Optimal savings allocation (IKE -> IKZE -> Standard)
     monthly_savings = required_monthly_savings
     ike_monthly = min(monthly_savings, IKE_LIMIT_2025 / 12)
     monthly_savings -= ike_monthly
@@ -48,7 +48,7 @@ def calculate_pension_details(uop_gross_salary):
     monthly_savings -= ikze_monthly
     standard_monthly = monthly_savings
 
-    # 5. Zwiększenie faktury B2B
+    # 5. B2B invoice increase
     invoice_increase = required_monthly_savings / B2B_NET_FACTOR
 
     return {

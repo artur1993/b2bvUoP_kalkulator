@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from './utils/test-utils';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App';
 import React from 'react';
@@ -42,9 +42,10 @@ describe('App', () => {
 
     // Default successful API response
     api.calculateResults.mockResolvedValue({
-      b2b_results: { calkowita_roczna_wartosc: 120000, roczny_przychod: 150000, roczne_koszty_firmowe: 10000, roczny_zus: 10000, roczny_podatek: 10000, roczny_utracony_przychod: 0, roczne_netto_na_reke: 100000, roczna_wartosc_benefitow_od_firmy: 0, roczna_wartosc_wlasnych_korzysci: 0, miesieczne_netto: 10000 },
-      uop_results: { calkowita_roczna_wartosc: 100000, roczne_brutto: 120000, roczny_zus: 10000, roczny_podatek: 10000, roczna_wartosc_benefitow: 0, roczna_wartosc_platnych_dni_wolnych: 0, roczne_netto_na_reke: 100000, miesieczne_netto: 8000 },
-      break_even_faktura: 11000,
+      b2b_results: { total_annual_value: 120000, steps: {} },
+      uop_results: { total_annual_value: 100000, steps: {} },
+      break_even_invoice_amount: 11000,
+      pension_details: { invoice_increase: 500 }
     });
 
     api.calculateBreakEvenAnalysis.mockResolvedValue([]);
@@ -151,7 +152,7 @@ describe('App', () => {
   it('handles B2B input changes correctly', async () => {
     render(<App />);
     const fakturaInput = screen.getByLabelText('Monthly Invoice (PLN)');
-    fireEvent.change(fakturaInput, { target: { name: 'faktura_miesieczna', value: '15000' } });
+    fireEvent.change(fakturaInput, { target: { name: 'monthly_invoice_amount', value: '15000' } });
     await waitFor(() => {
       expect(fakturaInput).toHaveValue(15000);
     });
@@ -160,7 +161,7 @@ describe('App', () => {
   it('handles UoP input changes correctly', async () => {
     render(<App />);
     const wynagrodzenieInput = screen.getByLabelText('Gross Monthly Salary (PLN)');
-    fireEvent.change(wynagrodzenieInput, { target: { name: 'wynagrodzenie_brutto', value: '9000' } });
+    fireEvent.change(wynagrodzenieInput, { target: { name: 'monthly_gross_salary', value: '9000' } });
     await waitFor(() => {
       expect(wynagrodzenieInput).toHaveValue(9000);
     });
@@ -184,13 +185,13 @@ describe('App', () => {
   it('handles UoP input changes correctly for KUP settings', async () => {
     render(<App />);
     const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');
-    fireEvent.change(kupSelect, { target: { name: 'kup_settings.type', value: 'autorskie_50' } });
+    fireEvent.change(kupSelect, { target: { name: 'deductible_cost_settings.type', value: 'author_50' } });
     await waitFor(() => {
-      expect(kupSelect).toHaveValue('autorskie_50');
+      expect(kupSelect).toHaveValue('author_50');
     });
 
     const creativePercentageInput = screen.getByLabelText('Creative Work Percentage (%)');
-    fireEvent.change(creativePercentageInput, { target: { name: 'kup_settings.creative_work_percentage', value: '80' } });
+    fireEvent.change(creativePercentageInput, { target: { name: 'deductible_cost_settings.creative_work_percentage', value: '80' } });
     await waitFor(() => {
       expect(creativePercentageInput).toHaveValue(80);
     });
@@ -200,7 +201,7 @@ describe('App', () => {
     api.calculateResults.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve({
       b2b_results: { calkowita_roczna_wartosc: 120000, roczny_przychod: 150000, roczne_koszty_firmowe: 10000, roczny_zus: 10000, roczny_podatek: 10000, roczny_utracony_przychod: 0, roczne_netto_na_reke: 100000, roczna_wartosc_benefitow_od_firmy: 0, roczna_wartosc_wlasnych_korzysci: 0, miesieczne_netto: 10000 },
       uop_results: { calkowita_roczna_wartosc: 100000, roczne_brutto: 120000, roczny_zus: 10000, roczny_podatek: 10000, roczna_wartosc_benefitow: 0, roczna_wartosc_platnych_dni_wolnych: 0, roczne_netto_na_reke: 100000, miesieczne_netto: 8000 },
-      break_even_faktura: 11000,
+      break_even_invoice_amount: 11000,
     }), 100))); // Simulate loading
     render(<App />);
     fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
