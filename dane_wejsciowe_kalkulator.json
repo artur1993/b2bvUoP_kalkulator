@@ -1,14 +1,21 @@
 {
+  "macro_indicators_2026": {
+    "minimum_wage": 4806.00,
+    "average_forecasted_wage": 9420.00
+  },
   "tax_thresholds": {
     "tax_scale": [
       { "income": 120000, "rate": 0.12 },
       { "income": "powyzej", "rate": 0.32 }
     ],
     "tax_free_amount": 30000,
+    "tax_reducing_amount": 3600,
     "flat_tax": 0.19,
     "lump_sum_it": 0.12,
     "ip_box": 0.05,
-    "author_tax_deductible_costs_limit": 120000
+    "author_tax_deductible_costs_limit": 120000,
+    "health_contribution_deduction_limit_flat_tax": 14100,
+    "youth_relief_limit": 85528
   },
   "tax_deductible_costs": {
     "standard": 250,
@@ -16,29 +23,42 @@
     "elevated": 300,
     "elevated_annual_limit": 3600
   },
-  "zus_2025": {
+  "zus_2026": {
+    "thirty_times_limit_uop": 282600,
+    "minimum_health_contribution": 432.54,
     "start_relief": {
       "pension": 0.0,
       "disability": 0.0,
-      "accident": 0.0,
       "sickness": 0.0,
-      "health": 418.86
+      "accident": 0.0,
+      "labor_fund": 0.0
     },
     "preferential": {
-      "pension": 314.09,
-      "disability": 129.45,
-      "accident": 31.53,
-      "sickness": 87.05,
-      "health": 418.86
+      "base": 1441.80,
+      "pension": 281.44,
+      "disability": 115.34,
+      "sickness": 35.32,
+      "accident": 24.08,
+      "labor_fund": 0.0
     },
     "full": {
-      "pension": 1202.40,
-      "disability": 492.54,
-      "accident": 103.77,
-      "sickness": 146.03,
-      "fundusz_pracy": 146.03,
-      "health": 418.86
-    }
+      "base": 5652.00,
+      "pension": 1103.27,
+      "disability": 452.16,
+      "sickness": 138.47,
+      "accident": 94.39,
+      "labor_fund": 138.47
+    },
+    "health_lump_sum_thresholds": [
+      { "limit": 60000, "contribution": 432.54 },
+      { "limit": 300000, "contribution": 720.90 },
+      { "limit": "powyzej", "contribution": 1297.62 }
+    ]
+  },
+  "pension_limits_2026": {
+    "ike": 28260,
+    "ikze_standard": 11304,
+    "ikze_b2b": 16956
   },
   "benefits": {
     "medical_care": 2400,
