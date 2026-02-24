@@ -32,31 +32,16 @@ const mockResultsUopToB2b = {
   },
   break_even_invoice_amount: 8500,
   break_even_gross_salary: -1,
+  analysis: {
+    summary: { recommendation: "Test recommendation" },
+    risk: { point1: "Risk point 1" },
+    methodology: "Test methodology",
+    checklist: { title: "Test Checklist", items: ["Item 1", "Item 2"] }
+  }
 };
 
 const mockResultsB2bToUop = {
-  b2b_results: {
-    annual_revenue: 120000,
-    annual_business_costs: 12000,
-    annual_zus: 24000,
-    annual_tax: 10000,
-    annual_lost_revenue: 5000,
-    annual_net_income: 69000,
-    annual_company_benefits_value: 1000,
-    annual_custom_benefits_value: 2000,
-    total_annual_value: 72000,
-    monthly_net_income: 6000,
-  },
-  uop_results: {
-    annual_gross_salary: 100000,
-    annual_zus: 20000,
-    annual_tax: 8000,
-    annual_net_income: 72000,
-    annual_benefits_value: 3000,
-    annual_paid_days_off_value: 4000,
-    total_annual_value: 79000,
-    monthly_net_income: 6583.33,
-  },
+  ...mockResultsUopToB2b,
   break_even_invoice_amount: -1,
   break_even_gross_salary: 9000,
 };
@@ -70,7 +55,7 @@ const formatCurrencyForTest = (value) => {
   };
 
 describe('ResultsDisplay Component', () => {
-  // Test 5: Handling no results
+  // Test: Handling no results
   it('should render null when no results are provided', () => {
     const { container } = render(
         <ResultsDisplay />
@@ -147,22 +132,34 @@ describe('ResultsDisplay Component', () => {
     });
   });
 
-  // Test 4: Rendering of export buttons
-  it('should always render export buttons when results are provided', () => {
-    const handleExportPdf = vi.fn();
+  // Test 4: Rendering of analysis sections
+  it('should render advanced analysis sections', () => {
+    render(
+        <ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />
+    );
+
+    expect(screen.getByText("Test recommendation")).toBeInTheDocument();
+    expect(screen.getByText("Risk point 1")).toBeInTheDocument();
+    expect(screen.getByText("Test methodology")).toBeInTheDocument();
+    expect(screen.getByText("Test Checklist")).toBeInTheDocument();
+    expect(screen.getByText("Item 1")).toBeInTheDocument();
+    expect(screen.getByText("Item 2")).toBeInTheDocument();
+  });
+
+  // Test 5: Rendering of export buttons
+  it('should render excel export button but not PDF buttons', () => {
     const handleExportExcel = vi.fn();
 
     render(
         <ResultsDisplay
           results={mockResultsUopToB2b}
-          onExportPdf={handleExportPdf}
           onExportExcel={handleExportExcel}
           calculationMode="uop_to_b2b"
         />
     );
 
-    expect(screen.getByRole('button', { name: i18n.t('results.export_pdf_basic') })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: i18n.t('results.export_pdf_advanced') })).toBeInTheDocument();
+    expect(screen.queryByText(i18n.t('results.export_pdf_basic'))).not.toBeInTheDocument();
+    expect(screen.queryByText(i18n.t('results.export_pdf_advanced'))).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: i18n.t('results.export_excel') })).toBeInTheDocument();
   });
 });

@@ -9,7 +9,7 @@ import SensitivityChart from './components/SensitivityChart';
 import Header from './components/Header';
 import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
-import { calculateResults, exportToExcel, exportToPdf, exportToAdvancedPdf } from './services/api';
+import { calculateResults, exportToExcel } from './services/api';
 import { saveAs } from 'file-saver';
 import { insuranceProfiles, insuranceModules } from './data/insuranceOptions';
 
@@ -168,7 +168,12 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const data = { b2b: b2bData, uop: uopData, calculation_mode: calculationMode };
+      const data = { 
+        b2b: b2bData, 
+        uop: uopData, 
+        calculation_mode: calculationMode,
+        language: i18n.language 
+      };
       const res = await calculateResults(data);
       if (res.pension_details) {
         setB2bData(prevData => ({
@@ -187,26 +192,6 @@ function App() {
     }
   };
 
-  const handleExportPdf = async () => {
-    if (!results) return;
-    try {
-      const data = {
-        b2b_results: results.b2b_results,
-        uop_results: results.uop_results,
-        input_data: {
-          b2b: b2bData,
-          uop: uopData,
-        },
-        language: i18n.language, // <-- DODANO
-      };
-      const blob = await exportToPdf(data);
-      saveAs(blob, 'Raport_B2B_vs_UoP.pdf');
-    } catch (err) {
-      console.error('Error exporting PDF:', err);
-      alert('Failed to export PDF. See console for details.');
-    }
-  };
-
   const handleExportExcel = async () => {
     try {
       const data = { b2b_results: results.b2b_results, uop_results: results.uop_results };
@@ -216,62 +201,6 @@ function App() {
       
       console.error('Error exporting Excel:', err);
       alert('Failed to export Excel. See console for details.');
-    }
-  };
-
-  const handleExportAdvancedPdf = async () => {
-    if (!results) return;
-
-    // 1. Generate chart images
-    const charts = {
-      comparison: comparisonChartRef.current?.toBase64Image(),
-      b2bStackedBar: b2bStackedBarRef.current?.toBase64Image(),
-      uopStackedBar: uopStackedBarRef.current?.toBase64Image(),
-      waterfall: waterfallChartRef.current?.toBase64Image(),
-      breakEven: breakEvenChartRef.current?.toBase64Image(),
-      sensitivity: sensitivityChartRef.current?.toBase64Image(),
-    };
-
-    // 2. Prepare detailed insurance data
-    const insuranceDetailsForReport = {
-      ...insuranceConfig,
-      totalMonthlyCost: calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.monthly_invoice_amount),
-      breakdown: Object.entries(insuranceConfig.selections)
-        .filter(([, config]) => config.enabled)
-        .map(([moduleId, config]) => {
-          const module = insuranceModules[moduleId];
-          const option = module.options[config.level];
-          const cost = module.type === 'dynamic' 
-            ? (b2bData.monthly_invoice_amount * 12 * option.multiplier) / 12 
-            : option.cost;
-          
-          return {
-            name: module.name,
-            level: config.level,
-            cost: cost,
-            details: option.details || '',
-            uop_comparison: option.uop_comparison || ''
-          };
-        })
-    };
-
-    // 3. Prepare all data for the API
-    try {
-      const data = {
-        b2b_results: results.b2b_results,
-        uop_results: results.uop_results,
-        input_data: { b2b: b2bData, uop: uopData },
-        language: i18n.language,
-        break_even_invoice_amount: results.break_even_invoice_amount,
-        insurance_details: insuranceDetailsForReport,
-        charts: charts, // <-- Pass generated charts to API
-      };
-      
-      const blob = await exportToAdvancedPdf(data);
-      saveAs(blob, 'Raport_Zaawansowany_B2B_vs_UoP.pdf');
-    } catch (err) {
-      console.error('Error exporting advanced PDF:', err);
-      alert('Failed to export advanced PDF. See console for details.');
     }
   };
 
@@ -301,8 +230,6 @@ function App() {
             <div className="mt-8">
               <ResultsDisplay 
                 results={results} 
-                onExportPdf={handleExportPdf} 
-                onExportAdvancedPdf={handleExportAdvancedPdf} 
                 onExportExcel={handleExportExcel} 
                 calculationMode={calculationMode} 
                 data-testid="results-display" 

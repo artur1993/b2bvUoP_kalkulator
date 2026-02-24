@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, jsonify, g
+from flask import request, jsonify, g, current_app
 
 def _validate_schema(schema):
     """A generic validation function that checks data against a schema."""
@@ -17,6 +17,7 @@ def _validate_schema(schema):
                     errors[key] = field_errors
             
             if errors:
+                current_app.logger.error(f"Validation errors: {errors}")
                 return jsonify({"validation_errors": errors}), 400
             
             g.validated_data = data
@@ -35,8 +36,25 @@ def _validate_field(field_name, value, rules):
     if value is None: # If not required and not present, skip other checks
         return []
 
+    # Attempt type conversion for numerical fields if sent as strings
+    if 'type' in rules:
+        expected_type = rules['type']
+        if expected_type in (int, float, (int, float)):
+            try:
+                if isinstance(value, str):
+                    value = float(value) if expected_type == float or expected_type == (int, float) else int(value)
+            except (ValueError, TypeError):
+                pass # Let the instance check handle it
+
     if 'type' in rules and not isinstance(value, rules['type']):
-        errors.append(f"must be of type {rules['type'].__name__}.")
+        expected_type = rules['type']
+        if isinstance(expected_type, tuple):
+            type_names = [t.__name__ for t in expected_type]
+            expected_name = " or ".join(type_names)
+        else:
+            expected_name = expected_type.__name__
+        errors.append(f"must be of type {expected_name}.")
+        return errors # Type mismatch, further checks might fail
     
     if 'allowed' in rules and value not in rules['allowed']:
         errors.append(f"has an invalid value. Allowed values are: {', '.join(map(str, rules['allowed']))}.")
@@ -69,11 +87,13 @@ CALCULATION_SCHEMA = {
             'sickness_insurance': {'required': False, 'type': bool},
             'monthly_business_costs': {'required': False, 'type': (int, float), 'min': 0},
             'vacation_days': {'required': False, 'type': int, 'min': 0},
+            'sick_days': {'required': False, 'type': int, 'min': 0},
             'stoppage_months': {'required': False, 'type': int, 'min': 0},
             'age': {'required': True, 'type': int, 'min': 18},
             'youth_relief': {'required': False, 'type': bool},
             'customBenefits': {'required': False, 'type': (int, float), 'min': 0},
-            'companyBenefits': {'required': False, 'type': dict}
+            'companyBenefits': {'required': False, 'type': dict},
+            'equalizePension': {'required': False, 'type': bool}
         }
     },
     'uop': {
@@ -90,7 +110,8 @@ CALCULATION_SCHEMA = {
             'youth_relief': {'required': False, 'type': bool}
         }
     },
-    'calculation_mode': {'required': True, 'type': str, 'allowed': ['uop_to_b2b', 'b2b_to_uop']}
+    'calculation_mode': {'required': True, 'type': str, 'allowed': ['uop_to_b2b', 'b2b_to_uop']},
+    'language': {'required': False, 'type': str}
 }
 
 def validate_calculation_request(f):

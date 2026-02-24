@@ -24,8 +24,8 @@ def generate_executive_summary(b2b_results, uop_results, break_even_faktura, lan
     data = _load_data()
     rekomendacje = data.get('rekomendacje', {}).get(lang, {})
 
-    b2b_net_annual = b2b_results.get('calkowita_roczna_wartosc', 0)
-    uop_net_annual = uop_results.get('calkowita_roczna_wartosc', 0)
+    b2b_net_annual = b2b_results.get('total_annual_value', 0)
+    uop_net_annual = uop_results.get('total_annual_value', 0)
 
     summary = {
         "recommendation": "",
@@ -55,3 +55,16 @@ def get_risk_analysis(lang='en'):
     """
     data = _load_data()
     return data.get('analiza_ryzyka', {}).get(lang, {})
+
+def get_methodology(lang='en'):
+    """Retrieves the calculation methodology explanation."""
+    methodology = {
+        "pl": "Obliczenia opierają się na aktualnych przepisach podatkowych i składkowych na rok 2025. W przypadku UoP uwzględniamy wszystkie koszty pracodawcy, składki ZUS oraz zaliczki na podatek dochodowy. Dla B2B bierzemy pod uwagę wybraną formę opodatkowania, składki ZUS (uwzględniając ulgi), koszty prowadzenia działalności oraz podatek VAT (jeśli dotyczy). Porównanie roczne obejmuje również benefity, dni wolne oraz płatne urlopy.",
+        "en": "Calculations are based on the current tax and social security regulations for 2025. For UoP, we include all employer costs, social security contributions, and income tax advances. For B2B, we consider the chosen form of taxation, social security contributions (including reliefs), business operating costs, and VAT (if applicable). The annual comparison also includes benefits, days off, and paid holidays."
+    }
+    return methodology.get(lang, methodology['en'])
+
+def get_checklist(lang='en'):
+    """Retrieves the B2B checklist."""
+    data = _load_data()
+    return data.get('checklists', {}).get(lang, {})

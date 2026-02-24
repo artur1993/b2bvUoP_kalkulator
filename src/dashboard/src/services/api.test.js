@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import axios from 'axios';
-import { calculateResults, exportToExcel, exportToPdf, exportToAdvancedPdf, calculateBreakEvenAnalysis, calculateSensitivityAnalysis } from './api';
+import { calculateResults, exportToExcel, calculateBreakEvenAnalysis, calculateSensitivityAnalysis } from './api';
 
 // Mock axios
 vi.mock('axios');
@@ -11,7 +11,7 @@ describe('API Service', () => {
     const mockResponse = { data: { b2b_results: {}, uop_results: {} } };
     axios.post.mockResolvedValue(mockResponse);
 
-    const result = await calculateResults(mockData); // Changed to pass mockData directly
+    const result = await calculateResults(mockData);
 
     expect(axios.post).toHaveBeenCalledWith('/api/calculate', mockData);
     expect(result).toEqual(mockResponse.data);
@@ -46,54 +46,6 @@ describe('API Service', () => {
 
     await expect(exportToExcel(mockResults)).rejects.toThrow(errorMessage);
     expect(axios.post).toHaveBeenCalledWith('/api/export/excel', mockResults, {
-      responseType: 'blob',
-    });
-  });
-
-  it('exportToPdf sends correct data and returns response', async () => {
-    const mockResults = { b2b_results: {}, uop_results: {} };
-    const mockResponse = { data: 'pdf_blob' };
-    axios.post.mockResolvedValue(mockResponse);
-
-    const result = await exportToPdf(mockResults);
-
-    expect(axios.post).toHaveBeenCalledWith('/api/export/pdf', mockResults, {
-      responseType: 'blob',
-    });
-    expect(result).toEqual(mockResponse.data);
-  });
-
-  it('exportToPdf handles errors', async () => {
-    const mockResults = { b2b_results: {}, uop_results: {} };
-    const errorMessage = 'Export PDF Error';
-    axios.post.mockRejectedValue(new Error(errorMessage));
-
-    await expect(exportToPdf(mockResults)).rejects.toThrow(errorMessage);
-    expect(axios.post).toHaveBeenCalledWith('/api/export/pdf', mockResults, {
-      responseType: 'blob',
-    });
-  });
-
-  it('exportToAdvancedPdf sends correct data and returns response', async () => {
-    const mockResults = { b2b_results: {}, uop_results: {} };
-    const mockResponse = { data: 'advanced_pdf_blob' };
-    axios.post.mockResolvedValue(mockResponse);
-
-    const result = await exportToAdvancedPdf(mockResults);
-
-    expect(axios.post).toHaveBeenCalledWith('/api/export/pdf/advanced', mockResults, {
-      responseType: 'blob',
-    });
-    expect(result).toEqual(mockResponse.data);
-  });
-
-  it('exportToAdvancedPdf handles errors', async () => {
-    const mockResults = { b2b_results: {}, uop_results: {} };
-    const errorMessage = 'Export Advanced PDF Error';
-    axios.post.mockRejectedValue(new Error(errorMessage));
-
-    await expect(exportToAdvancedPdf(mockResults)).rejects.toThrow(errorMessage);
-    expect(axios.post).toHaveBeenCalledWith('/api/export/pdf/advanced', mockResults, {
       responseType: 'blob',
     });
   });
