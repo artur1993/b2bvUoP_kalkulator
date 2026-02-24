@@ -9,8 +9,6 @@ import { saveAs } from 'file-saver';
 vi.mock('./services/api', () => ({
   calculateResults: vi.fn(),
   exportToExcel: vi.fn(),
-  exportToPdf: vi.fn(),
-  exportToAdvancedPdf: vi.fn(),
   calculateBreakEvenAnalysis: vi.fn(),
   calculateSensitivityAnalysis: vi.fn(),
 }));
@@ -33,8 +31,6 @@ describe('App', () => {
     // Reset mocks before each test
     api.calculateResults.mockReset();
     api.exportToExcel.mockReset();
-    api.exportToPdf.mockReset();
-    api.exportToAdvancedPdf.mockReset(); // Reset mock for exportToAdvancedPdf
     saveAs.mockReset();
 
     // Mock window.alert
@@ -45,15 +41,19 @@ describe('App', () => {
       b2b_results: { total_annual_value: 120000, steps: {} },
       uop_results: { total_annual_value: 100000, steps: {} },
       break_even_invoice_amount: 11000,
-      pension_details: { invoice_increase: 500 }
+      pension_details: { invoice_increase: 500 },
+      analysis: {
+        summary: { recommendation: "Test recommendation" },
+        risk: { point1: "Risk point 1" },
+        methodology: "Test methodology",
+        checklist: { title: "Test Checklist", items: ["Item 1", "Item 2"] }
+      }
     });
 
     api.calculateBreakEvenAnalysis.mockResolvedValue([]);
     api.calculateSensitivityAnalysis.mockResolvedValue([]);
 
     api.exportToExcel.mockResolvedValue(new Blob(['excel data'], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
-    api.exportToPdf.mockResolvedValue(new Blob(['pdf data'], { type: 'application/pdf' }));
-    api.exportToAdvancedPdf.mockResolvedValue(new Blob(['advanced pdf data'], { type: 'application/pdf' })); // Mock advanced PDF export
   });
 
   it('renders CalculatorForm and Header initially', () => {
@@ -107,46 +107,6 @@ describe('App', () => {
     await waitFor(() => expect(api.exportToExcel).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(saveAs).toHaveBeenCalledTimes(1));
     expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'kalkulator_wyniki.xlsx');
-  });
-
-  it('calls exportToPdf and saves the file', async () => {
-    render(<App />);
-
-    // First, calculate results to enable export buttons
-    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
-    await waitFor(() => {
-      expect(screen.getByTestId('results-display')).toBeInTheDocument();
-    });
-
-    // Wait for the button to appear before clicking
-    await waitFor(() => {
-      expect(screen.getByTestId('export-pdf-button')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('export-pdf-button'));
-
-    await waitFor(() => expect(api.exportToPdf).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(saveAs).toHaveBeenCalledTimes(1));
-    expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'Raport_B2B_vs_UoP.pdf');
-  });
-
-  it('calls exportToAdvancedPdf and saves the file', async () => {
-    render(<App />);
-
-    // First, calculate results to enable export buttons
-    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
-    await waitFor(() => {
-      expect(screen.getByTestId('results-display')).toBeInTheDocument();
-    });
-
-    // Wait for the button to appear before clicking
-    await waitFor(() => {
-      expect(screen.getByTestId('export-advanced-pdf-button')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('export-advanced-pdf-button'));
-
-    await waitFor(() => expect(api.exportToAdvancedPdf).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(saveAs).toHaveBeenCalledTimes(1));
-    expect(saveAs).toHaveBeenCalledWith(expect.any(Blob), 'Raport_Zaawansowany_B2B_vs_UoP.pdf');
   });
 
   it('handles B2B input changes correctly', async () => {
@@ -229,32 +189,6 @@ describe('App', () => {
     fireEvent.click(screen.getByTestId('export-excel-button'));
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith('Failed to export Excel. See console for details.');
-    });
-  });
-
-  it('displays alert if exportToPdf fails', async () => {
-    api.exportToPdf.mockRejectedValue(new Error('Export PDF Error'));
-    render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
-    await waitFor(() => {
-      expect(screen.getByTestId('results-display')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('export-pdf-button'));
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith('Failed to export PDF. See console for details.');
-    });
-  });
-
-  it('displays alert if exportToAdvancedPdf fails', async () => {
-    api.exportToAdvancedPdf.mockRejectedValue(new Error('Export Advanced PDF Error'));
-    render(<App />);
-    fireEvent.click(screen.getByRole('button', { name: 'Calculate Comparison' }));
-    await waitFor(() => {
-      expect(screen.getByTestId('results-display')).toBeInTheDocument();
-    });
-    fireEvent.click(screen.getByTestId('export-advanced-pdf-button'));
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith('Failed to export advanced PDF. See console for details.');
     });
   });
 

@@ -29,28 +29,6 @@ export const exportToExcel = async (data) => {
   }
 };
 
-export const exportToPdf = async (data) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/export/pdf`, data, {
-      responseType: 'blob', // Important for handling binary data
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error, 'exportToPdf');
-  }
-};
-
-export const exportToAdvancedPdf = async (data) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/export/pdf/advanced`, data, {
-      responseType: 'blob',
-    });
-    return response.data;
-  } catch (error) {
-    handleError(error, 'exportToAdvancedPdf');
-  }
-};
-
 export const calculateBreakEvenAnalysis = async (data) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/calculate/break-even-analysis`, data);
