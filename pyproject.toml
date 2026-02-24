@@ -1,0 +1,30 @@
+[project]
+name = "b2b-vs-uop-calculator"
+version = "0.1.0"
+description = "Professional B2B vs UoP contract comparison tool for IT industry"
+authors = [
+    { name = "Artur", email = "artur@example.com" }
+]
+dependencies = [
+    "Flask",
+    "Flask-Cors",
+    "openpyxl",
+    "matplotlib",
+    "pydantic",
+    "fpdf2",
+    "pypdf",
+    "weasyprint"
+]
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-flask",
+    "playwright"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

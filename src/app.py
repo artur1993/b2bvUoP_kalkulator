@@ -1,11 +1,9 @@
-import json
 from flask import Flask, request, jsonify, send_from_directory, send_file, g
 from flask_cors import CORS
 from openpyxl import Workbook
 import io
 import os
 import logging
-import time
 from logging.handlers import RotatingFileHandler
 from src.analysis import generate_executive_summary, get_risk_analysis, get_methodology, get_checklist
 from src.calculations import (
@@ -13,7 +11,6 @@ from src.calculations import (
     calculate_uop_results,
     calculate_break_even,
     calculate_uop_break_even,
-    _get_float,
     calculate_break_even_analysis,
     calculate_sensitivity_analysis
 )
@@ -45,7 +42,6 @@ def break_even_analysis():
     try:
         data = request.get_json()
         app.logger.info(f"Received break-even analysis request.")
-        app.logger.debug(f"Break-even analysis request data: {data}")
         uop_data = data.get('uop', {})
         b2b_base_data = data.get('b2b', {})
 
@@ -61,7 +57,6 @@ def sensitivity_analysis():
     try:
         data = request.get_json()
         app.logger.info(f"Received sensitivity analysis request.")
-        app.logger.debug(f"Sensitivity analysis request data: {data}")
         base_b2b_data = data.get('b2b', {})
         base_uop_data = data.get('uop', {})
 
@@ -79,19 +74,17 @@ def calculate():
         request_data = g.validated_data
         lang = request_data.get('language', 'pl')
 
-        # Initialize b2b_data and uop_data from request_data
-        b2b_data = request_data.get('b2b', {}).copy()
-        uop_data = request_data.get('uop', {}).copy()
+        b2b_data = request_data.get('b2b', {})
+        uop_data = request_data.get('uop', {})
         calculation_mode = request_data.get('calculation_mode', 'uop_to_b2b')
 
         app.logger.info(f"Received calculation request with mode: {calculation_mode}")
-        app.logger.debug(f"Full request data: {request_data}")
 
         b2b_results = calculate_b2b_results(b2b_data)
         uop_results = calculate_uop_results(uop_data)
         
-        break_even_point = -1
-        break_even_key = "break_even_invoice_amount" # Default value
+        break_even_point = -1.0
+        break_even_key = "break_even_invoice_amount"
         if calculation_mode == 'uop_to_b2b':
             break_even_point = calculate_break_even(uop_results['total_annual_value'], b2b_data)
             break_even_key = "break_even_invoice_amount"
@@ -99,7 +92,6 @@ def calculate():
             break_even_point = calculate_uop_break_even(b2b_results['total_annual_value'], uop_data)
             break_even_key = "break_even_gross_salary"
 
-        # Generate advanced analysis
         summary = generate_executive_summary(b2b_results, uop_results, break_even_point, lang)
         risk_analysis = get_risk_analysis(lang)
         methodology = get_methodology(lang)
@@ -120,7 +112,7 @@ def calculate():
 
         if b2b_data.get('equalizePension'):
             app.logger.info("Equalize pension requested.")
-            uop_gross_salary = _get_float(uop_data, 'monthly_gross_salary', 0)
+            uop_gross_salary = uop_data.get('monthly_gross_salary', 0.0)
             pension_details = calculate_pension_details(uop_gross_salary)
             response_data['pension_details'] = pension_details
 
@@ -135,7 +127,6 @@ def export_to_excel():
     try:
         data = request.get_json()
         app.logger.info(f"Received request to export to Excel.")
-        app.logger.debug(f"Export to Excel request data: {data}")
         b2b_results = data.get('b2b_results', {})
         uop_results = data.get('uop_results', {})
 
@@ -165,9 +156,6 @@ def export_to_excel():
 @app.route('/<path:path>')
 def serve(path):
     """Serves the React frontend."""
-    app.logger.debug(f"Serving path: {path}")
-    app.logger.debug(f"Static folder: {app.static_folder}")
-    
     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
         return send_from_directory(app.static_folder, path)
     else:
@@ -175,8 +163,7 @@ def serve(path):
         if os.path.exists(index_path):
             return send_from_directory(app.static_folder, 'index.html')
         else:
-            app.logger.error(f"index.html not found at: {index_path}")
-            return jsonify({"error": "Frontend build not found. Please run 'npm run build' in src/dashboard."}), 404
+            return jsonify({"error": "Frontend build not found."}), 404
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, port=5001)
