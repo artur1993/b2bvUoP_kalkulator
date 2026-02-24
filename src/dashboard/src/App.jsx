@@ -34,7 +34,7 @@ const calculateTotalInsuranceCost = (selections, b2bMonthlyInvoice) => {
 };
 
 function App() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [calculationMode, setCalculationMode] = useState('uop_to_b2b');
   const [age, setAge] = useState(30);
 
@@ -59,6 +59,7 @@ function App() {
       trainingBudget: { enabled: false, value: 0 },
       otherBenefits: { enabled: false, value: 0 },
     },
+    equalizePension: false
   });
 
   const [baseBusinessCosts, setBaseBusinessCosts] = useState(500);
@@ -81,16 +82,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const comparisonChartRef = useRef(null);
-  const b2bStackedBarRef = useRef(null);
-  const uopStackedBarRef = useRef(null);
-  const waterfallChartRef = useRef(null);
-  const breakEvenChartRef = useRef(null);
-  const sensitivityChartRef = useRef(null);
-
   const handleB2bChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
     if (name === 'monthly_business_costs') {
       setBaseBusinessCosts(value);
     } else if (name.startsWith('companyBenefits.')) {
@@ -115,7 +108,6 @@ function App() {
 
   const handleUopChange = (e) => {
     const { name, value, type, checked } = e.target;
-
     if (name === 'selected_benefits') {
       setUopData((prevData) => ({
         ...prevData,
@@ -153,40 +145,47 @@ function App() {
     if (insuranceConfig.enabled) {
       totalInsuranceCost = calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.monthly_invoice_amount);
     }
-    
     setB2bData(prevData => ({
       ...prevData,
       monthly_business_costs: Number(baseBusinessCosts) + totalInsuranceCost
     }));
   }, [insuranceConfig, baseBusinessCosts, b2bData.monthly_invoice_amount]);
 
-  const handleCalculationModeChange = (e) => {
-    setCalculationMode(e.target.value);
-  };
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('mode')) setCalculationMode(params.get('mode'));
+    if (params.has('b2b_invoice')) {
+      setB2bData(prev => ({
+        ...prev,
+        monthly_invoice_amount: parseFloat(params.get('b2b_invoice')) || prev.monthly_invoice_amount,
+        tax_form: params.get('b2b_tax') || prev.tax_form,
+        zus_type: params.get('b2b_zus') || prev.zus_type,
+      }));
+    }
+    if (params.has('uop_salary')) {
+      setUopData(prev => ({
+        ...prev,
+        monthly_gross_salary: parseFloat(params.get('uop_salary')) || prev.monthly_gross_salary,
+      }));
+    }
+  }, []);
 
   const handleCalculate = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = { 
-        b2b: b2bData, 
-        uop: uopData, 
-        calculation_mode: calculationMode,
-        language: i18n.language 
-      };
+      const data = { b2b: b2bData, uop: uopData, calculation_mode: calculationMode, language: i18n.language };
+      const params = new URLSearchParams();
+      params.set('mode', calculationMode);
+      params.set('b2b_invoice', b2bData.monthly_invoice_amount);
+      params.set('b2b_tax', b2bData.tax_form);
+      params.set('b2b_zus', b2bData.zus_type);
+      params.set('uop_salary', uopData.monthly_gross_salary);
+      window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
       const res = await calculateResults(data);
-      if (res.pension_details) {
-        setB2bData(prevData => ({
-          ...prevData,
-          monthly_invoice_amount: prevData.monthly_invoice_amount + res.pension_details.invoice_increase
-        }));
-      }
       setResults(res);
-      console.log("API Results for charting:", res);
     } catch (err) {
       setError('Failed to fetch results. Please check the console for more details.');
-      console.error('Calculation error:', err);
-      
     } finally {
       setLoading(false);
     }
@@ -198,51 +197,41 @@ function App() {
       const blob = await exportToExcel(data);
       saveAs(blob, 'kalkulator_wyniki.xlsx');
     } catch (err) {
-      
-      console.error('Error exporting Excel:', err);
       alert('Failed to export Excel. See console for details.');
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-background">
+    <div className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Header />
       <main className="container mx-auto p-4 md:p-8 w-full max-w-7xl">
-        <div className="bg-surface p-6 md:p-8 rounded-xl shadow-lg">
-          <CalculatorForm
-            b2bData={b2bData}
-            uopData={uopData}
-            handleB2bChange={handleB2bChange}
-            handleUopChange={handleUopChange}
-            handleAgeChange={handleAgeChange}
-            handleCalculate={handleCalculate}
-            loading={loading}
-            calculationMode={calculationMode}
-            handleCalculationModeChange={handleCalculationModeChange}
-            insuranceConfig={insuranceConfig}
-            setInsuranceConfig={setInsuranceConfig}
-          />
-
-          {loading && <SkeletonLoader />}
-          {error && <Alert message={error} type="error" />}
-
+        <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 print:shadow-none print:border-none">
+          <div className="print:hidden">
+            <CalculatorForm
+              b2bData={b2bData}
+              uopData={uopData}
+              handleB2bChange={handleB2bChange}
+              handleUopChange={handleUopChange}
+              handleAgeChange={handleAgeChange}
+              handleCalculate={handleCalculate}
+              loading={loading}
+              calculationMode={calculationMode}
+              handleCalculationModeChange={(e) => setCalculationMode(e.target.value)}
+              insuranceConfig={insuranceConfig}
+              setInsuranceConfig={setInsuranceConfig}
+            />
+          </div>
+          {loading && <div className="print:hidden"><SkeletonLoader /></div>}
+          {error && <div className="print:hidden"><Alert message={error} type="error" /></div>}
           {!loading && results && (
             <div className="mt-8">
-              <ResultsDisplay 
-                results={results} 
-                onExportExcel={handleExportExcel} 
-                calculationMode={calculationMode} 
-                data-testid="results-display" 
-              />
-              <ComparisonChart 
-                results={results} 
-                comparisonChartRef={comparisonChartRef}
-                b2bStackedBarRef={b2bStackedBarRef}
-                uopStackedBarRef={uopStackedBarRef}
-              />
-              <WaterfallChart results={results} ref={waterfallChartRef} />
-              <BreakEvenChart b2b={b2bData} uop={uopData} results={results} ref={breakEvenChartRef} />
-              <SensitivityChart b2b={b2bData} uop={uopData} results={results} ref={sensitivityChartRef} />
+              <ResultsDisplay results={results} onExportExcel={handleExportExcel} calculationMode={calculationMode} data-testid="results-display" />
+              <div className="print:hidden space-y-8">
+                <ComparisonChart results={results} />
+                <WaterfallChart results={results} />
+                <BreakEvenChart b2b={b2bData} uop={uopData} results={results} />
+                <SensitivityChart b2b={b2bData} uop={uopData} results={results} />
+              </div>
             </div>
           )}
         </div>
