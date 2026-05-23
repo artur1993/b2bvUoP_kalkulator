@@ -124,15 +124,6 @@
     "b2b_rate": "Monthly B2B Rate (PLN)",
     "net_difference_annual": "Annual Net Difference (PLN)"
   },
-  "sensitivity": {
-    "title": "Sensitivity Analysis (Tornado Chart)",
-    "impact_on_net": "Impact on Net Difference",
-    "impact_on_net_annual": "Impact on Annual Net Difference (PLN)",
-    "koszty_firmowe_miesieczne": "Monthly Business Costs",
-    "urlop_dni": "Vacation Days",
-    "przestoje_miesiace": "Stoppage Months",
-    "vacation_days": "Vacation Days"
-  },
   "report": {
     "input_summary_title": "Input Parameters Summary",
     "financial_comparison_title": "Financial Comparison (Annual)",

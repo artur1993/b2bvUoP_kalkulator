@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import axios from 'axios';
-import { calculateResults, exportToExcel, calculateBreakEvenAnalysis, calculateSensitivityAnalysis } from './api';
+import { calculateResults, exportToExcel, calculateBreakEvenAnalysis } from './api';
 
 // Mock axios
 vi.mock('axios');
@@ -70,23 +70,4 @@ describe('API Service', () => {
     expect(axios.post).toHaveBeenCalledWith('/api/calculate/break-even-analysis', mockData);
   });
 
-  it('calculateSensitivityAnalysis sends correct data and returns response', async () => {
-    const mockData = { b2b: {}, uop: {} };
-    const mockResponse = { data: [] };
-    axios.post.mockResolvedValue(mockResponse);
-
-    const result = await calculateSensitivityAnalysis(mockData);
-
-    expect(axios.post).toHaveBeenCalledWith('/api/calculate/sensitivity-analysis', mockData);
-    expect(result).toEqual(mockResponse.data);
-  });
-
-  it('calculateSensitivityAnalysis handles errors', async () => {
-    const mockData = { b2b: {}, uop: {} };
-    const errorMessage = 'Sensitivity Analysis Error';
-    axios.post.mockRejectedValue(new Error(errorMessage));
-
-    await expect(calculateSensitivityAnalysis(mockData)).rejects.toThrow(errorMessage);
-    expect(axios.post).toHaveBeenCalledWith('/api/calculate/sensitivity-analysis', mockData);
-  });
 });

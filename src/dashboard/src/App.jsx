@@ -5,7 +5,6 @@ import ResultsDisplay from './components/ResultsDisplay';
 import ComparisonChart from './components/ComparisonChart';
 import WaterfallChart from './components/WaterfallChart';
 import BreakEvenChart from './components/BreakEvenChart';
-import SensitivityChart from './components/SensitivityChart';
 import Header from './components/Header';
 import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
@@ -185,7 +184,6 @@ function App() {
                 <ComparisonChart results={results} />
                 <WaterfallChart results={results} />
                 <BreakEvenChart b2b={b2bData} uop={uopData} results={results} />
-                <SensitivityChart b2b={b2bData} uop={uopData} results={results} />
               </div>
             </div>
           )}

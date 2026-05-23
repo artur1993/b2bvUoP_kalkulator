@@ -124,15 +124,6 @@
     "b2b_rate": "Miesięczna Stawka B2B (PLN)",
     "net_difference_annual": "Roczna Różnica Netto (PLN)"
   },
-  "sensitivity": {
-    "title": "Analiza Wrażliwości (Wykres Tornado)",
-    "impact_on_net": "Wpływ na Różnicę Netto",
-    "impact_on_net_annual": "Wpływ na Roczną Różnicę Netto (PLN)",
-    "koszty_firmowe_miesieczne": "Miesięczne Koszty Firmowe",
-    "urlop_dni": "Dni Urlopu",
-    "przestoje_miesiace": "Miesiące Przestoju",
-    "vacation_days": "Dni Urlopu"
-  },
   "report": {
     "input_summary_title": "Podsumowanie Parametrów Wejściowych",
     "financial_comparison_title": "Porównanie Finansowe (Roczne)",

@@ -37,12 +37,3 @@ export const calculateBreakEvenAnalysis = async (data) => {
     handleError(error, 'calculateBreakEvenAnalysis');
   }
 };
-
-export const calculateSensitivityAnalysis = async (data) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/calculate/sensitivity-analysis`, data);
-    return response.data;
-  } catch (error) {
-    handleError(error, 'calculateSensitivityAnalysis');
-  }
-};
