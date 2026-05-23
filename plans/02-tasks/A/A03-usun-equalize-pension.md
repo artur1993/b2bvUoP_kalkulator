@@ -19,13 +19,13 @@ Usunąć cały moduł symulacji emerytalnej (model sztywny, UI nie pokazuje wyni
 - [tests/unit/test_pension_calculator.py](../../../tests/unit/test_pension_calculator.py) — **usunąć cały plik**
 
 ## Acceptance
-- [ ] `src/pension_calculator.py` nie istnieje
-- [ ] `tests/unit/test_pension_calculator.py` nie istnieje
-- [ ] `B2BDataModel` nie ma pola `equalizePension`
-- [ ] UI nie pokazuje checkboxa „equalize pension"
-- [ ] Nowy info-box w `ResultsDisplay.jsx` (lub w sekcji B2B): „Pamiętaj o emeryturze: rozważ [IKE](https://www.knf.gov.pl) lub [IKZE](https://www.gov.pl/web/rodzina/ikze-limit-wplat). Limity 2026: IKE 28 260 PLN, IKZE 11 304 PLN (B2B: 16 956 PLN)." (treść do tłumaczenia w obu lokalach)
-- [ ] `pytest` zielony, `npm test` zielony
-- [ ] `curl /api/calculate -d '{...,"b2b":{"equalizePension":true}}'` → 400 (pole nieznane)
+- [x] `src/pension_calculator.py` nie istnieje
+- [x] `tests/unit/test_pension_calculator.py` nie istnieje
+- [x] `B2BDataModel` nie ma pola `equalizePension`
+- [x] UI nie pokazuje checkboxa „equalize pension"
+- [x] Nowy info-box w `ResultsDisplay.jsx` (lub w sekcji B2B): „Pamiętaj o emeryturze: rozważ [IKE](https://www.knf.gov.pl) lub [IKZE](https://www.gov.pl/web/rodzina/ikze-limit-wplat). Limity 2026: IKE 28 260 PLN, IKZE 11 304 PLN (B2B: 16 956 PLN)." (treść do tłumaczenia w obu lokalach)
+- [x] `pytest` zielony, `npm test` zielony
+- [x] `curl /api/calculate -d '{...,"b2b":{"equalizePension":true}}'` → 400 (pole nieznane)
 
 ## Test plan
 ```bash

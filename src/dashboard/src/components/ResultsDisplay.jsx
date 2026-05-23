@@ -11,12 +11,18 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
+const formatLimit = (value) => {
+  return new Intl.NumberFormat('pl-PL', {
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
 const ResultsDisplay = ({ results, onExportExcel, calculationMode, 'data-testid': dataTestId }) => {
   const { t } = useTranslation();
 
   if (!results) return null;
 
-  const { b2b_results, uop_results, analysis } = results;
+  const { b2b_results, uop_results, analysis, pension_limits_2026 } = results;
   const break_even_invoice_amount = results.break_even_invoice_amount;
   const break_even_gross_salary = results.break_even_gross_salary;
 
@@ -71,6 +77,43 @@ const ResultsDisplay = ({ results, onExportExcel, calculationMode, 'data-testid'
           </ul>
         </div>
       </div>
+
+      {pension_limits_2026 && (
+        <section
+          data-testid="pension-info-box"
+          className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800 mb-8 print:bg-white print:text-black"
+        >
+          <h3 className="text-lg font-bold text-blue-900 dark:text-blue-300 mb-2">
+            {t('results.pension_info_title')}
+          </h3>
+          <p className="text-sm text-blue-800 dark:text-blue-200">
+            {t('results.pension_info_prefix')}{' '}
+            <a
+              href="https://www.knf.gov.pl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline"
+            >
+              {t('results.pension_info_ike')}
+            </a>{' '}
+            {t('results.pension_info_or')}{' '}
+            <a
+              href="https://www.gov.pl/web/rodzina/ikze-limit-wplat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold underline"
+            >
+              {t('results.pension_info_ikze')}
+            </a>
+            .{' '}
+            {t('results.pension_info_limits', {
+              ike: formatLimit(pension_limits_2026.ike),
+              ikzeStandard: formatLimit(pension_limits_2026.ikze_standard),
+              ikzeB2b: formatLimit(pension_limits_2026.ikze_b2b),
+            })}
+          </p>
+        </section>
+      )}
 
       {breakEvenText && (
         <div data-testid="break-even-section" className="text-center bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800 mb-8 print:bg-white print:text-black">

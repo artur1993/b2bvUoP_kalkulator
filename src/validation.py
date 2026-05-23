@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, jsonify, g, current_app
-from pydantic import BaseModel, Field, ValidationError, validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, validator
 from typing import Optional, List, Dict, Union
 
 class BenefitModel(BaseModel):
@@ -9,6 +9,8 @@ class BenefitModel(BaseModel):
     value: Optional[float] = 0.0
 
 class B2BDataModel(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+
     monthly_invoice_amount: float = Field(..., ge=0)
     tax_form: str = Field(..., pattern='^(lump_sum_it|flat_tax|tax_scale|ip_box)$')
     zus_type: str = Field(..., pattern='^(start_relief|small_business|preferential|full)$')
@@ -21,7 +23,6 @@ class B2BDataModel(BaseModel):
     youth_relief: bool = False
     customBenefits: float = Field(0.0, ge=0)
     companyBenefits: Optional[Dict[str, BenefitModel]] = None
-    equalizePension: bool = False
 
 class DeductibleCostSettingsModel(BaseModel):
     type: str = Field(..., pattern='^(standard|elevated|author_50|none)$')

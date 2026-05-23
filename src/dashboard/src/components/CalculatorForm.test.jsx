@@ -344,38 +344,4 @@ describe('CalculatorForm', () => {
     });
   });
 
-  it('disables equalize pension checkbox when UoP salary is zero', () => {
-    renderComponent();
-    const equalizePensionCheckbox = screen.getByLabelText(i18n.t('form.equalize_pension'));
-    expect(equalizePensionCheckbox).toBeDisabled();
-  });
-
-  it('enables equalize pension checkbox when UoP salary is entered', async () => {
-    renderComponent();
-    const uopSalaryInput = screen.getByLabelText(i18n.t('form.gross_salary'));
-    const equalizePensionCheckbox = screen.getByLabelText(i18n.t('form.equalize_pension'));
-
-    fireEvent.change(uopSalaryInput, { target: { name: 'monthly_gross_salary', value: '12000' } });
-
-    await waitFor(() => {
-      expect(equalizePensionCheckbox).not.toBeDisabled();
-    });
-  });
-
-  it('calls handleCalculate with equalizePension set to true when checked', async () => {
-    renderComponent();
-    const uopSalaryInput = screen.getByLabelText(i18n.t('form.gross_salary'));
-    const equalizePensionCheckbox = screen.getByLabelText(i18n.t('form.equalize_pension'));
-
-    fireEvent.change(uopSalaryInput, { target: { name: 'monthly_gross_salary', value: '12000' } });
-    await waitFor(() => { /* wait for state update */ });
-
-    fireEvent.click(equalizePensionCheckbox);
-    await waitFor(() => {
-      expect(equalizePensionCheckbox).toBeChecked();
-    });
-
-    fireEvent.click(screen.getByRole('button', { name: i18n.t('form.calculate_button') }));
-    expect(mockOnCalculate).toHaveBeenCalledTimes(1);
-  });
 });
