@@ -80,8 +80,6 @@
     "break_even_b2b_subtitle": "(This is the monthly B2B invoice amount needed to match the total annual value of the UoP contract)",
     "break_even_uop_title": "Break-Even Monthly UoP Gross Salary",
     "break_even_uop_subtitle": "(This is the monthly UoP gross salary needed to match the total annual value of the B2B contract)",
-    "export_pdf_basic": "Download Basic Report",
-    "export_pdf_advanced": "Download Advanced Report",
     "export_excel": "Export to Excel",
     "lost_revenue_tooltip": "Lost revenue is the amount B2B loses when not working (vacation, sick leave, downtime).",
     "loading": "Loading"

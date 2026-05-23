@@ -10,10 +10,7 @@ dependencies = [
     "Flask-Cors",
     "openpyxl",
     "matplotlib",
-    "pydantic",
-    "fpdf2",
-    "pypdf",
-    "weasyprint"
+    "pydantic"
 ]
 requires-python = ">=3.10"
 

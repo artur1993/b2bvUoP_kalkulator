@@ -144,14 +144,4 @@ test.describe.skip('B2B vs UoP Calculator E2E Tests', () => {
     await expect(download.suggestedFilename()).toBe('kalkulator_wyniki.xlsx');
   });
 
-  test.skip('Test Case 9: Export to PDF functionality', async ({ page }) => {
-    await page.click('button:has-text("Calculate Comparison")');
-    await page.waitForSelector('text=Calculation Results');
-
-    const downloadPromise = page.waitForEvent('download');
-    await page.click('button:has-text("Export to PDF")');
-    const download = await downloadPromise;
-
-    await expect(download.suggestedFilename()).toBe('kalkulator_wyniki.pdf');
-  });
 });
