@@ -182,42 +182,5 @@
   },
   "checklists": {
     "title": "Checklista Przed Przejściem na B2B"
-  },
-  "insurance": {
-    "title": "Konfigurator Ubezpieczenia B2B",
-    "intro": "Poniższa tabela przedstawia wybraną konfigurację ubezpieczeń i jej miesięczny koszt.",
-    "module": "Moduł",
-    "level": "Poziom",
-    "monthly_cost": "Koszt miesięczny",
-    "total_monthly_cost": "Całkowity miesięczny koszt ubezpieczenia",
-    "total_cost": "Całkowity koszt",
-    "profiles": {
-      "minimal": "Minimalny",
-      "standard": "Standardowy",
-      "premium": "Premium",
-      "custom": "Własny"
-    },
-    "modules": {
-      "income_protection": "Ubezpieczenie od utraty dochodu",
-      "professional_liability": "OC zawodowe",
-      "private_health": "Prywatne zdrowotne",
-      "equipment": "Ubezpieczenie sprzętu",
-      "zus_voluntary": "ZUS dobrowolne",
-      "legal_protection": "Ochrona prawna",
-      "cyber_insurance": "Ubezpieczenie cyber"
-    },
-    "options": {
-        "basic": "Podstawowy",
-        "standard": "Standardowy",
-        "premium": "Premium",
-        "uop_equivalent": "Ekwiwalent UoP",
-        "enabled": "Włączone"
-    },
-    "profile": "Profil",
-    "active_modules": "Aktywne Moduły",
-    "insurance": "Ubezpieczenie",
-    "selected_level": "Wybrany Poziom",
-    "coverage_details": "Szczegóły Pokrycia",
-    "uop_comparison": "Porównanie z UoP"
   }
 }

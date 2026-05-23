@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import Input from './Input';
 import Select from './Select';
 import Checkbox from './Checkbox';
-import InsuranceConfigurator from './InsuranceConfigurator';
 import Tooltip from './Tooltip';
 
-const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleAgeChange, handleCalculate, loading, calculationMode, handleCalculationModeChange, insuranceConfig, setInsuranceConfig }) => {
+const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleAgeChange, handleCalculate, loading, calculationMode, handleCalculationModeChange }) => {
   const { t } = useTranslation();
 
   const zusOptions = [
@@ -155,11 +154,6 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             onChange={handleB2bChange}
           />
         </fieldset>
-        <InsuranceConfigurator 
-            insuranceConfig={insuranceConfig} 
-            setInsuranceConfig={setInsuranceConfig} 
-            b2bMonthlyInvoice={b2bData.monthly_invoice_amount} 
-        />
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.benefits')}</legend>
           <Input
