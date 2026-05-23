@@ -18,11 +18,11 @@ Usunąć sensitivity (tornado) chart wraz z endpointem, funkcją obliczeniową i
 - [tests/unit/test_calculations.py](../../../tests/unit/test_calculations.py) — testy `test_calculate_sensitivity_*`
 
 ## Acceptance
-- [ ] `grep -r sensitivity` w `src/` zwraca pusto (poza historyczną wzmianką w komentarzach jeśli muszą zostać)
-- [ ] `curl -X POST http://localhost:5001/api/calculate/sensitivity-analysis -d '{}'` → 404
-- [ ] `npm test` zielony, `pytest` zielony
-- [ ] Strona po `npm run dev` nie pokazuje sekcji „Sensitivity" / „Tornado"
-- [ ] Klucze `sensitivity.*` usunięte z obu locale files
+- [x] `grep -r sensitivity` w `src/` zwraca pusto (poza historyczną wzmianką w komentarzach jeśli muszą zostać)
+- [x] `curl -X POST http://localhost:5001/api/calculate/sensitivity-analysis -d '{}'` → 404
+- [x] `npm test` zielony, `pytest` zielony
+- [x] Strona po `npm run dev` nie pokazuje sekcji „Sensitivity" / „Tornado"
+- [x] Klucze `sensitivity.*` usunięte z obu locale files
 
 ## Test plan
 ```bash

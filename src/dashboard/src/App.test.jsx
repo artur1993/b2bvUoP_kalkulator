@@ -10,7 +10,6 @@ vi.mock('./services/api', () => ({
   calculateResults: vi.fn(),
   exportToExcel: vi.fn(),
   calculateBreakEvenAnalysis: vi.fn(),
-  calculateSensitivityAnalysis: vi.fn(),
 }));
 
 // Mock file-saver
@@ -46,7 +45,6 @@ describe('App Phase 2', () => {
     });
 
     api.calculateBreakEvenAnalysis.mockResolvedValue([]);
-    api.calculateSensitivityAnalysis.mockResolvedValue([]);
     api.exportToExcel.mockResolvedValue(new Blob(['excel'], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
   });
 

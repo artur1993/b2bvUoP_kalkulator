@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory, send_file, g
 from flask_cors import CORS
 from openpyxl import Workbook
+from werkzeug.exceptions import HTTPException
 import io
 import os
 import logging
@@ -11,8 +12,7 @@ from src.calculations import (
     calculate_uop_results,
     calculate_break_even,
     calculate_uop_break_even,
-    calculate_break_even_analysis,
-    calculate_sensitivity_analysis
+    calculate_break_even_analysis
 )
 from src.config import config_manager
 from src.validation import validate_calculation_request
@@ -33,6 +33,10 @@ app.logger.setLevel(logging.DEBUG)
 @app.errorhandler(Exception)
 def handle_global_error(e):
     """Global error handler to log all unhandled exceptions."""
+    if isinstance(e, HTTPException):
+        status_code = 404 if e.code == 405 and request.path.startswith('/api/') else e.code
+        return jsonify({"error": e.description}), status_code
+
     app.logger.exception(f"Unhandled Exception: {e}")
     return jsonify({"error": "An unexpected server error occurred."}), 500
 
@@ -49,21 +53,6 @@ def break_even_analysis():
         return jsonify(analysis_results)
     except Exception as e:
         app.logger.exception("Error during break-even analysis:")
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/api/calculate/sensitivity-analysis', methods=['POST'])
-def sensitivity_analysis():
-    """Endpoint for sensitivity analysis chart data."""
-    try:
-        data = request.get_json()
-        app.logger.info(f"Received sensitivity analysis request.")
-        base_b2b_data = data.get('b2b', {})
-        base_uop_data = data.get('uop', {})
-
-        analysis_results = calculate_sensitivity_analysis(base_b2b_data, base_uop_data)
-        return jsonify(analysis_results)
-    except Exception as e:
-        app.logger.exception("Error during sensitivity analysis:")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/calculate', methods=['POST'])

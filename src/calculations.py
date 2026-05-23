@@ -271,15 +271,3 @@ def calculate_break_even_analysis(uop_data: Dict[str, Any], b2b_base_data: Dict[
         b2b_res = calculate_b2b_results(b2b_data)
         analysis.append({"b2b_rate": b2b_rate, "net_difference": b2b_res['total_annual_value'] - uop_results['total_annual_value']})
     return analysis
-
-def calculate_sensitivity_analysis(base_b2b_data: Dict[str, Any], base_uop_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-    base_b2b_results = calculate_b2b_results(base_b2b_data)
-    base_uop_results = calculate_uop_results(base_uop_data)
-    params = {'monthly_business_costs': 500, 'vacation_days': 5, 'stoppage_months': 1}
-    analysis = []
-    for param, change in params.items():
-        d = base_b2b_data.copy()
-        d[param] = float(d.get(param, 0)) + change
-        res = calculate_b2b_results(d)
-        analysis.append({"parameter": param, "impact": res['total_annual_value'] - base_b2b_results['total_annual_value']})
-    return analysis
