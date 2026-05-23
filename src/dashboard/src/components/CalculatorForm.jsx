@@ -23,7 +23,6 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
   const benefitOptions = [
     { value: 'medical_care', label: t('form.benefit_medical') },
     { value: 'sport_card', label: t('form.benefit_sport') },
-    { value: 'life_insurance', label: t('form.benefit_life') },
     { value: 'training_budget', label: t('form.benefit_training') },
     { value: 'ppk', label: t('form.benefit_ppk') },
   ];
@@ -220,7 +219,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             />
           )}
           <Checkbox
-            label={t('form.life_insurance')}
+            label={t('form.company_life_cover')}
             id="companyBenefits.lifeInsurance.enabled"
             checked={b2bData.companyBenefits.lifeInsurance.enabled}
             onChange={handleB2bChange}
@@ -228,7 +227,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
           />
           {b2bData.companyBenefits.lifeInsurance.enabled && (
             <Input
-              label={t('form.life_insurance').replace(' (from company)', '') + ' Value (PLN/year)'}
+              label={t('form.company_life_cover').replace(' (from company)', '') + ' Value (PLN/year)'}
               id="companyBenefits.lifeInsurance.value"
               type="number"
               value={b2bData.companyBenefits.lifeInsurance.value}
