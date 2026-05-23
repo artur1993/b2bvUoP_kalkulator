@@ -17,12 +17,12 @@ Usunąć rozbudowany konfigurator ubezpieczeń (polskie teksty wbite w kod, brok
 - [src/dashboard/src/locales/pl/translation.json](../../../src/dashboard/src/locales/pl/translation.json) — j.w.
 
 ## Acceptance
-- [ ] Brak plików `InsuranceConfigurator.*` i `insuranceOptions.js`
-- [ ] `App.jsx` nie ma `baseBusinessCosts`/`insuranceConfig` state ani `calculateTotalInsuranceCost` ani useEffect modyfikującego `monthly_business_costs`
-- [ ] Pole `monthly_business_costs` w `CalculatorForm` jest **bezpośrednio** kontrolowane przez `b2bData.monthly_business_costs`
-- [ ] Klucze `insurance.*` usunięte z obu locale files
-- [ ] `npm test` zielony, smoke test przejdzie
-- [ ] Strona nie pokazuje sekcji „Insurance configurator"
+- [x] Brak plików `InsuranceConfigurator.*` i `insuranceOptions.js`
+- [x] `App.jsx` nie ma `baseBusinessCosts`/`insuranceConfig` state ani `calculateTotalInsuranceCost` ani useEffect modyfikującego `monthly_business_costs`
+- [x] Pole `monthly_business_costs` w `CalculatorForm` jest **bezpośrednio** kontrolowane przez `b2bData.monthly_business_costs`
+- [x] Klucze `insurance.*` usunięte z obu locale files
+- [x] `npm test` zielony, smoke test przejdzie
+- [x] Strona nie pokazuje sekcji „Insurance configurator"
 
 ## Test plan
 ```bash

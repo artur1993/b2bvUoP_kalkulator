@@ -44,11 +44,6 @@ describe('CalculatorForm', () => {
     const [b2bData, setB2bData] = useState(initialB2b);
     const [uopData, setUopData] = useState(initialUop);
     const [calculationMode, setCalculationMode] = useState(initialCalculationMode || 'uop_to_b2b');
-    const [insuranceConfig, setInsuranceConfig] = useState({
-      enabled: true,
-      activeProfile: 'standard',
-      selections: {}
-    });
 
     const handleCalculationModeChange = (e) => {
       setCalculationMode(e.target.value);
@@ -113,8 +108,6 @@ describe('CalculatorForm', () => {
         loading={loading}
         calculationMode={calculationMode}
         handleCalculationModeChange={handleCalculationModeChange}
-        insuranceConfig={insuranceConfig}
-        setInsuranceConfig={setInsuranceConfig}
       />
     );
   };
@@ -323,8 +316,6 @@ describe('CalculatorForm', () => {
             loading={false}
             calculationMode="uop_to_b2b"
             handleCalculationModeChange={() => {}}
-            insuranceConfig={{ activeProfile: 'standard', selections: {} }}
-            setInsuranceConfig={() => {}}
           />
       );
     };

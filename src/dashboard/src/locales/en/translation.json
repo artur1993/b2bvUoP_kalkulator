@@ -182,42 +182,5 @@
   },
   "checklists": {
     "title": "Checklist Before Switching to B2B"
-  },
-  "insurance": {
-    "title": "B2B Insurance Configurator",
-    "intro": "The table below shows the selected insurance configuration and its monthly cost.",
-    "module": "Module",
-    "level": "Level",
-    "monthly_cost": "Monthly Cost",
-    "total_monthly_cost": "Total Monthly Insurance Cost",
-    "total_cost": "Total Cost",
-    "profiles": {
-      "minimal": "Minimal",
-      "standard": "Standard",
-      "premium": "Premium",
-      "custom": "Custom"
-    },
-    "modules": {
-      "income_protection": "Income Protection Insurance",
-      "professional_liability": "Professional Liability Insurance",
-      "private_health": "Private Health Insurance",
-      "equipment": "Equipment Insurance",
-      "zus_voluntary": "Voluntary ZUS",
-      "legal_protection": "Legal Protection",
-      "cyber_insurance": "Cyber Insurance"
-    },
-    "options": {
-        "basic": "Basic",
-        "standard": "Standard",
-        "premium": "Premium",
-        "uop_equivalent": "UoP Equivalent",
-        "enabled": "Enabled"
-    },
-    "profile": "Profile",
-    "active_modules": "Active Modules",
-    "insurance": "Insurance",
-    "selected_level": "Selected Level",
-    "coverage_details": "Coverage Details",
-    "uop_comparison": "Comparison with UoP"
   }
 }

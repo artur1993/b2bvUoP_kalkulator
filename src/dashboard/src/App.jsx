@@ -11,27 +11,6 @@ import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
 import { calculateResults, exportToExcel } from './services/api';
 import { saveAs } from 'file-saver';
-import { insuranceProfiles, insuranceModules } from './data/insuranceOptions';
-
-const calculateTotalInsuranceCost = (selections, b2bMonthlyInvoice) => {
-  let totalCost = 0;
-  for (const moduleId in selections) {
-    const config = selections[moduleId];
-    const module = insuranceModules[moduleId];
-    if (config.enabled && module) {
-      const option = module.options[config.level];
-      let cost = 0;
-      if (module.type === 'dynamic') {
-        const annualIncome = b2bMonthlyInvoice * 12;
-        cost = (annualIncome * option.multiplier) / 12;
-      } else {
-        cost = option.cost;
-      }
-      totalCost += cost;
-    }
-  }
-  return totalCost;
-};
 
 function App() {
   const { i18n, t } = useTranslation();
@@ -61,14 +40,6 @@ function App() {
     }
   });
 
-  const [baseBusinessCosts, setBaseBusinessCosts] = useState(500);
-
-  const [insuranceConfig, setInsuranceConfig] = useState({
-    enabled: true,
-    activeProfile: 'standard',
-    selections: insuranceProfiles.standard
-  });
-
   const [uopData, setUopData] = useState({
     monthly_gross_salary: 8000,
     deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
@@ -83,9 +54,7 @@ function App() {
 
   const handleB2bChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === 'monthly_business_costs') {
-      setBaseBusinessCosts(value);
-    } else if (name.startsWith('companyBenefits.')) {
+    if (name.startsWith('companyBenefits.')) {
       const [benefitType, field] = name.split('.').slice(1);
       setB2bData((prevData) => ({
         ...prevData,
@@ -138,17 +107,6 @@ function App() {
     setB2bData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
     setUopData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
   };
-
-  useEffect(() => {
-    let totalInsuranceCost = 0;
-    if (insuranceConfig.enabled) {
-      totalInsuranceCost = calculateTotalInsuranceCost(insuranceConfig.selections, b2bData.monthly_invoice_amount);
-    }
-    setB2bData(prevData => ({
-      ...prevData,
-      monthly_business_costs: Number(baseBusinessCosts) + totalInsuranceCost
-    }));
-  }, [insuranceConfig, baseBusinessCosts, b2bData.monthly_invoice_amount]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -216,8 +174,6 @@ function App() {
               loading={loading}
               calculationMode={calculationMode}
               handleCalculationModeChange={(e) => setCalculationMode(e.target.value)}
-              insuranceConfig={insuranceConfig}
-              setInsuranceConfig={setInsuranceConfig}
             />
           </div>
           {loading && <div className="print:hidden"><SkeletonLoader /></div>}
