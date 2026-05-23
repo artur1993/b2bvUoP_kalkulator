@@ -16,12 +16,12 @@ Usunąć wszystkie wzmianki o eksporcie PDF z dokumentacji, tłumaczeń, testów
 - [src/dashboard/src/services/api.js](../../../src/dashboard/src/services/api.js) — funkcja `exportToPdf` jeśli istnieje
 
 ## Acceptance
-- [ ] Grep `git grep -i pdf` zwraca tylko: ten plan, audyty (historyczne), wzmiankę „Excel zamiast PDF" w README
-- [ ] `npm test` zielony, `pytest` zielony
-- [ ] `pyproject.toml` nie zawiera bibliotek PDF
-- [ ] Frontend: zero przycisków „Eksportuj PDF"
-- [ ] E2E: zero testów o PDF (skipped lub usunięte)
-- [ ] README sekcja „Key Features" nie wymienia PDF
+- [x] Grep `git grep -i pdf` zwraca tylko: ten plan, audyty (historyczne), wzmiankę „Excel zamiast PDF" w README
+- [x] `npm test` zielony, `pytest` zielony
+- [x] `pyproject.toml` nie zawiera bibliotek PDF
+- [x] Frontend: zero przycisków „Eksportuj PDF"
+- [x] E2E: zero testów o PDF (skipped lub usunięte)
+- [x] README sekcja „Key Features" nie wymienia PDF
 
 ## Test plan
 ```bash

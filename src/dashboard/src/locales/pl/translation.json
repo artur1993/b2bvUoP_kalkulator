@@ -78,8 +78,6 @@
     "break_even_b2b_subtitle": "(Jest to kwota miesięcznej faktury B2B potrzebna do zrównania się z całkowitą roczną wartością umowy o pracę)",
     "break_even_uop_title": "Miesięczne Wynagrodzenie Brutto UoP do Wyrównania",
     "break_even_uop_subtitle": "(Jest to kwota miesięcznego wynagrodzenia brutto UoP potrzebna do zrównania się z całkowitą roczną wartością umowy B2B)",
-    "export_pdf_basic": "Pobierz Raport Podstawowy",
-    "export_pdf_advanced": "Pobierz Raport Zaawansowany",
     "export_excel": "Eksportuj do Excel",
     "lost_revenue_tooltip": "Utracony przychód to kwota, którą B2B traci, gdy nie pracuje (urlop, chorobowe, przestoje).",
     "loading": "Ładowanie",

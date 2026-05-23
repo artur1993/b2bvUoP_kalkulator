@@ -18,19 +18,12 @@ This tool provides a detailed and accurate financial comparison, taking into acc
   - **Waterfall Chart**: Visualizes the breakdown of gross income to net income, showing deductions like ZUS, taxes (with detailed breakdown by tax brackets), and other costs.
   - **Break-Even Analysis Chart**: A line chart illustrating the break-even point between B2B and UoP contracts, showing the net difference across various B2B monthly rates.
   - **Sensitivity (Tornado) Chart**: Identifies and visualizes the impact of key parameters (e.g., business costs, vacation days, stoppage months) on the final net income difference, sorted by impact magnitude.
-- **Export Results**: Export the detailed comparison to Excel, a basic PDF report, or an advanced PDF report.
-- **Internationalized PDF Reports**: The generated PDF report is fully translated into the language selected in the UI (English or Polish).
-- **Advanced PDF Report**: Generate a comprehensive, multi-page PDF report with a professional design, including:
-    - **Executive Summary & Risk Analysis**: High-level insights and risk assessment.
-    - **Detailed Insurance Section**: A dedicated section in the advanced report that breaks down the selected B2B insurance package. It details each active module, its coverage level, specific details (e.g., sum insured), a direct comparison to UoP standards, and the monthly cost, providing a clear and transparent view of the protection being purchased.
-    - **Narrative Calculation Methodology**: A clear, step-by-step "waterfall" breakdown of how the final B2B net income is calculated.
-    - **Advanced Charts**: Includes a bar chart for overall comparison and a waterfall chart visualizing the B2B cash flow.
-    - **B2B Checklist**: A practical checklist for individuals transitioning to a B2B contract.
-- **Transparent Methodology**: The PDF report includes a dedicated "How we calculated it?" section that breaks down the key steps of the calculation for both B2B and UoP, ensuring full transparency.
+- **Export Results**: Export the detailed comparison to Excel.
+- **Transparent Methodology**: The app includes a calculation summary and checklist that explain the key assumptions for both B2B and UoP.
 - **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
   - **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
   - **Pension Equalization**: For B2B contracts, automatically calculate the additional monthly invoice amount required to invest in a private pension plan (e.g., IKE/IKZE) to match the pension contributions made by the employer in a UoP contract. This provides a more holistic, long-term financial comparison.
-  - **Interactive B2B Insurance Configurator**: Build a custom insurance package (Income Protection, Professional Liability, Health, etc.) with pre-configured profiles (Minimal, Standard, Premium) or detailed customization. The total monthly cost is automatically added to your B2B business expenses for a more realistic financial comparison, and the selected package is detailed in the advanced PDF report.
+  - **Interactive B2B Insurance Configurator**: Build a custom insurance package (Income Protection, Professional Liability, Health, etc.) with pre-configured profiles (Minimal, Standard, Premium) or detailed customization. The total monthly cost is automatically added to your B2B business expenses for a more realistic financial comparison.
 
 ## Installation
 
@@ -51,10 +44,6 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     npm install
     cd ../..
     ```
-4.  **Install PDF Font (for PDF export functionality):**
-    Download `DejaVuSans.ttf` (or another Unicode-compatible font) and place it in the `src/fonts/` directory within the project root. If the `src/fonts/` directory does not exist, it will be created automatically when the Flask app runs.
-    You can find `DejaVuSans.ttf` on the official DejaVu Fonts website or other trusted font repositories.
-
 ## Usage
 
 1.  **Start the application (both backend and frontend):**

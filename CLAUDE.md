@@ -63,7 +63,7 @@ npm run test:e2e   # From project root
 src/
   app.py              # Flask app — API routes only, no business logic
   calculations.py     # Core B2B and UoP financial calculation functions
-  analysis.py         # Executive summary, risk analysis, PDF narrative helpers
+  analysis.py         # Executive summary, risk analysis, methodology helpers
   pension_calculator.py
   validation.py       # Pydantic-based request validation
   config.py           # Singleton ConfigManager loads dane_wejsciowe_kalkulator.json
