@@ -55,9 +55,7 @@
     "calculation_mode_title": "Tryb Kalkulacji",
     "uop_to_b2b_mode": "UoP do B2B (Oblicz fakturę B2B, aby zrównać się z UoP)",
     "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)",
-    "equalize_pension": "Wyrównaj emeryturę do poziomu UoP",
-    "kup_tooltip": "Koszty uzyskania przychodów (KUP) to wydatki poniesione w celu osiągnięcia przychodów. Standardowe KUP dla pracowników wynoszą 250 zł/mies. (3000 zł rocznie). Dla pracowników dojeżdżających z innej miejscowości wynoszą 300 zł/mies. (3600 zł rocznie). Twórcy mogą korzystać z 50% KUP, ale nie więcej niż 120 000 zł rocznie.",
-    "equalize_pension_tooltip": "Automatycznie oblicza dodatkową kwotę, którą należy doliczyć do faktury B2B, aby sfinansować prywatny plan emerytalny (np. IKE/IKZE) i wyrównać przyszłą emeryturę do poziomu prognozowanego z umowy o pracę. Założenia: 4.5% rocznej stopy zwrotu, 30 lat oszczędzania."
+    "kup_tooltip": "Koszty uzyskania przychodów (KUP) to wydatki poniesione w celu osiągnięcia przychodów. Standardowe KUP dla pracowników wynoszą 250 zł/mies. (3000 zł rocznie). Dla pracowników dojeżdżających z innej miejscowości wynoszą 300 zł/mies. (3600 zł rocznie). Twórcy mogą korzystać z 50% KUP, ale nie więcej niż 120 000 zł rocznie."
   },
   "results": {
     "title": "Wyniki Kalkulacji",
@@ -85,7 +83,13 @@
     "export_pdf_advanced": "Pobierz Raport Zaawansowany",
     "export_excel": "Eksportuj do Excel",
     "lost_revenue_tooltip": "Utracony przychód to kwota, którą B2B traci, gdy nie pracuje (urlop, chorobowe, przestoje).",
-    "loading": "Ładowanie"
+    "loading": "Ładowanie",
+    "pension_info_title": "Pamiętaj o emeryturze",
+    "pension_info_prefix": "Rozważ",
+    "pension_info_ike": "IKE",
+    "pension_info_or": "lub",
+    "pension_info_ikze": "IKZE",
+    "pension_info_limits": "Limity 2026: IKE {{ike}} PLN, IKZE {{ikzeStandard}} PLN (B2B: {{ikzeB2b}} PLN)."
   },
   "currency_pln": "PLN",
   "b2b": "B2B",
@@ -178,16 +182,6 @@
   },
   "checklists": {
     "title": "Checklista Przed Przejściem na B2B"
-  },
-  "pension": {
-    "analysis_title": "Analiza Wyrównania Emerytury",
-    "comparison_title": "Porównanie Prognozowanych Emerytur",
-    "uop_pension": "Emerytura UoP",
-    "b2b_pension": "Emerytura B2B",
-    "gap_to_cover": "Luka do pokrycia",
-    "savings_title": "Wymagane Oszczędności Prywatne",
-    "required_monthly_savings": "Wymagane Miesięczne Oszczędności",
-    "invoice_increase": "Wymagane Zwiększenie Faktury B2B"
   },
   "insurance": {
     "title": "Konfigurator Ubezpieczenia B2B",

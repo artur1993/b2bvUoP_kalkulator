@@ -33,6 +33,41 @@ def test_calculate_endpoint_positive(client):
     assert 'b2b_results' in json_data
     assert 'uop_results' in json_data
     assert 'analysis' in json_data
+    assert json_data['pension_limits_2026'] == {
+        'ike': 28260,
+        'ikze_standard': 11304,
+        'ikze_b2b': 16956,
+    }
+
+def test_calculate_endpoint_rejects_removed_pension_field(client):
+    """Unknown removed pension input should be rejected."""
+    removed_pension_field = 'equalize' + 'Pension'
+    data = {
+        'b2b': {
+            'monthly_invoice_amount': 10000,
+            'monthly_business_costs': 500,
+            'age': 30,
+            'vacation_days': 20,
+            'sick_days': 5,
+            'stoppage_months': 0,
+            'customBenefits': 0,
+            'sickness_insurance': True,
+            'youth_relief': False,
+            'zus_type': 'preferential',
+            'tax_form': 'lump_sum_it',
+            removed_pension_field: True
+        },
+        'uop': {
+            'monthly_gross_salary': 8000,
+            'age': 30,
+            'youth_relief': False,
+            'deductible_cost_settings': {'type': 'standard'}
+        },
+        'calculation_mode': 'uop_to_b2b',
+        'language': 'pl'
+    }
+    response = client.post('/api/calculate', json=data)
+    assert response.status_code == 400
 
 def test_calculate_endpoint_invalid_mode_negative(client):
     """Test calculation with invalid mode."""

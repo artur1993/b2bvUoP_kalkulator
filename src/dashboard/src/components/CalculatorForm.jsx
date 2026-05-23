@@ -127,16 +127,6 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             onChange={handleB2bChange}
             data-testid="youth-relief-b2b"
           />
-          <Tooltip text={t('form.equalize_pension_tooltip')}>
-            <Checkbox
-              label={t('form.equalize_pension')}
-              id="equalizePension"
-              name="equalizePension"
-              checked={b2bData.equalizePension}
-              onChange={handleB2bChange}
-              disabled={!uopData.monthly_gross_salary}
-            />
-          </Tooltip>
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>

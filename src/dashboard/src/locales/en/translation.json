@@ -55,8 +55,7 @@
     "calculation_mode_title": "Calculation Mode",
     "uop_to_b2b_mode": "UoP to B2B (Calculate B2B invoice to match UoP)",
     "b2b_to_uop_mode": "B2B to UoP (Calculate UoP salary to match B2B)",
-    "kup_tooltip": "Tax-deductible costs (KUP) are expenses incurred to generate revenue. Standard KUP for employees is 250 PLN/month (3000 PLN/year). For employees commuting from another town, it is 300 PLN/month (3600 PLN/year). Creators can benefit from 50% KUP, but not more than 120,000 PLN per year.",
-    "equalize_pension_tooltip": "Automatically calculates the additional amount to add to the B2B invoice to fund a private pension plan (e.g., IKE/IKZE) and equalize the future pension to the level projected from an employment contract. Assumptions: 4.5% annual rate of return, 30 years of savings."
+    "kup_tooltip": "Tax-deductible costs (KUP) are expenses incurred to generate revenue. Standard KUP for employees is 250 PLN/month (3000 PLN/year). For employees commuting from another town, it is 300 PLN/month (3600 PLN/year). Creators can benefit from 50% KUP, but not more than 120,000 PLN per year."
   },
   "results": {
     "title": "Calculation Results",
@@ -84,7 +83,13 @@
     "export_pdf_advanced": "Download Advanced Report",
     "export_excel": "Export to Excel",
     "lost_revenue_tooltip": "Lost revenue is the amount B2B loses when not working (vacation, sick leave, downtime).",
-    "loading": "Loading"
+    "loading": "Loading",
+    "pension_info_title": "Remember your retirement",
+    "pension_info_prefix": "Consider",
+    "pension_info_ike": "IKE",
+    "pension_info_or": "or",
+    "pension_info_ikze": "IKZE",
+    "pension_info_limits": "2026 limits: IKE {{ike}} PLN, IKZE {{ikzeStandard}} PLN (B2B: {{ikzeB2b}} PLN)."
   },
   "currency_pln": "PLN",
   "b2b": "B2B",
@@ -177,16 +182,6 @@
   },
   "checklists": {
     "title": "Checklist Before Switching to B2B"
-  },
-  "pension": {
-    "analysis_title": "Pension Equalization Analysis",
-    "comparison_title": "Projected Pension Comparison",
-    "uop_pension": "UoP Pension",
-    "b2b_pension": "B2B Pension",
-    "gap_to_cover": "Gap to Cover",
-    "savings_title": "Required Private Savings",
-    "required_monthly_savings": "Required Monthly Savings",
-    "invoice_increase": "Required B2B Invoice Increase"
   },
   "insurance": {
     "title": "B2B Insurance Configurator",

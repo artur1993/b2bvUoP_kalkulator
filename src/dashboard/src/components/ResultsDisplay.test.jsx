@@ -32,6 +32,11 @@ const mockResultsUopToB2b = {
   },
   break_even_invoice_amount: 8500,
   break_even_gross_salary: -1,
+  pension_limits_2026: {
+    ike: 28260,
+    ikze_standard: 11304,
+    ikze_b2b: 16956,
+  },
   analysis: {
     summary: { recommendation: "Test recommendation" },
     risk: { point1: "Risk point 1" },
@@ -93,6 +98,18 @@ describe('ResultsDisplay Component', () => {
     expect(screen.getByText(/Risk point 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Test Checklist/i)).toBeInTheDocument();
     expect(screen.getByText(/Item 1/i)).toBeInTheDocument();
+  });
+
+  it('should render pension info box with IKE and IKZE limits', async () => {
+    render(<ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />);
+
+    const infoBox = await screen.findByTestId('pension-info-box');
+    expect(infoBox).toHaveTextContent(i18n.t('results.pension_info_title'));
+    expect(infoBox).toHaveTextContent('IKE');
+    expect(infoBox).toHaveTextContent('IKZE');
+    expect(infoBox.textContent).toMatch(/28\s260/);
+    expect(infoBox.textContent).toMatch(/11\s304/);
+    expect(infoBox.textContent).toMatch(/16\s956/);
   });
 
   it('should render excel export button', async () => {

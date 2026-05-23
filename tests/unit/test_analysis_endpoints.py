@@ -28,8 +28,7 @@ class TestAnalysisEndpoints(unittest.TestCase):
                 'vacation_days': 26,
                 'stoppage_months': 1,
                 'customBenefits': 500,
-                'companyBenefits': {},
-                'equalizePension': False
+                'companyBenefits': {}
             },
             'uop': {
                 'monthly_gross_salary': 8000,
@@ -69,8 +68,7 @@ class TestAnalysisEndpoints(unittest.TestCase):
                 'age': 30,
                 'youth_relief': False,
                 'customBenefits': 0,
-                'companyBenefits': {},
-                'equalizePension': False
+                'companyBenefits': {}
             },
             'uop': {
                 'monthly_gross_salary': 10000,

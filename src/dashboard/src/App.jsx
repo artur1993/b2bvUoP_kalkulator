@@ -58,8 +58,7 @@ function App() {
       sportCard: { enabled: false, value: 0 },
       trainingBudget: { enabled: false, value: 0 },
       otherBenefits: { enabled: false, value: 0 },
-    },
-    equalizePension: false
+    }
   });
 
   const [baseBusinessCosts, setBaseBusinessCosts] = useState(500);

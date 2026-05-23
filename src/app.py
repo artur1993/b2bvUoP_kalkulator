@@ -14,7 +14,7 @@ from src.calculations import (
     calculate_break_even_analysis,
     calculate_sensitivity_analysis
 )
-from src.pension_calculator import calculate_pension_details
+from src.config import config_manager
 from src.validation import validate_calculation_request
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -101,6 +101,7 @@ def calculate():
             "b2b_results": b2b_results,
             "uop_results": uop_results,
             break_even_key: break_even_point,
+            "pension_limits_2026": config_manager.get_config()["pension_limits_2026"],
             "analysis": {
                 "summary": summary,
                 "risk": risk_analysis,
@@ -109,12 +110,6 @@ def calculate():
             },
             "comments": "Comparison and full analysis generated successfully."
         }
-
-        if b2b_data.get('equalizePension'):
-            app.logger.info("Equalize pension requested.")
-            uop_gross_salary = uop_data.get('monthly_gross_salary', 0.0)
-            pension_details = calculate_pension_details(uop_gross_salary)
-            response_data['pension_details'] = pension_details
 
         return jsonify(response_data)
     except Exception as e:
