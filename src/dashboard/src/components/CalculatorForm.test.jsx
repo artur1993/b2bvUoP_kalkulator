@@ -259,6 +259,18 @@ describe('CalculatorForm', () => {
     expect(sportCardCheckbox).toBeChecked(); // Other should remain checked
   });
 
+  it('renders only active UoP benefit options while keeping company life cover', () => {
+    renderComponent();
+
+    expect(screen.getAllByRole('checkbox', { name: 'Medical Care' })).toHaveLength(1);
+    expect(screen.getByRole('checkbox', { name: 'Sport Card' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: 'Training' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: 'PPK' })).toBeInTheDocument();
+    expect(screen.queryByRole('checkbox', { name: 'Life Insurance' })).not.toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: 'Life Insurance (from company)' })).toBeInTheDocument();
+    expect(document.querySelectorAll('input[name="selected_benefits"]')).toHaveLength(4);
+  });
+
   it('renders KUP type select and its options', () => {
     renderComponent();
     const kupSelect = screen.getByLabelText('Type of Tax-Deductible Costs');

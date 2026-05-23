@@ -12,10 +12,10 @@ Usunąć opcję `life_insurance` z UoP — opcja jest w UI, ale brakuje w `dane_
 - [src/dashboard/src/locales/pl/translation.json](../../../src/dashboard/src/locales/pl/translation.json) — j.w.
 
 ## Acceptance
-- [ ] `benefitOptions` w `CalculatorForm.jsx` nie zawiera `life_insurance`
-- [ ] Klucz `form.benefit_life` usunięty z obu locale files
-- [ ] UI nie pokazuje checkboxa „ubezpieczenie na życie" w sekcji benefitów UoP
-- [ ] Test parity i18n zielony (po F04)
+- [x] `benefitOptions` w `CalculatorForm.jsx` nie zawiera `life_insurance`
+- [x] Klucz `form.benefit_life` usunięty z obu locale files
+- [x] UI nie pokazuje checkboxa „ubezpieczenie na życie" w sekcji benefitów UoP
+- [x] Test parity i18n zielony (po F04)
 
 ## Test plan
 ```bash
