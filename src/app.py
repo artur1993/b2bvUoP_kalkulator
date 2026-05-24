@@ -24,8 +24,12 @@ from src.validation import (
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+def get_cors_origins():
+    origins = os.environ.get('CORS_ORIGINS', 'http://localhost:5173')
+    return [origin.strip() for origin in origins.split(',') if origin.strip()]
+
 app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'src/dashboard/dist'))
-CORS(app)
+CORS(app, origins=get_cors_origins())
 
 # --- Configure Logging ---
 file_handler = RotatingFileHandler('flask.log', maxBytes=1024 * 1024 * 10, backupCount=10)
