@@ -5,7 +5,7 @@ test.describe('Calculator E2E Tests', () => {
     await page.goto('/');
 
     // Ensure the form is loaded
-    await expect(page.locator('h1')).toHaveText('B2B vs UoP Calculator 2025');
+    await expect(page.locator('h1')).toHaveText('B2B vs UoP Calculator 2026');
     await expect(page.locator('button', { hasText: 'Calculate Comparison' })).toBeVisible();
 
     // Click the calculate button with default values

@@ -14,11 +14,11 @@ Zsynchronizować UI i README z faktem, że backend liczy wg prawa 2026. Pozbyć 
 - [src/calculations.py](../../../src/calculations.py) — docstringi mówią „2026", weryfikacja
 
 ## Acceptance
-- [ ] `git grep -i '2025' src/` zwraca pusto (poza historyczną wzmianką w komentarzu „od 2025" jeśli jest uzasadnione)
-- [ ] `git grep -i '2025' README.md` zwraca pusto
-- [ ] Tłumaczenia tytułów: „Kalkulator B2B vs UoP **2026**" / „B2B vs UoP Calculator **2026**"
-- [ ] Tooltipy, opisy benefitów, footer — wszystko mówi 2026
-- [ ] (Stretch) Rok wynika z jednej zmiennej `i18n` interpolation: `t('app.title', { year: 2026 })`
+- [x] `git grep -i '2025' src/` zwraca pusto (poza historyczną wzmianką w komentarzu „od 2025" jeśli jest uzasadnione)
+- [x] `git grep -i '2025' README.md` zwraca pusto
+- [x] Tłumaczenia tytułów: „Kalkulator B2B vs UoP **2026**" / „B2B vs UoP Calculator **2026**"
+- [x] Tooltipy, opisy benefitów, footer — wszystko mówi 2026
+- [x] (Stretch) Rok wynika z jednej zmiennej `i18n` interpolation: `t('app.title', { year: 2026 })`
 
 ## Test plan
 ```bash

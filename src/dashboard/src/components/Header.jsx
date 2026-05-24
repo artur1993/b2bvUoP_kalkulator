@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeToggle from './ThemeToggle';
 
+const TAX_YEAR = 2026;
+
 const Header = () => {
   const { t } = useTranslation();
 
@@ -15,7 +17,7 @@ const Header = () => {
           </svg>
         </div>
         <h1 className="text-xl font-bold text-gray-900 dark:text-white" data-testid="header-title">
-          {t('header.title')}
+          {t('header.title', { year: TAX_YEAR })}
         </h1>
       </div>
       <div className="flex items-center space-x-4">
