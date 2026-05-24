@@ -13,10 +13,10 @@ Funkcja `calculate_b2b_results` ma 136 linii i 6+ odpowiedzialności. Rozbić na
 Jeśli D08 (reorganizacja) nie ruszony — wystarczy podział wewnątrz `calculations.py` lub w `src/calculations/b2b/`.
 
 ## Acceptance
-- [ ] `calculate_b2b_results` ma <30 linii (orkiestracja)
-- [ ] Każdy helper pure function: input dict/model → output dict/float
-- [ ] Wszystkie istniejące testy `test_calculations.py::*b2b*` zielone
-- [ ] Nowe testy per helper
+- [x] `calculate_b2b_results` ma <30 linii (orkiestracja)
+- [x] Każdy helper pure function: input dict/model → output dict/float
+- [x] Wszystkie istniejące testy `test_calculations.py::*b2b*` zielone
+- [x] Nowe testy per helper
 
 ## Test plan
 ```bash
