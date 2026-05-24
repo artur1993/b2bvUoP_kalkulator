@@ -155,6 +155,16 @@ describe('CalculatorForm', () => {
     expect(screen.getByRole('button', { name: 'Calculate Comparison' })).toBeInTheDocument();
   });
 
+  it('renders supported ZUS options including start relief', () => {
+    renderComponent();
+
+    const zusSelect = screen.getByLabelText('ZUS Type');
+    const optionValues = [...zusSelect.options].map(option => option.value);
+
+    expect(optionValues).toEqual(['start_relief', 'preferential', 'full']);
+    expect(optionValues).not.toContain('small_business');
+  });
+
   it('updates B2B input fields correctly', async () => {
     renderComponent();
     const fakturaInput = screen.getByLabelText('Monthly Invoice (PLN)');

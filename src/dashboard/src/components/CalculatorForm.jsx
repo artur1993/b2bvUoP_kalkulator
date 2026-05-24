@@ -9,6 +9,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
   const { t } = useTranslation();
 
   const zusOptions = [
+    { value: 'start_relief', label: t('form.zus_start_relief') },
     { value: 'preferential', label: t('form.zus_preferential') },
     { value: 'full', label: t('form.zus_full') },
   ];

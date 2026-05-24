@@ -10,6 +10,7 @@
     "monthly_invoice": "Monthly Invoice (PLN)",
     "business_costs": "Monthly Business Costs (PLN)",
     "zus_type": "ZUS Type",
+    "zus_start_relief": "Start relief (first 6 months)",
     "zus_preferential": "Small Business (Preferential ZUS)",
     "zus_full": "Large Business (Full ZUS)",
     "voluntary_sick_leave": "Voluntary Sick Leave (ZUS Chorobowe)",
