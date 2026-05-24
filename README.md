@@ -139,7 +139,6 @@ Accepts a JSON object with B2B and UoP contract parameters and returns a detaile
     "stoppage_months": 0,
     "vacation_days": 0,
     "age": 30,
-    "youth_relief": false,
     "customBenefits": 0,
     "companyBenefits": {}
   },

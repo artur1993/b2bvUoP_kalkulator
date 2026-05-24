@@ -117,14 +117,6 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             onChange={handleB2bChange}
             options={taxFormOptions}
           />
-          <Checkbox
-            label={t('form.youth_relief')}
-            id="youth_relief"
-            name="youth_relief"
-            checked={b2bData.youth_relief}
-            onChange={handleB2bChange}
-            data-testid="youth-relief-b2b"
-          />
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>

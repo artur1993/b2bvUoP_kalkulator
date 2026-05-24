@@ -11,7 +11,7 @@ class ScenariosTestCase(unittest.TestCase):
           "b2b": {
             "monthly_invoice_amount": 20000, "tax_form": "lump_sum_it", "zus_type": "full",
             "sickness_insurance": True, "monthly_business_costs": 500, "stoppage_months": 0,
-            "vacation_days": 0, "age": 30, "youth_relief": False, "customBenefits": 0, "companyBenefits": {}
+            "vacation_days": 0, "age": 30, "customBenefits": 0, "companyBenefits": {}
           },
           "uop": {
             "monthly_gross_salary": 15000, "deductible_cost_settings": {'type': 'standard'},
@@ -131,7 +131,7 @@ class ScenariosTestCase(unittest.TestCase):
 
     def test_scenario_15_b2b_young_downtime_negative(self):
         request = self.base_request.copy()
-        request['b2b'].update({"age": 19, "youth_relief": True, "stoppage_months": 3, "zus_type": "start_relief"})
+        request['b2b'].update({"age": 19, "stoppage_months": 3, "zus_type": "start_relief"})
         response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         data = json.loads(response.data)['b2b_results']
         assert data['annual_lost_revenue'] == 60000
@@ -163,9 +163,9 @@ class ScenariosTestCase(unittest.TestCase):
         data = json.loads(response.data)['b2b_results']
         assert data['annual_tax'] > 15000
 
-    def test_scenario_20_b2b_youth_relief_exceeded_positive(self):
+    def test_scenario_20_b2b_young_tax_positive(self):
         request = self.base_request.copy()
-        request['b2b'].update({"monthly_invoice_amount": 10000, "youth_relief": True, "age": 20})
+        request['b2b'].update({"monthly_invoice_amount": 10000, "age": 20})
         response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         data = json.loads(response.data)['b2b_results']
         assert data['annual_tax'] > 0

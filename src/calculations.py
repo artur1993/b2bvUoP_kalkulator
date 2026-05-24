@@ -74,12 +74,8 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
 
     # 4. Taxes
     annual_tax = 0
-    youth_relief_limit = config['tax_thresholds']['youth_relief_limit']
-    
     if tax_form == 'lump_sum_it':
         tax_base = max(0, annual_invoice_amount - (annual_health_contribution * 0.5) - annual_social_contributions)
-        if b2b_data.get('youth_relief', False):
-            tax_base = max(0, tax_base - youth_relief_limit)
         annual_tax = round(tax_base * config['tax_thresholds']['lump_sum_it'])
     else:
         income = annual_invoice_amount - annual_business_costs - annual_social_contributions
@@ -87,7 +83,7 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
             health_deduction_limit = config['tax_thresholds']['health_contribution_deduction_limit_flat_tax']
             income -= min(annual_health_contribution, health_deduction_limit)
         
-        taxable_base = max(0, income - youth_relief_limit) if b2b_data.get('youth_relief', False) else income
+        taxable_base = income
 
         if tax_form == 'flat_tax':
             annual_tax = math.ceil(max(0, taxable_base) * config['tax_thresholds']['flat_tax'])

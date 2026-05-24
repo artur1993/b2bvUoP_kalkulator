@@ -14,7 +14,6 @@ def test_calculate_endpoint_positive(client):
             'stoppage_months': 0, 
             'customBenefits': 0, 
             'sickness_insurance': True, 
-            'youth_relief': False, 
             'zus_type': 'preferential', 
             'tax_form': 'lump_sum_it'
         },
@@ -52,7 +51,6 @@ def test_calculate_endpoint_rejects_removed_pension_field(client):
             'stoppage_months': 0,
             'customBenefits': 0,
             'sickness_insurance': True,
-            'youth_relief': False,
             'zus_type': 'preferential',
             'tax_form': 'lump_sum_it',
             removed_pension_field: True
