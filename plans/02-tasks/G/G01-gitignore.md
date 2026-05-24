@@ -23,8 +23,8 @@ htmlcov/
 ```
 
 ## Acceptance
-- [ ] `.gitignore` zawiera powyższe wpisy
-- [ ] `git status` po `./run_app.sh` nie pokazuje śmieci
+- [x] `.gitignore` zawiera powyższe wpisy
+- [x] `git status` po `./run_app.sh` nie pokazuje śmieci
 
 ## Test plan
 ```bash

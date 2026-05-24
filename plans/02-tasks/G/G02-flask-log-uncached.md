@@ -19,8 +19,8 @@ git commit -m "chore(G02): remove flask.log from git cache"
 **Wymaga potwierdzenia z człowiekiem przed wykonaniem** (operacja destrukcyjna).
 
 ## Acceptance
-- [ ] `git ls-files | grep flask.log` zwraca pusto
-- [ ] Plik fizyczny zostaje (jeśli istnieje lokalnie)
+- [x] `git ls-files | grep flask.log` zwraca pusto
+- [x] Plik fizyczny zostaje (jeśli istnieje lokalnie)
 
 ## Test plan
 ```bash
