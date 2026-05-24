@@ -146,11 +146,6 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
         data: [uop_results.annual_benefits_value],
         backgroundColor: '#2196F3', // Blue
       },
-      {
-        label: t('charts.paid_days_off'),
-        data: [uop_results.annual_paid_days_off_value],
-        backgroundColor: '#9C27B0', // Purple
-      },
     ],
   };
 

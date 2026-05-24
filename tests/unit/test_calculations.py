@@ -85,5 +85,23 @@ class TestCalculations(unittest.TestCase):
 
         self.assertEqual(results['annual_tax'], 22142)
 
+    def test_uop_total_value_without_double_vacation(self):
+        results = calculate_uop_results({
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'standard', 'creative_work_percentage': 0},
+            'youth_relief': False,
+            'selected_benefits': []
+        })
+        removed_key = 'annual_paid_days_off_' + 'value'
+        former_paid_days_off_amount = 26 * (10000 / 21)
+
+        self.assertAlmostEqual(results['total_annual_value'], results['annual_net_income'], delta=50)
+        self.assertNotIn(removed_key, results)
+        self.assertAlmostEqual(
+            results['annual_net_income'] + former_paid_days_off_amount - results['total_annual_value'],
+            former_paid_days_off_amount,
+            places=2,
+        )
+
 if __name__ == '__main__':
     unittest.main()

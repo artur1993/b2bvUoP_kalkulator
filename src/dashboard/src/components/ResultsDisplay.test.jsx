@@ -26,7 +26,6 @@ const mockResultsUopToB2b = {
     annual_tax: 8000,
     annual_net_income: 72000,
     annual_benefits_value: 3000,
-    annual_paid_days_off_value: 4000,
     total_annual_value: 79000,
     monthly_net_income: 6583.33,
   },

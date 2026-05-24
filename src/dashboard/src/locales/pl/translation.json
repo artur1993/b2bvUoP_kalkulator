@@ -70,7 +70,6 @@
     "monthly_net": "Miesięczne Netto (Całkowita Wartość)",
     "annual_gross": "Roczne Wynagrodzenie Brutto",
     "uop_benefits_value": "Roczna Wartość Benefitów",
-    "paid_days_off_value": "Roczna Wartość Płatnych Dni Wolnych",
     "total_uop_value": "Całkowita Roczna Wartość UoP",
     "break_even_title": "Miesięczna Faktura B2B do Wyrównania",
     "break_even_subtitle": "(Jest to kwota miesięcznej faktury B2B potrzebna do zrównania się z całkowitą roczną wartością umowy o pracę)",
@@ -103,7 +102,6 @@
     "company_benefits": "Benefity od Firmy",
     "custom_benefits": "Własne Korzyści",
     "benefits": "Benefity",
-    "paid_days_off": "Płatne Dni Wolne",
     "b2b_waterfall_title": "Przepływ środków na kontrakcie B2B"
   },
   "waterfall": {
