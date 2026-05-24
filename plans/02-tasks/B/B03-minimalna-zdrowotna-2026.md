@@ -53,10 +53,10 @@ Lub uproszczenie (jeśli pełna miesięczna kalkulacja byłaby zbyt rozległa):
 Zamiast `max(min_health * 12, ...)` użyć `max(config['zus_2026']['minimum_health_annual_2026'], ...)`.
 
 ## Acceptance
-- [ ] Config zawiera albo listę miesięcy, albo wartość roczną
-- [ ] `calculate_b2b_results` używa **rocznej** sumy, nie `* 12` od jednej wartości
-- [ ] Test `test_minimum_health_annual_2026` — case: `monthly_invoice_amount=0`, `tax_form='flat_tax'` → `annual_health_contribution = 5072.90`
-- [ ] `pytest` zielony
+- [x] Config zawiera albo listę miesięcy, albo wartość roczną
+- [x] `calculate_b2b_results` używa **rocznej** sumy, nie `* 12` od jednej wartości
+- [x] Test `test_minimum_health_annual_2026` — case: `monthly_invoice_amount=0`, `tax_form='flat_tax'` → `annual_health_contribution = 5072.90`
+- [x] `pytest` zielony
 
 ## Test plan
 ```bash
