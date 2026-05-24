@@ -8,7 +8,7 @@ echo "Starting B2B vs UoP Calculator..."
 # Start Flask Backend in the background
 echo "-> Starting Flask backend..."
 export FLASK_APP=src/app.py
-export FLASK_DEBUG=1
+export FLASK_ENV=development
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 flask run --host 0.0.0.0 --port 5001 &> flask.log &
 

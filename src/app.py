@@ -30,6 +30,10 @@ file_handler.setLevel(logging.DEBUG)
 app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.DEBUG)
 
+def is_debug_enabled():
+    """Enable Flask debug mode only for explicit local development."""
+    return os.environ.get('FLASK_ENV') == 'development'
+
 @app.errorhandler(Exception)
 def handle_global_error(e):
     """Global error handler to log all unhandled exceptions."""
@@ -150,4 +154,4 @@ def serve(path):
             return jsonify({"error": "Frontend build not found."}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False, port=5001)
+    app.run(debug=is_debug_enabled(), use_reloader=False, port=5001)
