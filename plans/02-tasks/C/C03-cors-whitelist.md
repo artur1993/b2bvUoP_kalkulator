@@ -24,10 +24,10 @@ CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
 ## Acceptance
-- [ ] `CORS(app, origins=...)` zamiast `CORS(app)`
-- [ ] Domyślna lista: `http://localhost:5173`
-- [ ] `.env.example` dokumentuje zmienną
-- [ ] Test (manualny): wywołanie z innego Origin → brak `Access-Control-Allow-Origin` w response
+- [x] `CORS(app, origins=...)` zamiast `CORS(app)`
+- [x] Domyślna lista: `http://localhost:5173`
+- [x] `.env.example` dokumentuje zmienną
+- [x] Test (manualny): wywołanie z innego Origin → brak `Access-Control-Allow-Origin` w response
 
 ## Test plan
 ```bash

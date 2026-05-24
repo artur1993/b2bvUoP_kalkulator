@@ -1,4 +1,4 @@
-from src.app import is_debug_enabled
+from src.app import get_cors_origins, is_debug_enabled
 
 
 def test_debug_mode_disabled_by_default(monkeypatch):
@@ -25,3 +25,21 @@ def test_excel_export_garbage_payload_returns_400(client):
 
     assert response.status_code == 400
     assert response.json['error'] == 'Validation failed'
+
+
+def test_default_cors_origins(monkeypatch):
+    monkeypatch.delenv('CORS_ORIGINS', raising=False)
+
+    assert get_cors_origins() == ['http://localhost:5173']
+
+
+def test_cors_allows_default_localhost_origin(client):
+    response = client.get('/api/calculate', headers={'Origin': 'http://localhost:5173'})
+
+    assert response.headers['Access-Control-Allow-Origin'] == 'http://localhost:5173'
+
+
+def test_cors_blocks_unknown_origin(client):
+    response = client.get('/api/calculate', headers={'Origin': 'http://attacker.com'})
+
+    assert 'Access-Control-Allow-Origin' not in response.headers
