@@ -22,7 +22,6 @@ function App() {
     zus_type: 'preferential',
     sickness_insurance: false,
     tax_form: 'lump_sum_it',
-    youth_relief: false,
     vacation_days: 20,
     sick_days: 5,
     stoppage_months: 0,
@@ -103,7 +102,7 @@ function App() {
     const newAge = parseInt(e.target.value, 10);
     setAge(newAge);
     const isYouthReliefApplicable = newAge < 26;
-    setB2bData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
+    setB2bData(prev => ({ ...prev, age: newAge }));
     setUopData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
   };
 

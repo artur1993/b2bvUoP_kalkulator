@@ -10,7 +10,6 @@ class TestCalculations(unittest.TestCase):
             'zus_type': 'full',
             'sickness_insurance': True,
             'tax_form': 'flat_tax',
-            'youth_relief': False,
             'vacation_days': 20,
             'sick_days': 10,
             'stoppage_months': 1,
@@ -39,7 +38,6 @@ class TestCalculations(unittest.TestCase):
             'zus_type': 'full',
             'sickness_insurance': False,
             'tax_form': 'lump_sum_it',
-            'youth_relief': False,
             'vacation_days': 0,
             'sick_days': 0,
             'stoppage_months': 0,
@@ -74,6 +72,18 @@ class TestCalculations(unittest.TestCase):
         results = calculate_b2b_results(data)
 
         self.assertAlmostEqual(results['steps']['annual_health_contribution'], 5072.90, places=2)
+
+    def test_pit_0_not_applied_to_b2b(self):
+        data = self._b2b_lump_sum_data(12000)
+        data.update({
+            'tax_form': 'flat_tax',
+            'age': 24,
+            'youth_relief': True,
+        })
+
+        results = calculate_b2b_results(data)
+
+        self.assertEqual(results['annual_tax'], 22142)
 
 if __name__ == '__main__':
     unittest.main()

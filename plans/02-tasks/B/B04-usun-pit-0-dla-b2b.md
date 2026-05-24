@@ -31,14 +31,14 @@ Dodatkowo: frontend AUTOMATYCZNIE ustawia `youth_relief = (age < 26)` dla **obu*
 2. W `handleAgeChange` (App.jsx:135): usunąć linijkę `setB2bData(prev => ({ ..., youth_relief: isYouthReliefApplicable }))`. Pozostawić tylko dla UoP.
 
 ## Acceptance
-- [ ] Backend: `B2BDataModel` nie ma pola `youth_relief`
-- [ ] Backend: payload `{"b2b": {..., "youth_relief": true}}` → **400** z `Extra inputs are not permitted`
-- [ ] Backend: payload `{"uop": {"age": 30, "youth_relief": true}}` → **400** z custom message (age >= 26)
-- [ ] Frontend: brak checkboxa „ulga dla młodych" w sekcji B2B
-- [ ] Frontend: automatyczne włączenie PIT-0 dla `age < 26` działa **tylko dla UoP**
-- [ ] Nowy test `test_pit_0_not_applied_to_b2b` — 24-latek B2B `flat_tax`, `monthly_invoice_amount=12000` → podatek liczony z pełnej podstawy, **bez** odjęcia 85 528 PLN
-- [ ] Nowy test `test_pit_0_payload_rejected_for_b2b` — POST z `b2b.youth_relief=true` → 400
-- [ ] Nowy test `test_pit_0_uop_only_when_age_under_26` — UoP `age=30, youth_relief=true` → 400 lub silent disable
+- [x] Backend: `B2BDataModel` nie ma pola `youth_relief`
+- [x] Backend: payload `{"b2b": {..., "youth_relief": true}}` → **400** z `Extra inputs are not permitted`
+- [x] Backend: payload `{"uop": {"age": 30, "youth_relief": true}}` → **400** z custom message (age >= 26)
+- [x] Frontend: brak checkboxa „ulga dla młodych" w sekcji B2B
+- [x] Frontend: automatyczne włączenie PIT-0 dla `age < 26` działa **tylko dla UoP**
+- [x] Nowy test `test_pit_0_not_applied_to_b2b` — 24-latek B2B `flat_tax`, `monthly_invoice_amount=12000` → podatek liczony z pełnej podstawy, **bez** odjęcia 85 528 PLN
+- [x] Nowy test `test_pit_0_payload_rejected_for_b2b` — POST z `b2b.youth_relief=true` → 400
+- [x] Nowy test `test_pit_0_uop_only_when_age_under_26` — UoP `age=30, youth_relief=true` → 400 lub silent disable
 
 ## Test plan
 ```bash

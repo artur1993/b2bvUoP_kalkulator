@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request, jsonify, g, current_app
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 from typing import Optional, List, Dict, Union
 
 class BenefitModel(BaseModel):
@@ -20,7 +20,6 @@ class B2BDataModel(BaseModel):
     sick_days: int = Field(0, ge=0)
     stoppage_months: int = Field(0, ge=0)
     age: int = Field(..., ge=18)
-    youth_relief: bool = False
     customBenefits: float = Field(0.0, ge=0)
     companyBenefits: Optional[Dict[str, BenefitModel]] = None
 
@@ -34,6 +33,12 @@ class UoPDataModel(BaseModel):
     selected_benefits: List[str] = []
     age: int = Field(..., ge=18)
     youth_relief: bool = False
+
+    @model_validator(mode='after')
+    def validate_youth_relief_age(self):
+        if self.youth_relief and self.age >= 26:
+            raise ValueError('Youth tax relief is available only for people under 26.')
+        return self
 
 class CalculationRequestModel(BaseModel):
     b2b: B2BDataModel
@@ -55,10 +60,11 @@ def validate_calculation_request(f):
             g.validated_data = validated_model.model_dump()
             return f(*args, **kwargs)
         except ValidationError as e:
-            current_app.logger.error(f"Pydantic Validation Error: {e.errors()}")
+            details = e.errors(include_context=False)
+            current_app.logger.error(f"Pydantic Validation Error: {details}")
             return jsonify({
                 "error": "Validation failed",
-                "details": e.errors()
+                "details": details
             }), 400
         except Exception as e:
             current_app.logger.exception(f"Unexpected validation error: {e}")

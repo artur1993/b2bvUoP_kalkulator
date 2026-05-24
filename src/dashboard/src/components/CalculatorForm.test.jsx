@@ -16,7 +16,6 @@ describe('CalculatorForm', () => {
     zus_type: 'preferential',
     sickness_insurance: false,
     tax_form: 'flat_tax',
-    youth_relief: false,
     vacation_days: 0,
     sick_days: 0,
     stoppage_months: 0,
@@ -137,7 +136,7 @@ describe('CalculatorForm', () => {
     expect(screen.getByLabelText('Monthly Business Costs (PLN)')).toBeInTheDocument();
     expect(screen.getByLabelText('ZUS Type')).toBeInTheDocument();
     expect(screen.getByLabelText('Taxation Form')).toBeInTheDocument();
-    expect(screen.getByTestId('youth-relief-b2b')).toBeInTheDocument();
+    expect(screen.queryByTestId('youth-relief-b2b')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Annual Vacation Days (unpaid)')).toBeInTheDocument();
     expect(screen.getByLabelText('Annual Sick Days (unpaid)')).toBeInTheDocument();
     expect(screen.getByLabelText('Months of Stoppage/No Projects')).toBeInTheDocument();

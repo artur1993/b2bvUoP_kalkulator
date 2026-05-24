@@ -22,7 +22,6 @@ def base_request():
             "stoppage_months": 0,
             "vacation_days": 0,
             "age": 30,
-            "youth_relief": False,
             "customBenefits": 0,
             "companyBenefits": {}
         },
