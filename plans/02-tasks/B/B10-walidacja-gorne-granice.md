@@ -35,11 +35,11 @@ age: int = Field(..., ge=18, le=100)
 ```
 
 ## Acceptance
-- [ ] Test `test_validation_vacation_days_over_365_rejected` → 400
-- [ ] Test `test_validation_stoppage_months_over_12_rejected` → 400
-- [ ] Test `test_validation_invoice_amount_over_10m_rejected` → 400
-- [ ] Test `test_validation_age_over_100_rejected` → 400
-- [ ] Test `test_validation_age_under_18_rejected` → 400
+- [x] Test `test_validation_vacation_days_over_365_rejected` → 400
+- [x] Test `test_validation_stoppage_months_over_12_rejected` → 400
+- [x] Test `test_validation_invoice_amount_over_10m_rejected` → 400
+- [x] Test `test_validation_age_over_100_rejected` → 400
+- [x] Test `test_validation_age_under_18_rejected` → 400
 
 ## Test plan
 ```bash

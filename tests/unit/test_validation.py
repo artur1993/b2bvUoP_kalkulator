@@ -77,3 +77,56 @@ def test_zus_type_start_relief_accepted(client):
 
     assert response.status_code == 200
     assert response.json['b2b_results']['steps']['annual_social_contributions'] == 0
+
+
+def _assert_rejected(client, payload):
+    response = client.post('/api/calculate', json=payload)
+
+    assert response.status_code == 400
+    assert response.json['error'] == 'Validation failed'
+    return response.json['details']
+
+
+def test_validation_vacation_days_over_365_rejected(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['vacation_days'] = 366
+
+    details = _assert_rejected(client, payload)
+
+    assert any(detail['loc'] == ['b2b', 'vacation_days'] for detail in details)
+
+
+def test_validation_stoppage_months_over_12_rejected(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['stoppage_months'] = 13
+
+    details = _assert_rejected(client, payload)
+
+    assert any(detail['loc'] == ['b2b', 'stoppage_months'] for detail in details)
+
+
+def test_validation_invoice_amount_over_10m_rejected(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['monthly_invoice_amount'] = 10_000_000.01
+
+    details = _assert_rejected(client, payload)
+
+    assert any(detail['loc'] == ['b2b', 'monthly_invoice_amount'] for detail in details)
+
+
+def test_validation_age_over_100_rejected(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['age'] = 101
+
+    details = _assert_rejected(client, payload)
+
+    assert any(detail['loc'] == ['b2b', 'age'] for detail in details)
+
+
+def test_validation_age_under_18_rejected(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['age'] = 17
+
+    details = _assert_rejected(client, payload)
+
+    assert any(detail['loc'] == ['b2b', 'age'] for detail in details)

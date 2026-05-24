@@ -11,18 +11,18 @@ class BenefitModel(BaseModel):
 class B2BDataModel(BaseModel):
     model_config = ConfigDict(extra='forbid')
 
-    monthly_invoice_amount: float = Field(..., ge=0)
+    monthly_invoice_amount: float = Field(..., ge=0, le=10_000_000)
     tax_form: str = Field(..., pattern='^(lump_sum_it|flat_tax|tax_scale|ip_box)$')
     zus_type: str = Field(..., pattern='^(start_relief|preferential|full)$')
     sickness_insurance: bool = False
     ip_box_qualified_share: float = Field(100.0, ge=0, le=100)
     ip_box_base_form: str = Field('flat_tax', pattern='^(flat_tax|tax_scale)$')
-    monthly_business_costs: float = Field(0.0, ge=0)
-    vacation_days: int = Field(0, ge=0)
-    sick_days: int = Field(0, ge=0)
-    stoppage_months: int = Field(0, ge=0)
-    age: int = Field(..., ge=18)
-    customBenefits: float = Field(0.0, ge=0)
+    monthly_business_costs: float = Field(0.0, ge=0, le=10_000_000)
+    vacation_days: int = Field(0, ge=0, le=365)
+    sick_days: int = Field(0, ge=0, le=365)
+    stoppage_months: int = Field(0, ge=0, le=12)
+    age: int = Field(..., ge=18, le=100)
+    customBenefits: float = Field(0.0, ge=0, le=10_000_000)
     companyBenefits: Optional[Dict[str, BenefitModel]] = None
 
 class DeductibleCostSettingsModel(BaseModel):
@@ -30,10 +30,10 @@ class DeductibleCostSettingsModel(BaseModel):
     creative_work_percentage: Optional[float] = Field(0.0, ge=0, le=100)
 
 class UoPDataModel(BaseModel):
-    monthly_gross_salary: float = Field(..., ge=0)
+    monthly_gross_salary: float = Field(..., ge=0, le=10_000_000)
     deductible_cost_settings: DeductibleCostSettingsModel
     selected_benefits: List[str] = []
-    age: int = Field(..., ge=18)
+    age: int = Field(..., ge=18, le=100)
     youth_relief: bool = False
 
     @model_validator(mode='after')
