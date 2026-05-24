@@ -27,6 +27,20 @@
     "elevated": 300,
     "elevated_annual_limit": 3600
   },
+  "regulatory_rates": {
+    "uop_pension_employee": 0.0976,
+    "uop_disability_employee": 0.0150,
+    "uop_sickness_employee": 0.0245,
+    "uop_health_employee": 0.09,
+    "sick_leave_payment": 0.8,
+    "lump_sum_health_deduction_share": 0.5,
+    "author_tax_deductible_cost_share": 0.5,
+    "break_even_start_multiplier": 0.5,
+    "break_even_analysis_min_multiplier": 0.8,
+    "break_even_analysis_max_multiplier": 2.5,
+    "tax_scale_health_rate": 0.09,
+    "flat_tax_health_rate": 0.049
+  },
   "zus_2026": {
     "thirty_times_limit_uop": 282600,
     "minimum_health_annual_2026": 5072.90,
@@ -171,6 +185,12 @@
       "valid_to": "2026-12-31"
     },
     "tax_deductible_costs": {
+      "source_url": "https://www.podatki.gov.pl/podatki-osobiste/pit/stawki-i-limity/",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "regulatory_rates": {
       "source_url": "https://www.podatki.gov.pl/podatki-osobiste/pit/stawki-i-limity/",
       "source_checked_at": "2026-05-23",
       "valid_from": "2026-01-01",

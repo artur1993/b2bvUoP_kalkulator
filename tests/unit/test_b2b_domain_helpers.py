@@ -70,6 +70,7 @@ def test_compute_income_tax_splits_ip_box_qualified_income():
 
 
 def test_compute_benefits_value_sums_days_and_cash_benefits():
+    config = config_manager.get_config()
     result = compute_benefits_value({
         "customBenefits": 1200,
         "companyBenefits": {
@@ -78,7 +79,7 @@ def test_compute_benefits_value_sums_days_and_cash_benefits():
             "medicalCare": {"enabled": True, "value": 1000},
             "sportCard": {"enabled": False, "value": 1000},
         },
-    }, daily_rate=1000)
+    }, daily_rate=1000, config=config)
 
     assert result["annual_company_benefits_value"] == 3800
     assert result["annual_custom_benefits_value"] == 1200

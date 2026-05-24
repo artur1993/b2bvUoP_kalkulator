@@ -31,9 +31,9 @@ Wszystkie stałe regulacyjne (stawki, mnożniki) wyłącznie w `dane_wejsciowe_k
 Plus metadane (B11).
 
 ## Acceptance
-- [ ] `git grep -E '0\.0?(09|049|0976|0150|0245|5|8)' src/calculations.py` zwraca pusto
-- [ ] Wszystkie odwołania przez `config['regulatory_rates'][...]`
-- [ ] Wszystkie testy zielone (regresja)
+- [x] `git grep -E '0\.0?(09|049|0976|0150|0245|5|8)' src/calculations.py` zwraca pusto
+- [x] Wszystkie odwołania przez `config['regulatory_rates'][...]`
+- [x] Wszystkie testy zielone (regresja)
 
 ## Test plan
 ```bash

@@ -14,9 +14,15 @@ def compute_income_tax(
 ) -> Dict[str, float]:
     tax_form = b2b_data.get('tax_form', 'lump_sum_it')
     annual_solidarity_tax = 0
+    regulatory_rates = config['regulatory_rates']
 
     if tax_form == 'lump_sum_it':
-        tax_base = max(0, annual_invoice_amount - (annual_health_contribution * 0.5) - annual_social_contributions)
+        tax_base = max(
+            0,
+            annual_invoice_amount
+            - (annual_health_contribution * regulatory_rates['lump_sum_health_deduction_share'])
+            - annual_social_contributions,
+        )
         annual_tax = round(tax_base * config['tax_thresholds']['lump_sum_it'])
         annual_solidarity_tax = solidarity_tax(tax_base, config)
         return {

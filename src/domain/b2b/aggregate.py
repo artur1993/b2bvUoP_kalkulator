@@ -35,7 +35,7 @@ def assemble_b2b_results(
         progressive_tax,
         solidarity_tax,
     )
-    benefits = compute_benefits_value(b2b_data, lost_revenue["daily_rate"])
+    benefits = compute_benefits_value(b2b_data, lost_revenue["daily_rate"], config)
     annual_net_income = (
         lost_revenue["annual_invoice_amount"]
         - annual_business_costs

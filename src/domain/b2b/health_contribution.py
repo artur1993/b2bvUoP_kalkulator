@@ -10,14 +10,15 @@ def compute_health_contribution(
 ) -> float:
     tax_form = b2b_data.get('tax_form', 'lump_sum_it')
     minimum_health_annual = config['zus_2026']['minimum_health_annual_2026']
+    regulatory_rates = config['regulatory_rates']
 
     if tax_form == 'tax_scale':
         income_for_health = max(0, annual_invoice_amount - annual_business_costs - annual_social_contributions)
-        return max(minimum_health_annual, income_for_health * 0.09)
+        return max(minimum_health_annual, income_for_health * regulatory_rates['tax_scale_health_rate'])
 
     if tax_form == 'flat_tax':
         income_for_health = max(0, annual_invoice_amount - annual_business_costs - annual_social_contributions)
-        return max(minimum_health_annual, income_for_health * 0.049)
+        return max(minimum_health_annual, income_for_health * regulatory_rates['flat_tax_health_rate'])
 
     if tax_form == 'lump_sum_it':
         thresholds = config['zus_2026']['health_lump_sum_thresholds']
