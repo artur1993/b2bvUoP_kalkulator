@@ -68,11 +68,7 @@
   },
   "ppk": {
     "employee_rate": 0.02,
-    "employer_rate": 0.015,
-    "source_url": "https://www.mojeppk.pl/",
-    "source_checked_at": "2026-05-23",
-    "valid_from": "2026-01-01",
-    "valid_to": "2026-12-31"
+    "employer_rate": 0.015
   },
   "uop_days_off": {
     "vacation": { "days": 26, "payment_percentage": 1.0 },
@@ -143,6 +139,74 @@
         "Prepare a B2B cooperation agreement template.",
         "Ensure you have a continuous flow of orders."
       ]
+    }
+  },
+  "_meta": {
+    "macro_indicators_2026": {
+      "source_url": "https://www.gov.pl/web/rodzina/minimalne-wynagrodzenie-za-prace",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "tax_thresholds": {
+      "source_url": "https://www.podatki.gov.pl/podatki-osobiste/pit/stawki-i-limity/",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "tax_thresholds.health_contribution_deduction_limit_flat_tax": {
+      "source_url": "https://www.podatki.gov.pl/ulgi-i-odliczenia/odliczenie-skladek-na-ubezpieczenie-zdrowotne-pit/",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "tax_deductible_costs": {
+      "source_url": "https://www.podatki.gov.pl/podatki-osobiste/pit/stawki-i-limity/",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "zus_2026": {
+      "source_url": "https://www.zus.pl/baza-wiedzy/skladki-wskazniki-odsetki/skladki/wysokosc-skladek-na-ubezpieczenia-spoleczne",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "zus_2026.health_lump_sum_thresholds": {
+      "source_url": "https://www.zus.pl/-/informacja-w-sprawie-podstawy-wymiaru-sk%C5%82adki-oraz-kwoty-sk%C5%82adki-na-ubezpieczenie-zdrowotne-w-2026-r.",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "zus_2026.minimum_health_annual_2026": {
+      "source_url": "https://www.zus.pl/-/informacja-w-sprawie-podstawy-wymiaru-sk%C5%82adki-oraz-kwoty-sk%C5%82adki-na-ubezpieczenie-zdrowotne-w-2026-r.",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "pension_limits_2026.ike": {
+      "source_url": "https://www.knf.gov.pl/?articleId=81021&p_id=18",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "pension_limits_2026.ikze": {
+      "source_url": "https://www.gov.pl/web/rodzina/ikze-limit-wplat",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "ppk": {
+      "source_url": "https://www.mojeppk.pl/",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "uop_days_off": {
+      "source_url": "https://www.gov.pl/web/rodzina/urlopy-i-zwolnienia-od-pracy",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
     }
   }
 }

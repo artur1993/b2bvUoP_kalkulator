@@ -55,11 +55,11 @@ Opcja B (czystsza, więcej zmian): każda wartość jako `{ value, source_url, s
 `valid_from`/`valid_to`: zależnie od pozycji — większość `2026-01-01` / `2026-12-31`, składka zdrowotna minimum ma dwa okresy (patrz B03).
 
 ## Acceptance
-- [ ] `dane_wejsciowe_kalkulator.json` zawiera sekcję `_meta` (lub schemat z `value`) ze wszystkimi gałęziami
-- [ ] Każda kwota regulacyjna ma `source_url` i `source_checked_at`
-- [ ] `ConfigManager` ładuje config bez błędu (z nowym schematem)
-- [ ] Stare wywołania `config['zus_2026']['full']` działają (jeśli wybrano Opcję A)
-- [ ] Test `test_config_has_metadata_for_all_regulatory_branches` — iteruje po listy gałęzi, sprawdza obecność 4 pól w `_meta`
+- [x] `dane_wejsciowe_kalkulator.json` zawiera sekcję `_meta` (lub schemat z `value`) ze wszystkimi gałęziami
+- [x] Każda kwota regulacyjna ma `source_url` i `source_checked_at`
+- [x] `ConfigManager` ładuje config bez błędu (z nowym schematem)
+- [x] Stare wywołania `config['zus_2026']['full']` działają (jeśli wybrano Opcję A)
+- [x] Test `test_config_has_metadata_for_all_regulatory_branches` — iteruje po listy gałęzi, sprawdza obecność 4 pól w `_meta`
 
 ## Test plan
 ```bash
