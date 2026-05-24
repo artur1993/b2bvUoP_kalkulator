@@ -6,15 +6,10 @@ import io
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-from src.analysis import generate_executive_summary, get_risk_analysis, get_methodology, get_checklist
 from src.calculations import (
-    calculate_b2b_results,
-    calculate_uop_results,
-    calculate_break_even,
-    calculate_uop_break_even,
     calculate_break_even_analysis
 )
-from src.config import config_manager
+from src.services.calculation_service import run_full_calculation
 from src.validation import (
     BreakEvenAnalysisRequest,
     CalculationRequestModel,
@@ -75,47 +70,8 @@ def break_even_analysis():
 def calculate():
     """Main endpoint to calculate and compare B2B vs. UoP earnings with full analysis."""
     try:
-        request_data = g.validated_data
-        lang = request_data.get('language', 'pl')
-
-        b2b_data = request_data.get('b2b', {})
-        uop_data = request_data.get('uop', {})
-        calculation_mode = request_data.get('calculation_mode', 'uop_to_b2b')
-
-        app.logger.info(f"Received calculation request with mode: {calculation_mode}")
-
-        b2b_results = calculate_b2b_results(b2b_data)
-        uop_results = calculate_uop_results(uop_data)
-        
-        break_even_point = -1.0
-        break_even_key = "break_even_invoice_amount"
-        if calculation_mode == 'uop_to_b2b':
-            break_even_point = calculate_break_even(uop_results['total_annual_value'], b2b_data)
-            break_even_key = "break_even_invoice_amount"
-        elif calculation_mode == 'b2b_to_uop':
-            break_even_point = calculate_uop_break_even(b2b_results['total_annual_value'], uop_data)
-            break_even_key = "break_even_gross_salary"
-
-        summary = generate_executive_summary(b2b_results, uop_results, break_even_point, lang)
-        risk_analysis = get_risk_analysis(lang)
-        methodology = get_methodology(lang)
-        checklist = get_checklist(lang)
-
-        response_data = {
-            "b2b_results": b2b_results,
-            "uop_results": uop_results,
-            break_even_key: break_even_point,
-            "pension_limits_2026": config_manager.get_config()["pension_limits_2026"],
-            "analysis": {
-                "summary": summary,
-                "risk": risk_analysis,
-                "methodology": methodology,
-                "checklist": checklist
-            },
-            "comments": "Comparison and full analysis generated successfully."
-        }
-
-        return jsonify(response_data)
+        app.logger.info("Received calculation request")
+        return jsonify(run_full_calculation(g.validated_data))
     except Exception:
         app.logger.exception("Error during calculation")
         return jsonify({"error": INTERNAL_SERVER_ERROR_MESSAGE}), 500
