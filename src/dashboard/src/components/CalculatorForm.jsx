@@ -20,6 +20,11 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
     { value: 'ip_box', label: t('form.tax_ip_box') },
   ];
 
+  const ipBoxBaseOptions = [
+    { value: 'flat_tax', label: t('form.ip_box_base_flat_tax') },
+    { value: 'tax_scale', label: t('form.ip_box_base_tax_scale') },
+  ];
+
   const benefitOptions = [
     { value: 'medical_care', label: t('form.benefit_medical') },
     { value: 'sport_card', label: t('form.benefit_sport') },
@@ -117,6 +122,36 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
             onChange={handleB2bChange}
             options={taxFormOptions}
           />
+          {b2bData.tax_form === 'ip_box' && (
+            <div className="mt-4">
+              <Input
+                label={t('form.ip_box_qualified_share')}
+                id="ip_box_qualified_share"
+                name="ip_box_qualified_share"
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                value={b2bData.ip_box_qualified_share}
+                onChange={handleB2bChange}
+                description={t('form.ip_box_qualified_share_tooltip')}
+              />
+              <Select
+                label={t('form.ip_box_base_form')}
+                id="ip_box_base_form"
+                name="ip_box_base_form"
+                value={b2bData.ip_box_base_form}
+                onChange={handleB2bChange}
+                options={ipBoxBaseOptions}
+              />
+              <div
+                role="alert"
+                className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+              >
+                {t('form.ip_box_warning')}
+              </div>
+            </div>
+          )}
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
           <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>

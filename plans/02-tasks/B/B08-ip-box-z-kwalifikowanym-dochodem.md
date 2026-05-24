@@ -71,12 +71,12 @@ W `CalculatorForm.jsx`, w sekcji B2B, gdy `b2bData.tax_form === 'ip_box'`:
 3. Alert (`<Alert type="warning">`): „IP Box wymaga prowadzenia ewidencji kwalifikowanych dochodów oraz obliczenia wskaźnika nexus. Skonsultuj się z księgowym przed wyborem tej formy."
 
 ## Acceptance
-- [ ] `B2BDataModel` ma pola `ip_box_qualified_share` i `ip_box_base_form` z walidacją
-- [ ] Backend liczy IP Box jako sumę dwóch komponentów (kwalifikowany × 5% + reszta × wybrana stawka)
-- [ ] UI pokazuje pola IP Box **tylko** dla `tax_form='ip_box'` z disclaimerem
-- [ ] Test `test_ip_box_100_percent_qualified` — `qualified_share=100` → wynik = `taxable_base × 5%` (regresja)
-- [ ] Test `test_ip_box_60_percent_qualified_flat_base` — `qualified_share=60`, `base_form='flat_tax'` → `60%×5% + 40%×19%` (Case C z 0002)
-- [ ] Test `test_ip_box_60_percent_qualified_scale_base` — analogicznie dla `tax_scale`
+- [x] `B2BDataModel` ma pola `ip_box_qualified_share` i `ip_box_base_form` z walidacją
+- [x] Backend liczy IP Box jako sumę dwóch komponentów (kwalifikowany × 5% + reszta × wybrana stawka)
+- [x] UI pokazuje pola IP Box **tylko** dla `tax_form='ip_box'` z disclaimerem
+- [x] Test `test_ip_box_100_percent_qualified` — `qualified_share=100` → wynik = `taxable_base × 5%` (regresja)
+- [x] Test `test_ip_box_60_percent_qualified_flat_base` — `qualified_share=60`, `base_form='flat_tax'` → `60%×5% + 40%×19%` (Case C z 0002)
+- [x] Test `test_ip_box_60_percent_qualified_scale_base` — analogicznie dla `tax_scale`
 
 ## Test plan
 ```bash
