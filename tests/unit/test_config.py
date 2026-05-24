@@ -18,6 +18,7 @@ def test_config_has_metadata_for_all_regulatory_branches():
         'tax_thresholds.health_contribution_deduction_limit_flat_tax',
         'tax_thresholds.solidarity_tax',
         'tax_deductible_costs',
+        'regulatory_rates',
         'zus_2026',
         'zus_2026.health_lump_sum_thresholds',
         'zus_2026.minimum_health_annual_2026',
@@ -33,3 +34,10 @@ def test_config_has_metadata_for_all_regulatory_branches():
         assert required_fields <= set(meta[branch])
         assert meta[branch]['source_url'].startswith('https://')
         assert meta[branch]['source_checked_at'] == '2026-05-23'
+
+
+def test_regulatory_rates_are_loaded_from_config():
+    config = config_manager.get_config()
+
+    assert config['regulatory_rates']['uop_pension_employee'] == 0.0976
+    assert config['regulatory_rates']['flat_tax_health_rate'] == 0.049

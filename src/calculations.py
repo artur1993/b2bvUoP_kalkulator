@@ -3,14 +3,6 @@ from typing import Dict, Any, List
 from src.config import config_manager
 from src.domain.b2b.aggregate import assemble_b2b_results
 
-# Helper rates for UoP (employee side)
-UOP_ZUS_RATES = {
-    "pension": 0.0976, 
-    "disability": 0.0150, 
-    "sickness": 0.0245, 
-    "health": 0.09
-}
-
 def _calculate_progressive_tax(taxable_base: float, config: Dict[str, Any]) -> float:
     tax_threshold = config['tax_thresholds']['tax_scale'][0]['income']
     tax_reducing = config['tax_thresholds']['tax_reducing_amount']
@@ -63,6 +55,7 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
     selected_benefits = uop_data.get('selected_benefits', [])
     ppk_selected = 'ppk' in selected_benefits
     ppk_rates = config.get('ppk', {})
+    regulatory_rates = config['regulatory_rates']
 
     for month in range(1, 13):
         if cumulative_gross >= thirty_times_limit:
@@ -70,20 +63,20 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
             monthly_disability = 0
         elif cumulative_gross + monthly_gross_salary > thirty_times_limit:
             base_for_pension = thirty_times_limit - cumulative_gross
-            monthly_pension = base_for_pension * UOP_ZUS_RATES['pension']
-            monthly_disability = base_for_pension * UOP_ZUS_RATES['disability']
+            monthly_pension = base_for_pension * regulatory_rates['uop_pension_employee']
+            monthly_disability = base_for_pension * regulatory_rates['uop_disability_employee']
         else:
-            monthly_pension = monthly_gross_salary * UOP_ZUS_RATES['pension']
-            monthly_disability = monthly_gross_salary * UOP_ZUS_RATES['disability']
+            monthly_pension = monthly_gross_salary * regulatory_rates['uop_pension_employee']
+            monthly_disability = monthly_gross_salary * regulatory_rates['uop_disability_employee']
         
-        monthly_sickness = monthly_gross_salary * UOP_ZUS_RATES['sickness']
+        monthly_sickness = monthly_gross_salary * regulatory_rates['uop_sickness_employee']
         monthly_social = monthly_pension + monthly_disability + monthly_sickness
         
         cumulative_gross += monthly_gross_salary
         annual_social_contributions += monthly_social
 
         health_base = monthly_gross_salary - monthly_social
-        monthly_health_contribution = health_base * UOP_ZUS_RATES['health']
+        monthly_health_contribution = health_base * regulatory_rates['uop_health_employee']
         annual_health_contribution += monthly_health_contribution
 
         monthly_costs = 0
@@ -95,7 +88,7 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
             if cumulative_author_costs < author_costs_limit:
                 creative_income = monthly_gross_salary * creative_work_percentage
                 author_costs_base = creative_income - (monthly_social * creative_work_percentage)
-                potential_costs = author_costs_base * 0.5
+                potential_costs = author_costs_base * regulatory_rates['author_tax_deductible_cost_share']
                 if cumulative_author_costs + potential_costs > author_costs_limit:
                     monthly_costs = author_costs_limit - cumulative_author_costs
                     cumulative_author_costs = author_costs_limit
@@ -167,7 +160,9 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 def calculate_break_even(uop_total_value: float, b2b_base_data: Dict[str, Any]) -> float:
-    start_range = int(float(b2b_base_data.get('monthly_invoice_amount', 10000)) * 0.5)
+    config = config_manager.get_config()
+    start_multiplier = config['regulatory_rates']['break_even_start_multiplier']
+    start_range = int(float(b2b_base_data.get('monthly_invoice_amount', 10000)) * start_multiplier)
     for test_invoice in range(start_range, 200000, 100):
         test_data = b2b_base_data.copy()
         test_data['monthly_invoice_amount'] = test_invoice
@@ -176,7 +171,9 @@ def calculate_break_even(uop_total_value: float, b2b_base_data: Dict[str, Any]) 
     return -1.0
 
 def calculate_uop_break_even(b2b_total_value: float, uop_base_data: Dict[str, Any]) -> float:
-    start_range = int(float(uop_base_data.get('monthly_gross_salary', 5000)) * 0.5)
+    config = config_manager.get_config()
+    start_multiplier = config['regulatory_rates']['break_even_start_multiplier']
+    start_range = int(float(uop_base_data.get('monthly_gross_salary', 5000)) * start_multiplier)
     for test_gross in range(start_range, 100000, 100):
         test_data = uop_base_data.copy()
         test_data['monthly_gross_salary'] = test_gross
@@ -185,10 +182,14 @@ def calculate_uop_break_even(b2b_total_value: float, uop_base_data: Dict[str, An
     return -1.0
 
 def calculate_break_even_analysis(uop_data: Dict[str, Any], b2b_base_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    config = config_manager.get_config()
+    regulatory_rates = config['regulatory_rates']
     uop_results = calculate_uop_results(uop_data)
     analysis = []
     base_rate = float(uop_data.get('monthly_gross_salary', 0))
-    for b2b_rate in range(int(base_rate * 0.8), int(base_rate * 2.5), 500):
+    min_rate = int(base_rate * regulatory_rates['break_even_analysis_min_multiplier'])
+    max_rate = int(base_rate * regulatory_rates['break_even_analysis_max_multiplier'])
+    for b2b_rate in range(min_rate, max_rate, 500):
         b2b_data = b2b_base_data.copy()
         b2b_data['monthly_invoice_amount'] = b2b_rate
         b2b_res = calculate_b2b_results(b2b_data)
