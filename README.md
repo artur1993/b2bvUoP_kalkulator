@@ -1,29 +1,22 @@
-# B2B vs UoP IT Calculator 2025
+# B2B vs UoP IT Calculator 2026
 
-A simple web application to compare the net income between B2B and Standard Employment Contract (UoP) for IT professionals in Poland for the year 2025.
+A simple web application to compare take-home income between B2B and Standard Employment Contract (UoP) for IT professionals in Poland for the 2026 tax year.
 
 ## Description
 
-This tool provides a detailed and accurate financial comparison, taking into account taxes, social security (ZUS), benefits, and paid time off, based on the regulations for 2025.
+This tool provides a detailed financial comparison, taking into account taxes, social security (ZUS), business costs, benefits, and paid time off, based on the regulations for 2026.
 
 ### Key Features
-- **Code and Convention Refinements**: The backend codebase has been refactored to use consistent English variable names, and server-side validation has been enhanced for better security and robustness.
-- **Interactive Tooltips**: Provides helpful context and explanations for various input fields and complex concepts, improving user understanding and usability.
-- **Accessibility Enhancements**: Implemented ARIA attributes and other best practices to improve accessibility for users with disabilities.
-- **Advanced B2B Options**: Customize your B2B calculation with company-provided benefits (paid leave, healthcare, training budget) and your own custom tax-deductible benefits.
-- **Multiple Tax Forms**: Supports all common tax forms for B2B in Poland: Ryczałt 12% (IT), Liniowy 19%, Skala Podatkowa, and IP Box 5%.
-- **Comprehensive Visualizations**: 
-  - A grouped bar chart to compare the total annual value of UoP, standard B2B, and B2B with benefits.
-  - A pie chart showing the distribution of your B2B revenue (net income, taxes, ZUS, etc.).
-  - **Waterfall Chart**: Visualizes the breakdown of gross income to net income, showing deductions like ZUS, taxes (with detailed breakdown by tax brackets), and other costs.
-  - **Break-Even Analysis Chart**: A line chart illustrating the break-even point between B2B and UoP contracts, showing the net difference across various B2B monthly rates.
-  - **Sensitivity (Tornado) Chart**: Identifies and visualizes the impact of key parameters (e.g., business costs, vacation days, stoppage months) on the final net income difference, sorted by impact magnitude.
-- **Export Results**: Export the detailed comparison to Excel.
-- **Transparent Methodology**: The app includes a calculation summary and checklist that explain the key assumptions for both B2B and UoP.
-- **Break-Even Analysis**: Automatically calculates the minimum B2B invoice amount required to match the total value of an employment contract.
-  - **Flexible Break-Even Analysis**: Choose to calculate either the B2B invoice amount needed to match a UoP contract, or the UoP gross salary needed to match a B2B contract.
-  - **Pension Equalization**: For B2B contracts, automatically calculate the additional monthly invoice amount required to invest in a private pension plan (e.g., IKE/IKZE) to match the pension contributions made by the employer in a UoP contract. This provides a more holistic, long-term financial comparison.
-  - **Interactive B2B Insurance Configurator**: Build a custom insurance package (Income Protection, Professional Liability, Health, etc.) with pre-configured profiles (Minimal, Standard, Premium) or detailed customization. The total monthly cost is automatically added to your B2B business expenses for a more realistic financial comparison.
+- **B2B vs UoP Comparison**: Compare annual and monthly net value for a B2B invoice and an employment contract salary.
+- **B2B Tax Forms**: Supports Ryczałt 12% IT, linear tax 19%, tax scale, and IP Box 5%.
+- **ZUS Options**: Supports startup relief, preferential ZUS, and full ZUS for B2B calculations.
+- **UoP Settings**: Supports standard and elevated tax-deductible costs, 50% creative work costs, and youth tax relief.
+- **Business Costs and Benefits**: Include monthly business costs, unpaid B2B time off, company-provided B2B benefits, and UoP benefits.
+- **Break-Even Modes**: Calculate either the B2B invoice needed to match UoP value or the UoP gross salary needed to match B2B value.
+- **Charts**: Includes comparison, waterfall, and break-even charts for understanding the result breakdown.
+- **Excel Export**: Export the detailed comparison and breakdown to Excel.
+- **Transparent Methodology**: Includes a summary, risk notes, checklist, and methodology details for the calculation.
+- **Retirement Reminder**: Results include a short IKE/IKZE reminder with 2026 contribution limits.
 
 ## Installation
 
@@ -34,9 +27,9 @@ This tool provides a detailed and accurate financial comparison, taking into acc
     ```
 2.  **Create a virtual environment and install Python dependencies:**
     ```bash
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install -e ".[dev]"
     ```
 3.  **Install Node.js dependencies for the React frontend:**
     ```bash
@@ -142,7 +135,6 @@ Accepts a JSON object with B2B and UoP contract parameters and returns a detaile
     "tax_form": "lump_sum_it",
     "zus_type": "full",
     "sickness_insurance": true,
-    "vat": true,
     "monthly_business_costs": 500,
     "stoppage_months": 0,
     "vacation_days": 0,
