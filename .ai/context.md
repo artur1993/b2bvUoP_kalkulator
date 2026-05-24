@@ -1,6 +1,6 @@
 # Project Context
 
-The goal of this project is to create a comprehensive B2B vs. UoP (Employment Contract) calculator for the Polish IT market for the year 2025.
+The goal of this project is to create a comprehensive B2B vs. UoP (Employment Contract) calculator for the Polish IT market for the year 2026.
 
 The application will be a web-based tool with:
 - A Python (Flask) backend responsible for all calculation logic.

@@ -9,7 +9,7 @@ This file contains information relevant to the Gemini AI assistant for this spec
 - Avoid “hello world” examples
 
 ## Project Overview
-- **Name**: B2B vs UoP IT Calculator 2025
+- **Name**: B2B vs UoP IT Calculator 2026
 - **Purpose**: Web application for comparing B2B and UoP contracts for IT professionals in Poland.
 - **Technologies**: Flask (Python backend), React (JavaScript frontend).
 
