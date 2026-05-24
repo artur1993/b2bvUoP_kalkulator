@@ -50,9 +50,9 @@
       "labor_fund": 138.47
     },
     "health_lump_sum_thresholds": [
-      { "limit": 60000, "contribution": 432.54 },
-      { "limit": 300000, "contribution": 720.90 },
-      { "limit": "powyzej", "contribution": 1297.62 }
+      { "limit": 60000, "contribution": 498.35 },
+      { "limit": 300000, "contribution": 830.58 },
+      { "limit": "powyzej", "contribution": 1495.04 }
     ]
   },
   "pension_limits_2026": {

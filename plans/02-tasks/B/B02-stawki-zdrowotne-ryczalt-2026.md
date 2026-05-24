@@ -43,12 +43,12 @@ Plus metadane (zgodnie z B11):
 ```
 
 ## Acceptance
-- [ ] Config zawiera wartości `498.35`, `830.58`, `1495.04`
-- [ ] Test `test_health_contribution_lump_sum_threshold_60k` — input `monthly_invoice_amount=5000` (60k roczne) → `monthly_health = 498.35`
-- [ ] Test `test_health_contribution_lump_sum_threshold_60k_plus_1` — input `monthly_invoice_amount=5001` → `monthly_health = 830.58`
-- [ ] Test `test_health_contribution_lump_sum_threshold_300k` — input `monthly_invoice_amount=25000` (300k roczne) → `monthly_health = 830.58`
-- [ ] Test `test_health_contribution_lump_sum_threshold_300k_plus_1` — input `monthly_invoice_amount=25001` → `monthly_health = 1495.04`
-- [ ] `pytest tests/unit/test_calculations.py::test_health_contribution_lump_sum_*` zielony
+- [x] Config zawiera wartości `498.35`, `830.58`, `1495.04`
+- [x] Test `test_health_contribution_lump_sum_threshold_60k` — input `monthly_invoice_amount=5000` (60k roczne) → `monthly_health = 498.35`
+- [x] Test `test_health_contribution_lump_sum_threshold_60k_plus_1` — input `monthly_invoice_amount=5001` → `monthly_health = 830.58`
+- [x] Test `test_health_contribution_lump_sum_threshold_300k` — input `monthly_invoice_amount=25000` (300k roczne) → `monthly_health = 830.58`
+- [x] Test `test_health_contribution_lump_sum_threshold_300k_plus_1` — input `monthly_invoice_amount=25001` → `monthly_health = 1495.04`
+- [x] `pytest tests/unit/test_calculations.py::test_health_contribution_lump_sum_*` zielony
 
 ## Test plan
 ```bash

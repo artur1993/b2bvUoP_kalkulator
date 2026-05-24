@@ -32,5 +32,40 @@ class TestCalculations(unittest.TestCase):
         self.assertIn('total_annual_value', results)
         self.assertNotIn('calkowita_roczna_wartosc', results)
 
+    def _b2b_lump_sum_data(self, monthly_invoice_amount):
+        return {
+            'monthly_invoice_amount': monthly_invoice_amount,
+            'monthly_business_costs': 0,
+            'zus_type': 'full',
+            'sickness_insurance': False,
+            'tax_form': 'lump_sum_it',
+            'youth_relief': False,
+            'vacation_days': 0,
+            'sick_days': 0,
+            'stoppage_months': 0,
+            'customBenefits': 0,
+            'companyBenefits': {}
+        }
+
+    def test_health_contribution_lump_sum_threshold_60k(self):
+        results = calculate_b2b_results(self._b2b_lump_sum_data(5000))
+
+        self.assertAlmostEqual(results['steps']['annual_health_contribution'] / 12, 498.35, places=2)
+
+    def test_health_contribution_lump_sum_threshold_60k_plus_1(self):
+        results = calculate_b2b_results(self._b2b_lump_sum_data(5001))
+
+        self.assertAlmostEqual(results['steps']['annual_health_contribution'] / 12, 830.58, places=2)
+
+    def test_health_contribution_lump_sum_threshold_300k(self):
+        results = calculate_b2b_results(self._b2b_lump_sum_data(25000))
+
+        self.assertAlmostEqual(results['steps']['annual_health_contribution'] / 12, 830.58, places=2)
+
+    def test_health_contribution_lump_sum_threshold_300k_plus_1(self):
+        results = calculate_b2b_results(self._b2b_lump_sum_data(25001))
+
+        self.assertAlmostEqual(results['steps']['annual_health_contribution'] / 12, 1495.04, places=2)
+
 if __name__ == '__main__':
     unittest.main()
