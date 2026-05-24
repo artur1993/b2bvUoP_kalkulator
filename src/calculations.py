@@ -1,6 +1,7 @@
 import math
 from typing import Dict, Any, List
 from src.config import config_manager
+from src.domain.b2b.aggregate import assemble_b2b_results
 
 # Helper rates for UoP (employee side)
 UOP_ZUS_RATES = {
@@ -30,137 +31,12 @@ def compute_solidarity_tax(annual_taxable_base: float, config: Dict[str, Any]) -
 def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
     """Calculates all financial aspects for a B2B contract for 2026."""
     config = config_manager.get_config()
-    monthly_invoice_amount = float(b2b_data.get('monthly_invoice_amount', 0))
-    monthly_business_costs = float(b2b_data.get('monthly_business_costs', 0))
-    annual_business_costs = monthly_business_costs * 12
-    
-    # 1. Lost Revenue Calculation
-    daily_rate = monthly_invoice_amount / config['general_data']['working_days_monthly']
-    company_benefits = b2b_data.get('companyBenefits') or {}
-    
-    paid_vacation_days = float(company_benefits.get('paidVacationDays', {}).get('days', 0)) if company_benefits.get('paidVacationDays', {}).get('enabled') else 0
-    paid_sick_days = float(company_benefits.get('paidSickDays', {}).get('days', 0)) if company_benefits.get('paidSickDays', {}).get('enabled') else 0
-    
-    unpaid_vacation_days = max(0, int(b2b_data.get('vacation_days', 0)) - paid_vacation_days)
-    unpaid_sick_days = max(0, int(b2b_data.get('sick_days', 0)) - paid_sick_days) 
-
-    lost_revenue_vacation = unpaid_vacation_days * daily_rate
-    lost_revenue_sickness = unpaid_sick_days * daily_rate * 0.8
-    lost_revenue_stoppage = float(b2b_data.get('stoppage_months', 0)) * monthly_invoice_amount
-    total_lost_revenue = lost_revenue_vacation + lost_revenue_sickness + lost_revenue_stoppage
-
-    # Corrected Annual Revenue
-    annual_invoice_amount = (monthly_invoice_amount * 12) - total_lost_revenue
-
-    # 2. ZUS Social Contributions
-    zus_type = b2b_data.get('zus_type', 'full')
-    zus_details = config['zus_2026'][zus_type]
-    
-    pension_insurance_contribution = zus_details.get('pension', 0) * 12
-    disability_insurance_contribution = zus_details.get('disability', 0) * 12
-    accident_insurance_contribution = zus_details.get('accident', 0) * 12
-    labor_fund_contribution = zus_details.get('labor_fund', 0) * 12
-    sickness_insurance_contribution = zus_details.get('sickness', 0) * 12 if b2b_data.get('sickness_insurance') else 0
-    
-    annual_social_contributions = pension_insurance_contribution + disability_insurance_contribution + accident_insurance_contribution + labor_fund_contribution + sickness_insurance_contribution
-
-    # 3. Health Contribution
-    tax_form = b2b_data.get('tax_form', 'lump_sum_it')
-    minimum_health_annual = config['zus_2026']['minimum_health_annual_2026']
-    
-    if tax_form == 'tax_scale':
-        income_for_health = max(0, annual_invoice_amount - annual_business_costs - annual_social_contributions)
-        annual_health_contribution = max(minimum_health_annual, income_for_health * 0.09)
-    elif tax_form == 'flat_tax':
-        income_for_health = max(0, annual_invoice_amount - annual_business_costs - annual_social_contributions)
-        annual_health_contribution = max(minimum_health_annual, income_for_health * 0.049)
-    elif tax_form == 'lump_sum_it':
-        revenue = annual_invoice_amount
-        thresholds = config['zus_2026']['health_lump_sum_thresholds']
-        if revenue <= thresholds[0]['limit']:
-            monthly_health = thresholds[0]['contribution']
-        elif revenue <= thresholds[1]['limit']:
-            monthly_health = thresholds[1]['contribution']
-        else:
-            monthly_health = thresholds[2]['contribution']
-        annual_health_contribution = monthly_health * 12
-    else:
-        annual_health_contribution = minimum_health_annual
-
-    total_zus_contributions = annual_social_contributions + annual_health_contribution
-
-    # 4. Taxes
-    annual_tax = 0
-    annual_solidarity_tax = 0
-    if tax_form == 'lump_sum_it':
-        tax_base = max(0, annual_invoice_amount - (annual_health_contribution * 0.5) - annual_social_contributions)
-        annual_tax = round(tax_base * config['tax_thresholds']['lump_sum_it'])
-        annual_solidarity_tax = compute_solidarity_tax(tax_base, config)
-    else:
-        income = annual_invoice_amount - annual_business_costs - annual_social_contributions
-        if tax_form == 'flat_tax':
-            health_deduction_limit = config['tax_thresholds']['health_contribution_deduction_limit_flat_tax']
-            income -= min(annual_health_contribution, health_deduction_limit)
-        
-        taxable_base = income
-
-        if tax_form == 'flat_tax':
-            annual_tax = math.ceil(max(0, taxable_base) * config['tax_thresholds']['flat_tax'])
-        elif tax_form == 'tax_scale':
-            annual_tax = _calculate_progressive_tax(taxable_base, config)
-        elif tax_form == 'ip_box':
-            taxable_base = max(0, taxable_base)
-            qualified_share = float(b2b_data.get('ip_box_qualified_share', 100)) / 100
-            base_form = b2b_data.get('ip_box_base_form', 'flat_tax')
-            qualified_base = taxable_base * qualified_share
-            other_base = taxable_base - qualified_base
-            qualified_tax = math.ceil(qualified_base * config['tax_thresholds']['ip_box'])
-
-            if base_form == 'tax_scale':
-                other_tax = _calculate_progressive_tax(other_base, config)
-            else:
-                other_tax = math.ceil(other_base * config['tax_thresholds']['flat_tax'])
-
-            annual_tax = qualified_tax + other_tax
-
-        annual_solidarity_tax = compute_solidarity_tax(max(0, taxable_base), config)
-
-    annual_tax += annual_solidarity_tax
-    annual_net_income = annual_invoice_amount - annual_business_costs - total_zus_contributions - annual_tax
-    
-    # Benefits
-    annual_custom_benefits = float(b2b_data.get('customBenefits', 0))
-    annual_company_benefits_value = 0
-    for key, benefit in company_benefits.items():
-        if benefit.get('enabled', False):
-            if key == 'paidVacationDays':
-                annual_company_benefits_value += float(benefit.get('days', 0)) * daily_rate
-            elif key == 'paidSickDays':
-                annual_company_benefits_value += float(benefit.get('days', 0)) * daily_rate * 0.8
-            else:
-                annual_company_benefits_value += float(benefit.get('value', 0))
-
-    total_b2b_value = annual_net_income + annual_company_benefits_value + annual_custom_benefits
-
-    return {
-        "annual_revenue": annual_invoice_amount + total_lost_revenue,
-        "annual_business_costs": annual_business_costs,
-        "annual_zus": total_zus_contributions,
-        "annual_tax": annual_tax,
-        "annual_solidarity_tax": annual_solidarity_tax,
-        "annual_lost_revenue": total_lost_revenue,
-        "annual_net_income": annual_net_income,
-        "annual_company_benefits_value": annual_company_benefits_value,
-        "annual_custom_benefits_value": annual_custom_benefits,
-        "total_annual_value": total_b2b_value,
-        "monthly_net_income": total_b2b_value / 12,
-        "steps": {
-            "annual_social_contributions": annual_social_contributions,
-            "annual_health_contribution": annual_health_contribution,
-            "annual_tax": annual_tax,
-            "annual_solidarity_tax": annual_solidarity_tax
-        }
-    }
+    return assemble_b2b_results(
+        b2b_data,
+        config,
+        _calculate_progressive_tax,
+        compute_solidarity_tax,
+    )
 
 def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
     """Calculates all financial aspects for an Employment Contract (UoP) for 2026."""
