@@ -103,5 +103,51 @@ class TestCalculations(unittest.TestCase):
             places=2,
         )
 
+    def test_ppk_employee_contribution_lowers_net(self):
+        base_data = {
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'standard', 'creative_work_percentage': 0},
+            'youth_relief': False,
+            'selected_benefits': []
+        }
+        without_ppk = calculate_uop_results(base_data)
+        with_ppk = calculate_uop_results({**base_data, 'selected_benefits': ['ppk']})
+        monthly_cash_difference = (without_ppk['annual_net_income'] - with_ppk['annual_net_income']) / 12
+
+        self.assertGreater(without_ppk['annual_net_income'], with_ppk['annual_net_income'])
+        self.assertGreater(monthly_cash_difference, 180)
+        self.assertLess(monthly_cash_difference, 260)
+        self.assertAlmostEqual(with_ppk['steps']['annual_ppk_employee_contribution'], 2400, places=2)
+
+    def test_ppk_employer_contribution_is_taxed_benefit(self):
+        results = calculate_uop_results({
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'standard', 'creative_work_percentage': 0},
+            'youth_relief': False,
+            'selected_benefits': ['ppk']
+        })
+
+        self.assertAlmostEqual(results['steps']['annual_ppk_employer_contribution'], 1800, places=2)
+        self.assertAlmostEqual(results['steps']['annual_ppk_employer_net'], 1584, delta=50)
+        self.assertAlmostEqual(results['annual_benefits_value'], results['steps']['annual_ppk_employer_net'], places=2)
+        self.assertAlmostEqual(
+            results['total_annual_value'] - results['annual_net_income'],
+            results['steps']['annual_ppk_employer_net'],
+            places=2,
+        )
+
+    def test_ppk_disabled_no_changes(self):
+        results = calculate_uop_results({
+            'monthly_gross_salary': 10000,
+            'deductible_cost_settings': {'type': 'standard', 'creative_work_percentage': 0},
+            'youth_relief': False,
+            'selected_benefits': []
+        })
+
+        self.assertEqual(results['annual_benefits_value'], 0)
+        self.assertEqual(results['steps']['annual_ppk_employee_contribution'], 0)
+        self.assertEqual(results['steps']['annual_ppk_employer_contribution'], 0)
+        self.assertEqual(results['steps']['annual_ppk_employer_net'], 0)
+
 if __name__ == '__main__':
     unittest.main()

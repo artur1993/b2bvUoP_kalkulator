@@ -67,13 +67,13 @@ if 'ppk' in uop_data.get('selected_benefits', []):
 (Codex może uprościć implementację, ale efekt księgowy musi być zgodny z powyższym.)
 
 ## Acceptance
-- [ ] Config: `ppk.employee_rate=0.02`, `ppk.employer_rate=0.015`
-- [ ] Sekcja `benefits` nie zawiera `ppk`
-- [ ] Logika UoP odejmuje wpłatę pracownika z brutto przed PIT
-- [ ] Logika UoP dodaje wpłatę pracodawcy do `monthly_tax_base` oraz jako net-benefit
-- [ ] Test `test_ppk_employee_contribution_lowers_net` — pensja 10 000 brutto z PPK → netto **niższe** niż bez PPK (o ~2% × 12 = 240 PLN/mies. mniej w gotówce)
-- [ ] Test `test_ppk_employer_contribution_is_taxed_benefit` — pensja 10 000 brutto z PPK → `total_annual_value` wyższe o ~1,5% × 12 × (1-stawka_PIT) = ~1 584 PLN
-- [ ] Test `test_ppk_disabled_no_changes` — pensja 10 000 bez PPK → wynik identyczny jak przed B06
+- [x] Config: `ppk.employee_rate=0.02`, `ppk.employer_rate=0.015`
+- [x] Sekcja `benefits` nie zawiera `ppk`
+- [x] Logika UoP odejmuje wpłatę pracownika z brutto przed PIT
+- [x] Logika UoP dodaje wpłatę pracodawcy do `monthly_tax_base` oraz jako net-benefit
+- [x] Test `test_ppk_employee_contribution_lowers_net` — pensja 10 000 brutto z PPK → netto **niższe** niż bez PPK (o ~2% × 12 = 240 PLN/mies. mniej w gotówce)
+- [x] Test `test_ppk_employer_contribution_is_taxed_benefit` — pensja 10 000 brutto z PPK → `total_annual_value` wyższe o ~1,5% × 12 × (1-stawka_PIT) = ~1 584 PLN
+- [x] Test `test_ppk_disabled_no_changes` — pensja 10 000 bez PPK → wynik identyczny jak przed B06
 
 ## Test plan
 ```bash
