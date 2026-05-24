@@ -50,6 +50,15 @@ class TestCalculations(unittest.TestCase):
 
         self.assertAlmostEqual(results['steps']['annual_health_contribution'] / 12, 498.35, places=2)
 
+    def test_calculate_with_start_relief_zus(self):
+        data = self._b2b_lump_sum_data(10000)
+        data['zus_type'] = 'start_relief'
+
+        results = calculate_b2b_results(data)
+
+        self.assertEqual(results['steps']['annual_social_contributions'], 0)
+        self.assertAlmostEqual(results['steps']['annual_health_contribution'], 830.58 * 12, places=2)
+
     def test_health_contribution_lump_sum_threshold_60k_plus_1(self):
         results = calculate_b2b_results(self._b2b_lump_sum_data(5001))
 

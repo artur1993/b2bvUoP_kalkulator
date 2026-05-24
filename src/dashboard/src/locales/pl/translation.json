@@ -10,6 +10,7 @@
     "monthly_invoice": "Miesięczna Faktura (PLN)",
     "business_costs": "Miesięczne Koszty Firmowe (PLN)",
     "zus_type": "Rodzaj ZUS",
+    "zus_start_relief": "Ulga na start (6 miesięcy)",
     "zus_preferential": "Mała firma (preferencyjny ZUS)",
     "zus_full": "Duża firma (pełny ZUS)",
     "voluntary_sick_leave": "Dobrowolne Chorobowe (ZUS Chorobowe)",

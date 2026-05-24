@@ -56,3 +56,24 @@ def test_pit_0_uop_under_26_accepted(client):
     response = client.post('/api/calculate', json=_valid_calculation_payload())
 
     assert response.status_code == 200
+
+
+def test_zus_type_small_business_rejected(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['zus_type'] = 'small_business'
+
+    response = client.post('/api/calculate', json=payload)
+
+    assert response.status_code == 400
+    assert response.json['error'] == 'Validation failed'
+    assert 'small_business' in str(response.json['details'])
+
+
+def test_zus_type_start_relief_accepted(client):
+    payload = _valid_calculation_payload()
+    payload['b2b']['zus_type'] = 'start_relief'
+
+    response = client.post('/api/calculate', json=payload)
+
+    assert response.status_code == 200
+    assert response.json['b2b_results']['steps']['annual_social_contributions'] == 0

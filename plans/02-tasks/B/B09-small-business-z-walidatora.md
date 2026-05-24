@@ -48,12 +48,12 @@ Dodać `form.zus_start_relief`:
 Opcjonalnie tooltip: „Brak składek społecznych przez pierwsze 6 miesięcy działalności gospodarczej. Składka zdrowotna obowiązuje."
 
 ## Acceptance
-- [ ] Walidator: payload `{"b2b": {"zus_type": "small_business"}}` → **400**
-- [ ] Walidator: payload `{"b2b": {"zus_type": "start_relief"}}` → **200** (działa)
-- [ ] UI: dropdown ZUS pokazuje 3 opcje (start_relief, preferential, full)
-- [ ] Test `test_zus_type_small_business_rejected` — 400 z message
-- [ ] Test `test_zus_type_start_relief_accepted` — działa, wynik liczbowy zgodny z config (zerowe składki społeczne)
-- [ ] Test `test_calculate_with_start_relief_zus` — `monthly_invoice_amount=10000`, `zus_type='start_relief'` → ZUS społeczne = 0, zdrowotna = wybrana wg `tax_form`
+- [x] Walidator: payload `{"b2b": {"zus_type": "small_business"}}` → **400**
+- [x] Walidator: payload `{"b2b": {"zus_type": "start_relief"}}` → **200** (działa)
+- [x] UI: dropdown ZUS pokazuje 3 opcje (start_relief, preferential, full)
+- [x] Test `test_zus_type_small_business_rejected` — 400 z message
+- [x] Test `test_zus_type_start_relief_accepted` — działa, wynik liczbowy zgodny z config (zerowe składki społeczne)
+- [x] Test `test_calculate_with_start_relief_zus` — `monthly_invoice_amount=10000`, `zus_type='start_relief'` → ZUS społeczne = 0, zdrowotna = wybrana wg `tax_form`
 
 ## Test plan
 ```bash
