@@ -11,11 +11,11 @@ Po A01-A05: zaktualizować README, żeby opisywało aplikację po wycięciu (bez
 - [README.md](../../../README.md) — pełna sekcja „Key Features" + sekcje opisujące funkcje wycięte
 
 ## Acceptance
-- [ ] Brak wzmianek o: PDF eksporcie, sensitivity/tornado chart, insurance configurator (z modułami minimal/standard/premium), equalize pension, `life_insurance` benefit
-- [ ] Sekcja „Key Features" odzwierciedla aktualny zakres ([00-spec/0001-zakres.md](../../00-spec/0001-zakres.md))
-- [ ] Tytuł: „B2B vs UoP IT Calculator **2026**" (przygotowanie pod B01)
-- [ ] Instrukcja instalacji: `pip install -e ".[dev]"` zamiast `pip install -r requirements.txt` (powiązane z [AUDYT.md §12.2](../../../AUDYT.md))
-- [ ] Instrukcja venv: `.venv/` zamiast `venv/` (powiązane z [AUDYT.md §12.3](../../../AUDYT.md))
+- [x] Brak wzmianek o: PDF eksporcie, sensitivity/tornado chart, insurance configurator (z modułami minimal/standard/premium), equalize pension, `life_insurance` benefit
+- [x] Sekcja „Key Features" odzwierciedla aktualny zakres ([00-spec/0001-zakres.md](../../00-spec/0001-zakres.md))
+- [x] Tytuł: „B2B vs UoP IT Calculator **2026**" (przygotowanie pod B01)
+- [x] Instrukcja instalacji: `pip install -e ".[dev]"` zamiast `pip install -r requirements.txt` (powiązane z [AUDYT.md §12.2](../../../AUDYT.md))
+- [x] Instrukcja venv: `.venv/` zamiast `venv/` (powiązane z [AUDYT.md §12.3](../../../AUDYT.md))
 
 ## Test plan
 ```bash
