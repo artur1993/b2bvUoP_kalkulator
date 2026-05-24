@@ -24,7 +24,6 @@ class TestAnalysisEndpoints(unittest.TestCase):
                 'tax_form': 'flat_tax',
                 'sickness_insurance': True,
                 'age': 30,
-                'youth_relief': False,
                 'vacation_days': 26,
                 'stoppage_months': 1,
                 'customBenefits': 500,

@@ -15,7 +15,12 @@ from src.calculations import (
     calculate_break_even_analysis
 )
 from src.config import config_manager
-from src.validation import validate_calculation_request
+from src.validation import (
+    BreakEvenAnalysisRequest,
+    CalculationRequestModel,
+    ExcelExportRequest,
+    validate,
+)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -45,10 +50,11 @@ def handle_global_error(e):
     return jsonify({"error": "An unexpected server error occurred."}), 500
 
 @app.route('/api/calculate/break-even-analysis', methods=['POST'])
+@validate(BreakEvenAnalysisRequest)
 def break_even_analysis():
     """Endpoint for break-even analysis chart data."""
     try:
-        data = request.get_json()
+        data = g.validated_data
         app.logger.info(f"Received break-even analysis request.")
         uop_data = data.get('uop', {})
         b2b_base_data = data.get('b2b', {})
@@ -60,7 +66,7 @@ def break_even_analysis():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/calculate', methods=['POST'])
-@validate_calculation_request
+@validate(CalculationRequestModel)
 def calculate():
     """Main endpoint to calculate and compare B2B vs. UoP earnings with full analysis."""
     try:
@@ -110,10 +116,11 @@ def calculate():
         return jsonify({"error": str(e) if app.debug else "An internal server error occurred."}), 500
 
 @app.route('/api/export/excel', methods=['POST'])
+@validate(ExcelExportRequest)
 def export_to_excel():
     """Exports the calculation results to an Excel file."""
     try:
-        data = request.get_json()
+        data = g.validated_data
         app.logger.info(f"Received request to export to Excel.")
         b2b_results = data.get('b2b_results', {})
         uop_results = data.get('uop_results', {})

@@ -46,12 +46,12 @@ def validate(model_class):
 Stare `validate_calculation_request` przepisać na `@validate(CalculationRequestModel)`.
 
 ## Acceptance
-- [ ] `/api/calculate` używa `@validate(CalculationRequestModel)`
-- [ ] `/api/calculate/break-even-analysis` używa `@validate(BreakEvenAnalysisRequest)`
-- [ ] `/api/export/excel` używa `@validate(ExcelExportRequest)`
-- [ ] Test `test_break_even_garbage_payload_returns_400` — `{"junk": 1}` → 400
-- [ ] Test `test_excel_export_garbage_payload_returns_400` — j.w.
-- [ ] Brak `try/except` z `request.get_json()` w endpointach (dekorator obsługuje)
+- [x] `/api/calculate` używa `@validate(CalculationRequestModel)`
+- [x] `/api/calculate/break-even-analysis` używa `@validate(BreakEvenAnalysisRequest)`
+- [x] `/api/export/excel` używa `@validate(ExcelExportRequest)`
+- [x] Test `test_break_even_garbage_payload_returns_400` — `{"junk": 1}` → 400
+- [x] Test `test_excel_export_garbage_payload_returns_400` — j.w.
+- [x] Brak `try/except` z `request.get_json()` w endpointach (dekorator obsługuje)
 
 ## Test plan
 ```bash
