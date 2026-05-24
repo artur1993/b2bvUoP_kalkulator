@@ -69,6 +69,8 @@
     "annual_costs": "Roczne Koszty Firmowe",
     "annual_zus": "Roczny ZUS",
     "annual_tax": "Roczny Podatek",
+    "solidarity_tax": "Danina solidarnościowa",
+    "solidarity_tax_disclaimer": "Uwaga: Danina solidarnościowa 4% dotyczy łącznych dochodów powyżej 1 000 000 PLN ze wszystkich źródeł. Kalkulator zakłada jedno źródło; w deklaracji PIT-DS uwzględnij wszystkie dochody.",
     "lost_revenue": "Roczny Utracony Przychód",
     "net_income": "Roczne Netto (na rękę)",
     "company_benefits_value": "Roczna Wartość Benefitów od Firmy",

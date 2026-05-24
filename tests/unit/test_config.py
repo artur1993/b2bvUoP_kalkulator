@@ -16,6 +16,7 @@ def test_config_has_metadata_for_all_regulatory_branches():
         'macro_indicators_2026',
         'tax_thresholds',
         'tax_thresholds.health_contribution_deduction_limit_flat_tax',
+        'tax_thresholds.solidarity_tax',
         'tax_deductible_costs',
         'zus_2026',
         'zus_2026.health_lump_sum_thresholds',

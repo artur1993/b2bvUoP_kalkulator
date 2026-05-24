@@ -66,16 +66,16 @@ Tłumaczenia:
 - EN: analogicznie.
 
 ## Acceptance
-- [ ] Config zawiera `tax_thresholds.solidarity_tax`
-- [ ] `compute_solidarity_tax` wyodrębnione jako helper
-- [ ] B2B i UoP doliczają daninę po naliczeniu zwykłego podatku
-- [ ] Response API zawiera `annual_solidarity_tax` (osobny klucz)
-- [ ] UI pokazuje wiersz „Danina solidarnościowa" tylko gdy >0
-- [ ] Disclaimer widoczny zawsze gdy `annual_solidarity_tax > 0`
-- [ ] Test `test_solidarity_tax_below_threshold` — `taxable_base=500000` → `solidarity_tax = 0`
-- [ ] Test `test_solidarity_tax_at_threshold` — `taxable_base=1000000` → `solidarity_tax = 0`
-- [ ] Test `test_solidarity_tax_above_threshold` — `taxable_base=1200000` → `solidarity_tax = 8000` (= 200k × 4%)
-- [ ] Test `test_b2b_high_income_includes_solidarity_tax` — B2B `monthly_invoice_amount=100000`, ryczałt → `annual_solidarity_tax > 0` w response
+- [x] Config zawiera `tax_thresholds.solidarity_tax`
+- [x] `compute_solidarity_tax` wyodrębnione jako helper
+- [x] B2B i UoP doliczają daninę po naliczeniu zwykłego podatku
+- [x] Response API zawiera `annual_solidarity_tax` (osobny klucz)
+- [x] UI pokazuje wiersz „Danina solidarnościowa" tylko gdy >0
+- [x] Disclaimer widoczny zawsze gdy `annual_solidarity_tax > 0`
+- [x] Test `test_solidarity_tax_below_threshold` — `taxable_base=500000` → `solidarity_tax = 0`
+- [x] Test `test_solidarity_tax_at_threshold` — `taxable_base=1000000` → `solidarity_tax = 0`
+- [x] Test `test_solidarity_tax_above_threshold` — `taxable_base=1200000` → `solidarity_tax = 8000` (= 200k × 4%)
+- [x] Test `test_b2b_high_income_includes_solidarity_tax` — B2B `monthly_invoice_amount=100000`, ryczałt → `annual_solidarity_tax > 0` w response
 
 ## Test plan
 ```bash
