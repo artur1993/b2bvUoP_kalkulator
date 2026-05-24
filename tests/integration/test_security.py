@@ -71,7 +71,7 @@ def test_error_handler_no_traceback(client):
         'language': 'pl',
     }
 
-    with patch('src.app.calculate_b2b_results', side_effect=ValueError('secret crash detail')):
+    with patch('src.services.calculation_service.calculate_b2b_results', side_effect=ValueError('secret crash detail')):
         response = client.post('/api/calculate', json=request_data)
 
     body = response.get_data(as_text=True)

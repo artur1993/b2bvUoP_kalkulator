@@ -34,13 +34,16 @@ def test_break_even_analysis_endpoint_positive(mock_calculate, client):
     assert response.status_code == 200
     assert response.json == {"some": "data"}
 
-@patch('src.app.calculate_b2b_results')
-@patch('src.app.calculate_uop_results')
-@patch('src.app.calculate_break_even')
-def test_calculate_endpoint_positive(mock_break_even, mock_uop, mock_b2b, client):
-    mock_b2b.return_value = {'total_annual_value': 120000}
-    mock_uop.return_value = {'total_annual_value': 100000}
-    mock_break_even.return_value = 11000
+@patch('src.app.run_full_calculation')
+def test_calculate_endpoint_positive(mock_run_full_calculation, client):
+    mock_run_full_calculation.return_value = {
+        'b2b_results': {'total_annual_value': 120000},
+        'uop_results': {'total_annual_value': 100000},
+        'break_even_invoice_amount': 11000,
+        'pension_limits_2026': {'ike': 28260},
+        'analysis': {},
+        'comments': 'Comparison and full analysis generated successfully.',
+    }
     data = {
         'b2b': {
             'monthly_invoice_amount': 10000,

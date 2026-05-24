@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from src.app import app
 
 class TestAnalysisEndpoints(unittest.TestCase):
@@ -8,14 +7,8 @@ class TestAnalysisEndpoints(unittest.TestCase):
         self.app = app.test_client()
         self.app.testing = True
 
-    @patch('src.app.calculate_b2b_results')
-    @patch('src.app.calculate_uop_results')
-    def test_break_even_analysis_endpoint_positive(self, mock_uop, mock_b2b):
+    def test_break_even_analysis_endpoint_positive(self):
         """Test the /api/calculate/break-even-analysis endpoint for correct structure."""
-        # Mock the return values of the core calculation functions
-        mock_b2b.return_value = {'calkowita_roczna_wartosc': 120000}
-        mock_uop.return_value = {'calkowita_roczna_wartosc': 100000}
-
         request_data = {
             'b2b': {
                 'monthly_invoice_amount': 10000,

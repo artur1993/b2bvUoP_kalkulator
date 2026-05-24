@@ -34,9 +34,9 @@ def calculate():
 ```
 
 ## Acceptance
-- [ ] `src/services/calculation_service.py` istnieje
-- [ ] `app.py:calculate()` ma <15 linii
-- [ ] Wszystkie istniejące testy zielone
+- [x] `src/services/calculation_service.py` istnieje
+- [x] `app.py:calculate()` ma <15 linii
+- [x] Wszystkie istniejące testy zielone
 
 ## Test plan
 ```bash
