@@ -25,10 +25,10 @@ W `run_app.sh`: zostaw `FLASK_ENV=development` (dev), usuń `FLASK_DEBUG=1` lub 
 W error handlerze: zawsze zwracać stałą wiadomość, niezależnie od `app.debug` (powiązane z C04).
 
 ## Acceptance
-- [ ] `app.run(debug=...)` czyta ENV, nie hardkoduje
-- [ ] `FLASK_ENV=production python src/app.py` → brak `/console`, brak hot-reload
-- [ ] Test `test_debug_mode_disabled_by_default` — bez ENV, debug=False
-- [ ] Test `test_debug_mode_enabled_via_env` — FLASK_ENV=development, debug=True
+- [x] `app.run(debug=...)` czyta ENV, nie hardkoduje
+- [x] `FLASK_ENV=production python src/app.py` → brak `/console`, brak hot-reload
+- [x] Test `test_debug_mode_disabled_by_default` — bez ENV, debug=False
+- [x] Test `test_debug_mode_enabled_via_env` — FLASK_ENV=development, debug=True
 
 ## Test plan
 ```bash
