@@ -99,7 +99,19 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
         elif tax_form == 'tax_scale':
             annual_tax = _calculate_progressive_tax(taxable_base, config)
         elif tax_form == 'ip_box':
-            annual_tax = math.ceil(max(0, taxable_base) * config['tax_thresholds']['ip_box'])
+            taxable_base = max(0, taxable_base)
+            qualified_share = float(b2b_data.get('ip_box_qualified_share', 100)) / 100
+            base_form = b2b_data.get('ip_box_base_form', 'flat_tax')
+            qualified_base = taxable_base * qualified_share
+            other_base = taxable_base - qualified_base
+            qualified_tax = math.ceil(qualified_base * config['tax_thresholds']['ip_box'])
+
+            if base_form == 'tax_scale':
+                other_tax = _calculate_progressive_tax(other_base, config)
+            else:
+                other_tax = math.ceil(other_base * config['tax_thresholds']['flat_tax'])
+
+            annual_tax = qualified_tax + other_tax
 
     annual_net_income = annual_invoice_amount - annual_business_costs - total_zus_contributions - annual_tax
     

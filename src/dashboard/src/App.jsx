@@ -22,6 +22,8 @@ function App() {
     zus_type: 'preferential',
     sickness_insurance: false,
     tax_form: 'lump_sum_it',
+    ip_box_qualified_share: 100,
+    ip_box_base_form: 'flat_tax',
     vacation_days: 20,
     sick_days: 5,
     stoppage_months: 0,

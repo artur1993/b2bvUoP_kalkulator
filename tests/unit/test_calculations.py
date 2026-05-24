@@ -85,6 +85,42 @@ class TestCalculations(unittest.TestCase):
 
         self.assertEqual(results['annual_tax'], 22142)
 
+    def test_ip_box_100_percent_qualified(self):
+        data = self._b2b_lump_sum_data(10000)
+        data.update({
+            'tax_form': 'ip_box',
+            'ip_box_qualified_share': 100,
+            'ip_box_base_form': 'flat_tax',
+        })
+
+        results = calculate_b2b_results(data)
+
+        self.assertEqual(results['annual_tax'], 4928)
+
+    def test_ip_box_60_percent_qualified_flat_base(self):
+        data = self._b2b_lump_sum_data(10000)
+        data.update({
+            'tax_form': 'ip_box',
+            'ip_box_qualified_share': 60,
+            'ip_box_base_form': 'flat_tax',
+        })
+
+        results = calculate_b2b_results(data)
+
+        self.assertEqual(results['annual_tax'], 10447)
+
+    def test_ip_box_60_percent_qualified_scale_base(self):
+        data = self._b2b_lump_sum_data(10000)
+        data.update({
+            'tax_form': 'ip_box',
+            'ip_box_qualified_share': 60,
+            'ip_box_base_form': 'tax_scale',
+        })
+
+        results = calculate_b2b_results(data)
+
+        self.assertEqual(results['annual_tax'], 4087)
+
     def test_uop_total_value_without_double_vacation(self):
         results = calculate_uop_results({
             'monthly_gross_salary': 10000,

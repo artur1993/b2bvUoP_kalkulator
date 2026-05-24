@@ -20,6 +20,8 @@ describe('CalculatorForm', () => {
     sick_days: 0,
     stoppage_months: 0,
     customBenefits: 0,
+    ip_box_qualified_share: 100,
+    ip_box_base_form: 'flat_tax',
     companyBenefits: {
       paidVacationDays: { enabled: false, days: 0, value: 0 },
       paidSickDays: { enabled: false, days: 0, value: 0 },
@@ -166,6 +168,23 @@ describe('CalculatorForm', () => {
     await waitFor(() => {
       expect(costsInput).toHaveValue(500);
     });
+  });
+
+  it('shows IP Box fields only when IP Box is selected', async () => {
+    renderComponent();
+
+    expect(screen.queryByLabelText('Qualified IP Income Share (%)')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Tax Form for Non-Qualified Income')).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('Taxation Form'), {
+      target: { name: 'tax_form', value: 'ip_box' },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Qualified IP Income Share (%)')).toBeInTheDocument();
+    });
+    expect(screen.getByLabelText('Tax Form for Non-Qualified Income')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('nexus');
   });
 
   it('updates UoP input fields correctly', async () => {
