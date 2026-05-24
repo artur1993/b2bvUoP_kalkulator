@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe.skip('B2B vs UoP Calculator E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5001');
-    await page.waitForSelector('h1:has-text("B2B vs UoP Calculator 2025")');
+    await page.waitForSelector('h1:has-text("B2B vs UoP Calculator 2026")');
   });
 
   test('Test Case 1: "Happy Path" with Default Values', async ({ page }) => {

@@ -14,7 +14,7 @@ test.describe('Visual and UI/UX Tests', () => {
     await expect(body).toHaveCSS('background-color', 'rgb(247, 250, 252)');
 
     // Sprawdzenie fontu w nagłówku
-    const headerTitle = page.locator('h1:has-text("B2B vs UoP Calculator 2025")');
+    const headerTitle = page.locator('h1:has-text("B2B vs UoP Calculator 2026")');
     await expect(headerTitle).toHaveCSS('font-family', /Inter/);
 
     // Sprawdzenie widoczności i treści nagłówka
