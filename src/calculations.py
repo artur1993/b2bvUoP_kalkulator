@@ -191,7 +191,7 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
         elif deductible_cost_type == 'author_50':
             if cumulative_author_costs < author_costs_limit:
                 creative_income = monthly_gross_salary * creative_work_percentage
-                author_costs_base = creative_income - (monthly_social * (creative_income / monthly_gross_salary))
+                author_costs_base = creative_income - (monthly_social * creative_work_percentage)
                 potential_costs = author_costs_base * 0.5
                 if cumulative_author_costs + potential_costs > author_costs_limit:
                     monthly_costs = author_costs_limit - cumulative_author_costs
