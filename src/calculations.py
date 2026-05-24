@@ -10,6 +10,15 @@ UOP_ZUS_RATES = {
     "health": 0.09
 }
 
+def _calculate_progressive_tax(taxable_base: float, config: Dict[str, Any]) -> float:
+    tax_threshold = config['tax_thresholds']['tax_scale'][0]['income']
+    tax_reducing = config['tax_thresholds']['tax_reducing_amount']
+
+    if taxable_base <= tax_threshold:
+        return max(0, math.ceil(taxable_base * 0.12) - tax_reducing)
+
+    return math.ceil((tax_threshold * 0.12) - tax_reducing + (taxable_base - tax_threshold) * 0.32)
+
 def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
     """Calculates all financial aspects for a B2B contract for 2026."""
     config = config_manager.get_config()
@@ -88,12 +97,7 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
         if tax_form == 'flat_tax':
             annual_tax = math.ceil(max(0, taxable_base) * config['tax_thresholds']['flat_tax'])
         elif tax_form == 'tax_scale':
-            tax_threshold = config['tax_thresholds']['tax_scale'][0]['income']
-            tax_reducing = config['tax_thresholds']['tax_reducing_amount']
-            if taxable_base <= tax_threshold:
-                annual_tax = max(0, math.ceil(taxable_base * 0.12) - tax_reducing)
-            else:
-                annual_tax = math.ceil((tax_threshold * 0.12) - tax_reducing + (taxable_base - tax_threshold) * 0.32)
+            annual_tax = _calculate_progressive_tax(taxable_base, config)
         elif tax_form == 'ip_box':
             annual_tax = math.ceil(max(0, taxable_base) * config['tax_thresholds']['ip_box'])
 
@@ -147,9 +151,15 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
     annual_health_contribution = 0
     annual_deductible_costs = 0
     annual_tax_base = 0
+    annual_tax_base_without_ppk_employer = 0
+    annual_ppk_employee_contribution = 0
+    annual_ppk_employer_contribution = 0
     cumulative_gross = 0
     cumulative_author_costs = 0
     monthly_calculations = []
+    selected_benefits = uop_data.get('selected_benefits', [])
+    ppk_selected = 'ppk' in selected_benefits
+    ppk_rates = config.get('ppk', {})
 
     for month in range(1, 13):
         if cumulative_gross >= thirty_times_limit:
@@ -193,31 +203,40 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
                 monthly_costs = config['tax_deductible_costs']['standard']
         
         annual_deductible_costs += monthly_costs
-        monthly_tax_base = max(0, monthly_gross_salary - monthly_social - monthly_costs)
+        monthly_ppk_employee = monthly_gross_salary * ppk_rates.get('employee_rate', 0) if ppk_selected else 0
+        monthly_ppk_employer = monthly_gross_salary * ppk_rates.get('employer_rate', 0) if ppk_selected else 0
+        annual_ppk_employee_contribution += monthly_ppk_employee
+        annual_ppk_employer_contribution += monthly_ppk_employer
+
+        monthly_tax_base_without_ppk_employer = max(0, monthly_gross_salary - monthly_social - monthly_costs - monthly_ppk_employee)
+        monthly_tax_base = monthly_tax_base_without_ppk_employer + monthly_ppk_employer
         annual_tax_base += monthly_tax_base
+        annual_tax_base_without_ppk_employer += monthly_tax_base_without_ppk_employer
         
         monthly_calculations.append({
             "month": month,
             "deductible_costs": monthly_costs,
-            "tax_base": monthly_tax_base
+            "tax_base": monthly_tax_base,
+            "ppk_employee_contribution": monthly_ppk_employee,
+            "ppk_employer_contribution": monthly_ppk_employer
         })
 
     if uop_data.get('youth_relief', False):
         annual_tax_base = max(0, annual_tax_base - youth_relief_limit)
+        annual_tax_base_without_ppk_employer = max(0, annual_tax_base_without_ppk_employer - youth_relief_limit)
 
-    tax_threshold = config['tax_thresholds']['tax_scale'][0]['income']
-    tax_reducing = config['tax_thresholds']['tax_reducing_amount']
-    
-    if annual_tax_base <= tax_threshold:
-        annual_tax = max(0, math.ceil(annual_tax_base * 0.12) - tax_reducing)
-    else:
-        annual_tax = math.ceil((tax_threshold * 0.12) - tax_reducing + (annual_tax_base - tax_threshold) * 0.32)
+    annual_tax = _calculate_progressive_tax(annual_tax_base, config)
+    annual_tax_without_ppk_employer = _calculate_progressive_tax(annual_tax_base_without_ppk_employer, config)
 
-    annual_net = cumulative_gross - annual_social_contributions - annual_health_contribution - annual_tax
+    annual_net = cumulative_gross - annual_social_contributions - annual_health_contribution - annual_tax - annual_ppk_employee_contribution
     
-    benefits_value = sum(config['benefits'][b] for b in uop_data.get('selected_benefits', []) if b in config['benefits'] and b != 'ppk')
-    if 'ppk' in uop_data.get('selected_benefits', []):
-        benefits_value += cumulative_gross * config['benefits']['ppk']
+    benefits_value = sum(config['benefits'][b] for b in selected_benefits if b in config['benefits'])
+    annual_ppk_employer_net = 0
+    if ppk_selected:
+        # Uproszczenie: PIT od dopłaty pracodawcy to różnica podatku z/bez tej dopłaty.
+        ppk_employer_tax = max(0, annual_tax - annual_tax_without_ppk_employer)
+        annual_ppk_employer_net = max(0, annual_ppk_employer_contribution - ppk_employer_tax)
+        benefits_value += annual_ppk_employer_net
         
     total_uop_value = annual_net + benefits_value
 
@@ -231,6 +250,9 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
         "monthly_net_income": total_uop_value / 12,
         "steps": {
             "annual_deductible_costs": annual_deductible_costs,
+            "annual_ppk_employee_contribution": annual_ppk_employee_contribution,
+            "annual_ppk_employer_contribution": annual_ppk_employer_contribution,
+            "annual_ppk_employer_net": annual_ppk_employer_net,
             "monthly_calculations": monthly_calculations
         }
     }

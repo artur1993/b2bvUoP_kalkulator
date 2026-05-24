@@ -67,7 +67,7 @@ class ScenariosTestCase(unittest.TestCase):
         request['uop'].update({"monthly_gross_salary": 15000, "selected_benefits": ["medical_care", "sport_card", "training_budget", "ppk"]})
         response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         data = json.loads(response.data)['uop_results']
-        assert data['annual_benefits_value'] > 10000
+        assert pytest.approx(data['annual_benefits_value'], 1.0) == 9036
 
     def test_scenario_7_b2b_preferential_zus_positive(self):
         request = self.base_request.copy()

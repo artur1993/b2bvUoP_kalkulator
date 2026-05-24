@@ -64,8 +64,15 @@
     "medical_care": 2400,
     "sport_card": 1800,
     "training_budget": 3000,
-    "ppk": 0.02,
     "equipment": 4000
+  },
+  "ppk": {
+    "employee_rate": 0.02,
+    "employer_rate": 0.015,
+    "source_url": "https://www.mojeppk.pl/",
+    "source_checked_at": "2026-05-23",
+    "valid_from": "2026-01-01",
+    "valid_to": "2026-12-31"
   },
   "uop_days_off": {
     "vacation": { "days": 26, "payment_percentage": 1.0 },
