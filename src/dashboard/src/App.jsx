@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import CalculatorForm from './components/CalculatorForm';
 import ResultsDisplay from './components/ResultsDisplay';
@@ -10,126 +10,36 @@ import SkeletonLoader from './components/SkeletonLoader';
 import Alert from './components/Alert';
 import { calculateResults, exportToExcel } from './services/api';
 import { saveAs } from 'file-saver';
+import { calculatorReducer, initialState } from './state/calculatorReducer';
 
 function App() {
-  const { i18n, t } = useTranslation();
-  const [calculationMode, setCalculationMode] = useState('uop_to_b2b');
-  const [age, setAge] = useState(30);
-
-  const [b2bData, setB2bData] = useState({
-    monthly_invoice_amount: 10000,
-    monthly_business_costs: 500,
-    zus_type: 'preferential',
-    sickness_insurance: false,
-    tax_form: 'lump_sum_it',
-    ip_box_qualified_share: 100,
-    ip_box_base_form: 'flat_tax',
-    vacation_days: 20,
-    sick_days: 5,
-    stoppage_months: 0,
-    age: 30,
-    customBenefits: 0,
-    companyBenefits: {
-      paidVacationDays: { enabled: false, days: 0 },
-      paidSickDays: { enabled: false, days: 0 },
-      medicalCare: { enabled: false, value: 0 },
-      lifeInsurance: { enabled: false, value: 0 },
-      sportCard: { enabled: false, value: 0 },
-      trainingBudget: { enabled: false, value: 0 },
-      otherBenefits: { enabled: false, value: 0 },
-    }
-  });
-
-  const [uopData, setUopData] = useState({
-    monthly_gross_salary: 8000,
-    deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
-    youth_relief: false,
-    selected_benefits: [],
-    age: 30,
-  });
-
-  const [results, setResults] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleB2bChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name.startsWith('companyBenefits.')) {
-      const [benefitType, field] = name.split('.').slice(1);
-      setB2bData((prevData) => ({
-        ...prevData,
-        companyBenefits: {
-          ...prevData.companyBenefits,
-          [benefitType]: {
-            ...prevData.companyBenefits[benefitType],
-            [field]: type === 'checkbox' ? checked : value,
-          },
-        },
-      }));
-    } else {
-      setB2bData((prevData) => ({
-        ...prevData,
-        [name]: type === 'checkbox' ? checked : value,
-      }));
-    }
-  };
-
-  const handleUopChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name === 'selected_benefits') {
-      setUopData((prevData) => ({
-        ...prevData,
-        selected_benefits: checked
-          ? [...prevData.selected_benefits, value]
-          : prevData.selected_benefits.filter((benefit) => benefit !== value),
-      }));
-    } else if (name.startsWith('deductible_cost_settings.')) {
-      const field = name.split('.')[1];
-      setUopData((prevData) => ({
-        ...prevData,
-        deductible_cost_settings: {
-          ...prevData.deductible_cost_settings,
-          [field]: value,
-        },
-      }));
-    } else {
-      setUopData((prevData) => ({
-        ...prevData,
-        [name]: type === 'checkbox' ? checked : value,
-      }));
-    }
-  };
-
-  const handleAgeChange = (e) => {
-    const newAge = parseInt(e.target.value, 10);
-    setAge(newAge);
-    const isYouthReliefApplicable = newAge < 26;
-    setB2bData(prev => ({ ...prev, age: newAge }));
-    setUopData(prev => ({ ...prev, age: newAge, youth_relief: isYouthReliefApplicable }));
-  };
+  const { i18n } = useTranslation();
+  const [state, dispatch] = useReducer(calculatorReducer, initialState);
+  const { b2bData, uopData, calculationMode, results, loading, error } = state;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.has('mode')) setCalculationMode(params.get('mode'));
+    const payload = {};
+    if (params.has('mode')) payload.calculationMode = params.get('mode');
     if (params.has('b2b_invoice')) {
-      setB2bData(prev => ({
-        ...prev,
-        monthly_invoice_amount: parseFloat(params.get('b2b_invoice')) || prev.monthly_invoice_amount,
-        tax_form: params.get('b2b_tax') || prev.tax_form,
-        zus_type: params.get('b2b_zus') || prev.zus_type,
-      }));
+      payload.b2bData = {
+        monthly_invoice_amount: parseFloat(params.get('b2b_invoice')) || initialState.b2bData.monthly_invoice_amount,
+        tax_form: params.get('b2b_tax') || initialState.b2bData.tax_form,
+        zus_type: params.get('b2b_zus') || initialState.b2bData.zus_type,
+      };
     }
     if (params.has('uop_salary')) {
-      setUopData(prev => ({
-        ...prev,
-        monthly_gross_salary: parseFloat(params.get('uop_salary')) || prev.monthly_gross_salary,
-      }));
+      payload.uopData = {
+        monthly_gross_salary: parseFloat(params.get('uop_salary')) || initialState.uopData.monthly_gross_salary,
+      };
+    }
+    if (Object.keys(payload).length > 0) {
+      dispatch({ type: 'HYDRATE_FROM_URL', payload });
     }
   }, []);
 
   const handleCalculate = async () => {
-    setLoading(true);
-    setError(null);
+    dispatch({ type: 'CALCULATE_START' });
     try {
       const data = { b2b: b2bData, uop: uopData, calculation_mode: calculationMode, language: i18n.language };
       const params = new URLSearchParams();
@@ -140,11 +50,9 @@ function App() {
       params.set('uop_salary', uopData.monthly_gross_salary);
       window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
       const res = await calculateResults(data);
-      setResults(res);
+      dispatch({ type: 'CALCULATE_SUCCESS', payload: res });
     } catch (err) {
-      setError('Failed to fetch results. Please check the console for more details.');
-    } finally {
-      setLoading(false);
+      dispatch({ type: 'CALCULATE_FAILURE', payload: 'Failed to fetch results. Please check the console for more details.' });
     }
   };
 
@@ -165,15 +73,9 @@ function App() {
         <div className="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 print:shadow-none print:border-none">
           <div className="print:hidden">
             <CalculatorForm
-              b2bData={b2bData}
-              uopData={uopData}
-              handleB2bChange={handleB2bChange}
-              handleUopChange={handleUopChange}
-              handleAgeChange={handleAgeChange}
+              state={state}
+              dispatch={dispatch}
               handleCalculate={handleCalculate}
-              loading={loading}
-              calculationMode={calculationMode}
-              handleCalculationModeChange={(e) => setCalculationMode(e.target.value)}
             />
           </div>
           {loading && <div className="print:hidden"><SkeletonLoader /></div>}

@@ -5,8 +5,27 @@ import Select from './Select';
 import Checkbox from './Checkbox';
 import Tooltip from './Tooltip';
 
-const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, handleAgeChange, handleCalculate, loading, calculationMode, handleCalculationModeChange }) => {
+const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
   const { t } = useTranslation();
+  const { b2bData, uopData, loading, calculationMode } = state;
+
+  const handleB2bChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    dispatch({ type: 'SET_B2B_FIELD', payload: { name, value, inputType: type, checked } });
+  };
+
+  const handleUopChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    dispatch({ type: 'SET_UOP_FIELD', payload: { name, value, inputType: type, checked } });
+  };
+
+  const handleAgeChange = (e) => {
+    dispatch({ type: 'SET_AGE', payload: parseInt(e.target.value, 10) });
+  };
+
+  const handleCalculationModeChange = (e) => {
+    dispatch({ type: 'SET_CALCULATION_MODE', payload: e.target.value });
+  };
 
   const zusOptions = [
     { value: 'start_relief', label: t('form.zus_start_relief') },

@@ -2,8 +2,9 @@
 import { render, screen, fireEvent, waitFor } from '../utils/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import CalculatorForm from './CalculatorForm';
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import i18n from '../i18n';
+import { calculatorReducer, initialState } from '../state/calculatorReducer';
 
 
 describe('CalculatorForm', () => {
@@ -42,73 +43,19 @@ describe('CalculatorForm', () => {
 
   // Test Wrapper component to manage state
   const TestWrapper = ({ initialB2b, initialUop, onCalculate, onExport, loading, initialCalculationMode }) => {
-    const [b2bData, setB2bData] = useState(initialB2b);
-    const [uopData, setUopData] = useState(initialUop);
-    const [calculationMode, setCalculationMode] = useState(initialCalculationMode || 'uop_to_b2b');
-
-    const handleCalculationModeChange = (e) => {
-      setCalculationMode(e.target.value);
-    };
-
-    const handleB2bChange = (e) => {
-      const { name, value, type, checked } = e.target;
-      if (name.startsWith('companyBenefits.')) {
-        const [parent, child, prop] = name.split('.');
-        setB2bData(prev => ({
-          ...prev,
-          companyBenefits: {
-            ...prev.companyBenefits,
-            [child]: {
-              ...prev.companyBenefits[child],
-              [prop]: type === 'checkbox' ? checked : value,
-            },
-          },
-        }));
-      } else {
-        setB2bData(prev => ({
-          ...prev,
-          [name]: type === 'checkbox' ? checked : value,
-        }));
-      }
-    };
-
-    const handleUopChange = (e) => {
-      const { name, value, type, checked } = e.target;
-      if (name === 'selected_benefits') {
-        setUopData(prev => ({
-          ...prev,
-          selected_benefits: checked
-            ? [...prev.selected_benefits, value]
-            : prev.selected_benefits.filter(benefit => benefit !== value),
-        }));
-      } else if (name.startsWith('deductible_cost_settings.')) {
-        const field = name.split('.')[1];
-        setUopData(prev => ({
-          ...prev,
-          deductible_cost_settings: {
-            ...prev.deductible_cost_settings,
-            [field]: value,
-          },
-        }));
-      } else {
-        setUopData(prev => ({
-          ...prev,
-          [name]: type === 'checkbox' ? checked : value,
-        }));
-      }
-    };
+    const [state, dispatch] = useReducer(calculatorReducer, {
+      ...initialState,
+      b2bData: initialB2b,
+      uopData: initialUop,
+      loading,
+      calculationMode: initialCalculationMode || 'uop_to_b2b',
+    });
 
     return (
       <CalculatorForm
-        b2bData={b2bData}
-        uopData={uopData}
-        handleB2bChange={handleB2bChange}
-        handleUopChange={handleUopChange}
+        state={state}
+        dispatch={dispatch}
         handleCalculate={onCalculate}
-        onExport={onExport}
-        loading={loading}
-        calculationMode={calculationMode}
-        handleCalculationModeChange={handleCalculationModeChange}
       />
     );
   };
@@ -325,37 +272,24 @@ describe('CalculatorForm', () => {
 
   it('updates KUP settings in state correctly', async () => {
     const TestWrapperWithState = () => {
-      const [uopData, setUopData] = useState({
-        monthly_gross_salary: 8000,
-        deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
-        youth_relief: false,
-        selected_benefits: [],
+      const [state, dispatch] = useReducer(calculatorReducer, {
+        ...initialState,
+        b2bData: initialB2bData,
+        uopData: {
+          monthly_gross_salary: 8000,
+          deductible_cost_settings: { type: 'standard', creative_work_percentage: 70 },
+          youth_relief: false,
+          selected_benefits: [],
+        },
+        loading: false,
+        calculationMode: 'uop_to_b2b',
       });
-
-      const handleUopChange = (e) => {
-        const { name, value } = e.target;
-        if (name.startsWith('deductible_cost_settings.')) {
-          const field = name.split('.')[1];
-          setUopData(prev => ({
-            ...prev,
-            deductible_cost_settings: {
-              ...prev.deductible_cost_settings,
-              [field]: value,
-            },
-          }));
-        }
-      };
 
       return (
           <CalculatorForm
-            b2bData={initialB2bData}
-            uopData={uopData}
-            handleB2bChange={() => {}}
-            handleUopChange={handleUopChange}
+            state={state}
+            dispatch={dispatch}
             handleCalculate={mockOnCalculate}
-            loading={false}
-            calculationMode="uop_to_b2b"
-            handleCalculationModeChange={() => {}}
           />
       );
     };
