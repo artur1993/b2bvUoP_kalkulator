@@ -23,6 +23,7 @@ from src.validation import (
 )
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+INTERNAL_SERVER_ERROR_MESSAGE = "An internal server error occurred."
 
 def get_cors_origins():
     origins = os.environ.get('CORS_ORIGINS', 'http://localhost:5173')
@@ -48,10 +49,10 @@ def handle_global_error(e):
     """Global error handler to log all unhandled exceptions."""
     if isinstance(e, HTTPException):
         status_code = 404 if e.code == 405 and request.path.startswith('/api/') else e.code
-        return jsonify({"error": e.description}), status_code
+        return jsonify({"error": e.name}), status_code
 
-    app.logger.exception(f"Unhandled Exception: {e}")
-    return jsonify({"error": "An unexpected server error occurred."}), 500
+    app.logger.exception("Unhandled exception")
+    return jsonify({"error": INTERNAL_SERVER_ERROR_MESSAGE}), 500
 
 @app.route('/api/calculate/break-even-analysis', methods=['POST'])
 @validate(BreakEvenAnalysisRequest)
@@ -65,9 +66,9 @@ def break_even_analysis():
 
         analysis_results = calculate_break_even_analysis(uop_data, b2b_base_data)
         return jsonify(analysis_results)
-    except Exception as e:
-        app.logger.exception("Error during break-even analysis:")
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        app.logger.exception("Error during break-even analysis")
+        return jsonify({"error": INTERNAL_SERVER_ERROR_MESSAGE}), 500
 
 @app.route('/api/calculate', methods=['POST'])
 @validate(CalculationRequestModel)
@@ -115,9 +116,9 @@ def calculate():
         }
 
         return jsonify(response_data)
-    except Exception as e:
-        app.logger.exception("Error during calculation:")
-        return jsonify({"error": str(e) if app.debug else "An internal server error occurred."}), 500
+    except Exception:
+        app.logger.exception("Error during calculation")
+        return jsonify({"error": INTERNAL_SERVER_ERROR_MESSAGE}), 500
 
 @app.route('/api/export/excel', methods=['POST'])
 @validate(ExcelExportRequest)
@@ -147,9 +148,9 @@ def export_to_excel():
 
         return send_file(buffer, as_attachment=True, download_name="kalkulator_wyniki.xlsx", 
                          mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    except Exception as e:
-        app.logger.exception("Error exporting to Excel:")
-        return jsonify({"error": "Failed to generate Excel file."}), 500
+    except Exception:
+        app.logger.exception("Error exporting to Excel")
+        return jsonify({"error": INTERNAL_SERVER_ERROR_MESSAGE}), 500
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
