@@ -1,5 +1,38 @@
 import unittest
-from src.calculations import calculate_b2b_results, calculate_uop_results
+from src.calculations import calculate_b2b_results, calculate_uop_results, compute_solidarity_tax
+from src.config import config_manager
+
+
+def test_solidarity_tax_below_threshold():
+    assert compute_solidarity_tax(500000, config_manager.get_config()) == 0
+
+
+def test_solidarity_tax_at_threshold():
+    assert compute_solidarity_tax(1000000, config_manager.get_config()) == 0
+
+
+def test_solidarity_tax_above_threshold():
+    assert compute_solidarity_tax(1200000, config_manager.get_config()) == 8000
+
+
+def test_b2b_high_income_includes_solidarity_tax():
+    data = {
+        'monthly_invoice_amount': 100000,
+        'monthly_business_costs': 0,
+        'zus_type': 'full',
+        'sickness_insurance': False,
+        'tax_form': 'lump_sum_it',
+        'vacation_days': 0,
+        'sick_days': 0,
+        'stoppage_months': 0,
+        'customBenefits': 0,
+        'companyBenefits': {}
+    }
+
+    results = calculate_b2b_results(data)
+
+    assert results['annual_solidarity_tax'] > 0
+    assert results['annual_tax'] > results['annual_solidarity_tax']
 
 class TestCalculations(unittest.TestCase):
 

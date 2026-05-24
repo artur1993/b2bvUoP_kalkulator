@@ -13,6 +13,7 @@ const mockResultsUopToB2b = {
     annual_business_costs: 12000,
     annual_zus: 24000,
     annual_tax: 10000,
+    annual_solidarity_tax: 0,
     annual_lost_revenue: 5000,
     annual_net_income: 69000,
     annual_company_benefits_value: 1000,
@@ -24,6 +25,7 @@ const mockResultsUopToB2b = {
     annual_gross_salary: 100000,
     annual_zus: 20000,
     annual_tax: 8000,
+    annual_solidarity_tax: 0,
     annual_net_income: 72000,
     annual_benefits_value: 3000,
     total_annual_value: 79000,
@@ -109,6 +111,30 @@ describe('ResultsDisplay Component', () => {
     expect(infoBox.textContent).toMatch(/28\s260/);
     expect(infoBox.textContent).toMatch(/11\s304/);
     expect(infoBox.textContent).toMatch(/16\s956/);
+  });
+
+  it('should show solidarity tax and disclaimer when present', async () => {
+    const results = {
+      ...mockResultsUopToB2b,
+      b2b_results: {
+        ...mockResultsUopToB2b.b2b_results,
+        annual_tax: 180000,
+        annual_solidarity_tax: 8000,
+      },
+    };
+
+    render(<ResultsDisplay results={results} calculationMode="uop_to_b2b" />);
+
+    expect(await screen.findByText(new RegExp(i18n.t('results.solidarity_tax')))).toBeInTheDocument();
+    expect(screen.getByTestId('solidarity-tax-disclaimer')).toHaveTextContent('PIT-DS');
+  });
+
+  it('should hide solidarity tax and disclaimer when zero', async () => {
+    render(<ResultsDisplay results={mockResultsUopToB2b} calculationMode="uop_to_b2b" />);
+
+    await screen.findByText(i18n.t('results.title'));
+    expect(screen.queryByText(i18n.t('results.solidarity_tax'))).not.toBeInTheDocument();
+    expect(screen.queryByTestId('solidarity-tax-disclaimer')).not.toBeInTheDocument();
   });
 
   it('should render excel export button', async () => {

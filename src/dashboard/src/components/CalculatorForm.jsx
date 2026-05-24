@@ -398,6 +398,7 @@ const CalculatorForm = ({ b2bData, uopData, handleB2bChange, handleUopChange, ha
         <button
           onClick={handleCalculate}
           disabled={loading}
+          data-testid="calculate-button"
           className="w-full md:w-auto bg-primary hover:bg-blue-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 shadow-lg"
           aria-label={t('form.calculate_button')}
         >

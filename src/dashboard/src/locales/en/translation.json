@@ -69,6 +69,8 @@
     "annual_costs": "Annual Business Costs",
     "annual_zus": "Annual ZUS",
     "annual_tax": "Annual Tax",
+    "solidarity_tax": "Solidarity Tax",
+    "solidarity_tax_disclaimer": "Note: the 4% solidarity tax applies to total income above 1,000,000 PLN from all sources. This calculator assumes one source; include all income in the PIT-DS declaration.",
     "lost_revenue": "Annual Lost Revenue",
     "net_income": "Annual Net Income (Hand)",
     "company_benefits_value": "Annual Company Benefits Value",

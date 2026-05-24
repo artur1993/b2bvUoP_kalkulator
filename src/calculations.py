@@ -19,6 +19,14 @@ def _calculate_progressive_tax(taxable_base: float, config: Dict[str, Any]) -> f
 
     return math.ceil((tax_threshold * 0.12) - tax_reducing + (taxable_base - tax_threshold) * 0.32)
 
+def compute_solidarity_tax(annual_taxable_base: float, config: Dict[str, Any]) -> float:
+    """Returns 4% of taxable base over 1M PLN, else 0."""
+    solidarity_tax = config['tax_thresholds']['solidarity_tax']
+    threshold = solidarity_tax['threshold']
+    rate = solidarity_tax['rate']
+
+    return max(0, annual_taxable_base - threshold) * rate
+
 def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
     """Calculates all financial aspects for a B2B contract for 2026."""
     config = config_manager.get_config()
@@ -83,9 +91,11 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
 
     # 4. Taxes
     annual_tax = 0
+    annual_solidarity_tax = 0
     if tax_form == 'lump_sum_it':
         tax_base = max(0, annual_invoice_amount - (annual_health_contribution * 0.5) - annual_social_contributions)
         annual_tax = round(tax_base * config['tax_thresholds']['lump_sum_it'])
+        annual_solidarity_tax = compute_solidarity_tax(tax_base, config)
     else:
         income = annual_invoice_amount - annual_business_costs - annual_social_contributions
         if tax_form == 'flat_tax':
@@ -113,6 +123,9 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
 
             annual_tax = qualified_tax + other_tax
 
+        annual_solidarity_tax = compute_solidarity_tax(max(0, taxable_base), config)
+
+    annual_tax += annual_solidarity_tax
     annual_net_income = annual_invoice_amount - annual_business_costs - total_zus_contributions - annual_tax
     
     # Benefits
@@ -134,6 +147,7 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
         "annual_business_costs": annual_business_costs,
         "annual_zus": total_zus_contributions,
         "annual_tax": annual_tax,
+        "annual_solidarity_tax": annual_solidarity_tax,
         "annual_lost_revenue": total_lost_revenue,
         "annual_net_income": annual_net_income,
         "annual_company_benefits_value": annual_company_benefits_value,
@@ -143,7 +157,8 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
         "steps": {
             "annual_social_contributions": annual_social_contributions,
             "annual_health_contribution": annual_health_contribution,
-            "annual_tax": annual_tax
+            "annual_tax": annual_tax,
+            "annual_solidarity_tax": annual_solidarity_tax
         }
     }
 
@@ -239,6 +254,10 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
 
     annual_tax = _calculate_progressive_tax(annual_tax_base, config)
     annual_tax_without_ppk_employer = _calculate_progressive_tax(annual_tax_base_without_ppk_employer, config)
+    annual_solidarity_tax = compute_solidarity_tax(annual_tax_base, config)
+    annual_solidarity_tax_without_ppk_employer = compute_solidarity_tax(annual_tax_base_without_ppk_employer, config)
+    annual_tax += annual_solidarity_tax
+    annual_tax_without_ppk_employer += annual_solidarity_tax_without_ppk_employer
 
     annual_net = cumulative_gross - annual_social_contributions - annual_health_contribution - annual_tax - annual_ppk_employee_contribution
     
@@ -256,6 +275,7 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
         "annual_gross_salary": cumulative_gross,
         "annual_zus": annual_social_contributions + annual_health_contribution,
         "annual_tax": annual_tax,
+        "annual_solidarity_tax": annual_solidarity_tax,
         "annual_benefits_value": benefits_value,
         "annual_net_income": annual_net,
         "total_annual_value": total_uop_value,
@@ -265,6 +285,7 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
             "annual_ppk_employee_contribution": annual_ppk_employee_contribution,
             "annual_ppk_employer_contribution": annual_ppk_employer_contribution,
             "annual_ppk_employer_net": annual_ppk_employer_net,
+            "annual_solidarity_tax": annual_solidarity_tax,
             "monthly_calculations": monthly_calculations
         }
     }

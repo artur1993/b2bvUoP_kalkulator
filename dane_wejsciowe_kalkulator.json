@@ -15,7 +15,11 @@
     "ip_box": 0.05,
     "author_tax_deductible_costs_limit": 120000,
     "health_contribution_deduction_limit_flat_tax": 14100,
-    "youth_relief_limit": 85528
+    "youth_relief_limit": 85528,
+    "solidarity_tax": {
+      "threshold": 1000000,
+      "rate": 0.04
+    }
   },
   "tax_deductible_costs": {
     "standard": 250,
@@ -156,6 +160,12 @@
     },
     "tax_thresholds.health_contribution_deduction_limit_flat_tax": {
       "source_url": "https://www.podatki.gov.pl/ulgi-i-odliczenia/odliczenie-skladek-na-ubezpieczenie-zdrowotne-pit/",
+      "source_checked_at": "2026-05-23",
+      "valid_from": "2026-01-01",
+      "valid_to": "2026-12-31"
+    },
+    "tax_thresholds.solidarity_tax": {
+      "source_url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU19910800350",
       "source_checked_at": "2026-05-23",
       "valid_from": "2026-01-01",
       "valid_to": "2026-12-31"

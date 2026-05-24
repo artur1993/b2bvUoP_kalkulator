@@ -23,6 +23,7 @@ const ResultsDisplay = ({ results, onExportExcel, calculationMode, 'data-testid'
   if (!results) return null;
 
   const { b2b_results, uop_results, analysis, pension_limits_2026 } = results;
+  const hasSolidarityTax = (b2b_results.annual_solidarity_tax || 0) > 0 || (uop_results.annual_solidarity_tax || 0) > 0;
   const break_even_invoice_amount = results.break_even_invoice_amount;
   const break_even_gross_salary = results.break_even_gross_salary;
 
@@ -56,6 +57,9 @@ const ResultsDisplay = ({ results, onExportExcel, calculationMode, 'data-testid'
             <li className="flex justify-between"><span>{t('results.annual_revenue')}:</span> <span className="font-medium">{formatCurrency(b2b_results.annual_revenue)}</span></li>
             <li className="flex justify-between"><span>{t('results.annual_zus')}:</span> <span className="font-medium">{formatCurrency(b2b_results.annual_zus)}</span></li>
             <li className="flex justify-between"><span>{t('results.annual_tax')}:</span> <span className="font-medium">{formatCurrency(b2b_results.annual_tax)}</span></li>
+            {(b2b_results.annual_solidarity_tax || 0) > 0 && (
+              <li className="flex justify-between"><span>{t('results.solidarity_tax')}:</span> <span className="font-medium">{formatCurrency(b2b_results.annual_solidarity_tax)}</span></li>
+            )}
             <li className="text-2xl font-bold text-green-600 dark:text-accent-dark mt-4 border-t pt-4 flex justify-between">
               <span>{t('results.total_b2b_value')}:</span> <span>{formatCurrency(b2b_results.total_annual_value)}</span>
             </li>
@@ -71,12 +75,26 @@ const ResultsDisplay = ({ results, onExportExcel, calculationMode, 'data-testid'
             <li className="flex justify-between"><span>{t('results.annual_gross')}:</span> <span className="font-medium">{formatCurrency(uop_results.annual_gross_salary)}</span></li>
             <li className="flex justify-between"><span>{t('results.annual_zus')}:</span> <span className="font-medium">{formatCurrency(uop_results.annual_zus)}</span></li>
             <li className="flex justify-between"><span>{t('results.annual_tax')}:</span> <span className="font-medium">{formatCurrency(uop_results.annual_tax)}</span></li>
+            {(uop_results.annual_solidarity_tax || 0) > 0 && (
+              <li className="flex justify-between"><span>{t('results.solidarity_tax')}:</span> <span className="font-medium">{formatCurrency(uop_results.annual_solidarity_tax)}</span></li>
+            )}
             <li className="text-2xl font-bold text-gray-800 dark:text-white mt-4 border-t pt-4 flex justify-between">
               <span>{t('results.total_uop_value')}:</span> <span>{formatCurrency(uop_results.total_annual_value)}</span>
             </li>
           </ul>
         </div>
       </div>
+
+      {hasSolidarityTax && (
+        <section
+          data-testid="solidarity-tax-disclaimer"
+          className="bg-sky-50 dark:bg-sky-900/20 p-4 rounded-lg border border-sky-200 dark:border-sky-800 mb-8 print:bg-white print:text-black"
+        >
+          <p className="text-sm text-sky-900 dark:text-sky-200">
+            {t('results.solidarity_tax_disclaimer')}
+          </p>
+        </section>
+      )}
 
       {pension_limits_2026 && (
         <section
