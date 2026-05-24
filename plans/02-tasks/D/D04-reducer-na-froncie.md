@@ -46,10 +46,10 @@ const [state, dispatch] = useReducer(calculatorReducer, initialState);
 Komponenty dostają `dispatch` zamiast 5 handlerów.
 
 ## Acceptance
-- [ ] `App.jsx` ma ≤2 `useState` (np. tylko dark mode toggle)
-- [ ] Reducer testowalny w izolacji
-- [ ] `CalculatorForm` dostaje `state` + `dispatch` zamiast 12 propów
-- [ ] Frontend testy zielone
+- [x] `App.jsx` ma ≤2 `useState` (np. tylko dark mode toggle)
+- [x] Reducer testowalny w izolacji
+- [x] `CalculatorForm` dostaje `state` + `dispatch` zamiast 12 propów
+- [x] Frontend testy zielone
 
 ## Test plan
 ```bash
