@@ -27,9 +27,9 @@ author_costs_base = creative_income - monthly_social * creative_work_percentage
 Wartości obliczone są **identyczne**, ale wyrażenie nie dzieli przez `monthly_gross_salary`.
 
 ## Acceptance
-- [ ] Wzór nie zawiera `creative_income / monthly_gross_salary`
-- [ ] Test `test_author_costs_no_div_by_zero` — `monthly_gross_salary=0`, `deductible_cost_settings.type='author_50'`, `creative_work_percentage=50` → bez crasha
-- [ ] Test `test_author_costs_value_unchanged` — dla `monthly_gross_salary=10000`, `creative_work_percentage=70` → wynik **identyczny** jak przed zmianą (regression)
+- [x] Wzór nie zawiera `creative_income / monthly_gross_salary`
+- [x] Test `test_author_costs_no_div_by_zero` — `monthly_gross_salary=0`, `deductible_cost_settings.type='author_50'`, `creative_work_percentage=50` → bez crasha
+- [x] Test `test_author_costs_value_unchanged` — dla `monthly_gross_salary=10000`, `creative_work_percentage=70` → wynik **identyczny** jak przed zmianą (regression)
 
 ## Test plan
 ```bash
