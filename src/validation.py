@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import request, jsonify, g, current_app
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
-from typing import Optional, List, Dict, Union
+from typing import Any, Optional, List, Dict
 
 class BenefitModel(BaseModel):
     enabled: bool = False
@@ -48,28 +48,37 @@ class CalculationRequestModel(BaseModel):
     calculation_mode: str = Field(..., pattern='^(uop_to_b2b|b2b_to_uop)$')
     language: Optional[str] = "pl"
 
-def validate_calculation_request(f):
-    """Decorator to validate the main calculation request using Pydantic."""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        try:
-            json_data = request.get_json()
-            if not json_data:
-                return jsonify({"error": "Request body cannot be empty."}), 400
-            
-            validated_model = CalculationRequestModel(**json_data)
-            # Store as dict for compatibility with existing logic
-            g.validated_data = validated_model.model_dump()
-            return f(*args, **kwargs)
-        except ValidationError as e:
-            details = e.errors(include_context=False)
-            current_app.logger.error(f"Pydantic Validation Error: {details}")
-            return jsonify({
-                "error": "Validation failed",
-                "details": details
-            }), 400
-        except Exception as e:
-            current_app.logger.exception(f"Unexpected validation error: {e}")
-            return jsonify({"error": "Internal validation error"}), 500
-            
-    return decorated_function
+class BreakEvenAnalysisRequest(BaseModel):
+    b2b: B2BDataModel
+    uop: UoPDataModel
+
+class ExcelExportRequest(BaseModel):
+    b2b_results: Dict[str, Any]
+    uop_results: Dict[str, Any]
+
+def validate(model_class):
+    """Validate a JSON request body using the given Pydantic model."""
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            try:
+                json_data = request.get_json()
+                if not json_data:
+                    return jsonify({"error": "Request body cannot be empty."}), 400
+
+                validated_model = model_class(**json_data)
+                g.validated_data = validated_model.model_dump()
+                return f(*args, **kwargs)
+            except ValidationError as e:
+                details = e.errors(include_context=False)
+                current_app.logger.error(f"Pydantic Validation Error: {details}")
+                return jsonify({
+                    "error": "Validation failed",
+                    "details": details
+                }), 400
+            except Exception as e:
+                current_app.logger.exception(f"Unexpected validation error: {e}")
+                return jsonify({"error": "Internal validation error"}), 500
+
+        return decorated_function
+    return decorator
