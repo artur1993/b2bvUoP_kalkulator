@@ -219,17 +219,13 @@ def calculate_uop_results(uop_data: Dict[str, Any]) -> Dict[str, Any]:
     if 'ppk' in uop_data.get('selected_benefits', []):
         benefits_value += cumulative_gross * config['benefits']['ppk']
         
-    daily_rate = monthly_gross_salary / config['general_data']['working_days_monthly']
-    paid_days_off_value = config['uop_days_off']['vacation']['days'] * daily_rate
-    
-    total_uop_value = annual_net + benefits_value + paid_days_off_value
+    total_uop_value = annual_net + benefits_value
 
     return {
         "annual_gross_salary": cumulative_gross,
         "annual_zus": annual_social_contributions + annual_health_contribution,
         "annual_tax": annual_tax,
         "annual_benefits_value": benefits_value,
-        "annual_paid_days_off_value": paid_days_off_value,
         "annual_net_income": annual_net,
         "total_annual_value": total_uop_value,
         "monthly_net_income": total_uop_value / 12,

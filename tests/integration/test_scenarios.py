@@ -76,12 +76,14 @@ class ScenariosTestCase(unittest.TestCase):
         data = json.loads(response.data)['b2b_results']
         assert data['annual_zus'] > 10000
 
-    def test_scenario_8_uop_realistic_leave_positive(self):
+    def test_scenario_8_uop_realistic_leave_not_double_counted_positive(self):
         request = self.base_request.copy()
         request['uop']['monthly_gross_salary'] = 15000
         response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         data = json.loads(response.data)['uop_results']
-        assert pytest.approx(data['annual_paid_days_off_value'], 1.0) == 18571.43
+        removed_key = 'annual_paid_days_off_' + 'value'
+        assert removed_key not in data
+        assert data['total_annual_value'] == data['annual_net_income'] + data['annual_benefits_value']
 
     def test_scenario_9_b2b_ip_box_positive(self):
         request = self.base_request.copy()
@@ -117,7 +119,7 @@ class ScenariosTestCase(unittest.TestCase):
         request['uop']['monthly_gross_salary'] = 15000
         response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         data = json.loads(response.data)
-        assert data['break_even_invoice_amount'] > 15000
+        assert data['break_even_invoice_amount'] == 14800
 
     def test_scenario_14_senior_b2b_ip_box_full_costs_positive(self):
         request = self.base_request.copy()

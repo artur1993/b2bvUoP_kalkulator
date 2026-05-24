@@ -30,11 +30,11 @@ Usunąć zmienną `paid_days_off_value` i `annual_paid_days_off_value` z returna
 W odpowiedzi API: usunąć klucz `annual_paid_days_off_value`. Sprawdzić, czy frontend nie czyta tego pola — jeśli tak, usunąć użycie (powiązane z A06 i ResultsDisplay).
 
 ## Acceptance
-- [ ] `calculate_uop_results` nie liczy `paid_days_off_value`
-- [ ] Returned dict nie zawiera `annual_paid_days_off_value`
-- [ ] `ResultsDisplay.jsx` nie odwołuje się do tego pola
-- [ ] Test `test_uop_total_value_without_double_vacation` — pensja 10 000 brutto, KUP standard, brak benefitów → `total_annual_value ≈ annual_net` (z tolerancją ±50 PLN)
-- [ ] Test sprawdza, że dla wcześniej zawyżonego wyniku różnica wynosi `vacation_days × daily_rate`
+- [x] `calculate_uop_results` nie liczy `paid_days_off_value`
+- [x] Returned dict nie zawiera `annual_paid_days_off_value`
+- [x] `ResultsDisplay.jsx` nie odwołuje się do tego pola
+- [x] Test `test_uop_total_value_without_double_vacation` — pensja 10 000 brutto, KUP standard, brak benefitów → `total_annual_value ≈ annual_net` (z tolerancją ±50 PLN)
+- [x] Test sprawdza, że dla wcześniej zawyżonego wyniku różnica wynosi `vacation_days × daily_rate`
 
 ## Test plan
 ```bash

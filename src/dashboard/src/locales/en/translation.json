@@ -70,7 +70,6 @@
     "monthly_net": "Monthly Net (Total Value)",
     "annual_gross": "Annual Gross Salary",
     "uop_benefits_value": "Annual Benefits Value",
-    "paid_days_off_value": "Annual Paid Days Off Value",
     "total_uop_value": "Total Annual UoP Value",
     "break_even_title": "Break-Even Monthly B2B Invoice",
     "break_even_subtitle": "(This is the monthly B2B invoice amount needed to match the total annual value of the UoP contract)",
@@ -103,7 +102,6 @@
     "company_benefits": "Company Benefits",
     "custom_benefits": "Custom Benefits",
     "benefits": "Benefits",
-    "paid_days_off": "Paid Days Off",
     "b2b_waterfall_title": "B2B Contract Cash Flow"
   },
   "waterfall": {
