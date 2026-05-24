@@ -67,5 +67,13 @@ class TestCalculations(unittest.TestCase):
 
         self.assertAlmostEqual(results['steps']['annual_health_contribution'] / 12, 1495.04, places=2)
 
+    def test_minimum_health_annual_2026(self):
+        data = self._b2b_lump_sum_data(0)
+        data['tax_form'] = 'flat_tax'
+
+        results = calculate_b2b_results(data)
+
+        self.assertAlmostEqual(results['steps']['annual_health_contribution'], 5072.90, places=2)
+
 if __name__ == '__main__':
     unittest.main()

@@ -49,14 +49,14 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
 
     # 3. Health Contribution
     tax_form = b2b_data.get('tax_form', 'lump_sum_it')
-    min_health = config['zus_2026']['minimum_health_contribution']
+    minimum_health_annual = config['zus_2026']['minimum_health_annual_2026']
     
     if tax_form == 'tax_scale':
         income_for_health = max(0, annual_invoice_amount - annual_business_costs - annual_social_contributions)
-        annual_health_contribution = max(min_health * 12, income_for_health * 0.09)
+        annual_health_contribution = max(minimum_health_annual, income_for_health * 0.09)
     elif tax_form == 'flat_tax':
         income_for_health = max(0, annual_invoice_amount - annual_business_costs - annual_social_contributions)
-        annual_health_contribution = max(min_health * 12, income_for_health * 0.049)
+        annual_health_contribution = max(minimum_health_annual, income_for_health * 0.049)
     elif tax_form == 'lump_sum_it':
         revenue = annual_invoice_amount
         thresholds = config['zus_2026']['health_lump_sum_thresholds']
@@ -68,7 +68,7 @@ def calculate_b2b_results(b2b_data: Dict[str, Any]) -> Dict[str, Any]:
             monthly_health = thresholds[2]['contribution']
         annual_health_contribution = monthly_health * 12
     else:
-        annual_health_contribution = min_health * 12
+        annual_health_contribution = minimum_health_annual
 
     total_zus_contributions = annual_social_contributions + annual_health_contribution
 
