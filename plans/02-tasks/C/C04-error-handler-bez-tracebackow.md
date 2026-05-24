@@ -21,9 +21,9 @@ except Exception:
 Usunąć `str(e)`, usunąć `if app.debug`. Pozostawić tylko global error handler oraz może per-endpoint loggery (z `app.logger.exception`).
 
 ## Acceptance
-- [ ] `git grep 'str(e)' src/app.py` zwraca pusto (lub tylko w logach)
-- [ ] `git grep 'app.debug' src/app.py` zwraca pusto
-- [ ] Test `test_error_handler_no_traceback` — endpoint który celowo crashuje → response zawiera tylko stałą wiadomość, nie zawiera „Traceback" ani „ValueError" itp.
+- [x] `git grep 'str(e)' src/app.py` zwraca pusto (lub tylko w logach)
+- [x] `git grep 'app.debug' src/app.py` zwraca pusto
+- [x] Test `test_error_handler_no_traceback` — endpoint który celowo crashuje → response zawiera tylko stałą wiadomość, nie zawiera „Traceback" ani „ValueError" itp.
 
 ## Test plan
 ```bash
