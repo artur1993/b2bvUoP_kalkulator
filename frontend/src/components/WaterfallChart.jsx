@@ -169,18 +169,25 @@ const WaterfallChart = forwardRef(({ results }, ref) => {
       <div className="flex justify-center mb-4">
         <button
           onClick={() => setContractType("b2b")}
-          className={`px-4 py-2 rounded-l-lg ${contractType === "b2b" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 rounded-l-lg transition-colors ${contractType === "b2b" ? "bg-blue-700 text-white" : "bg-gray-200 text-gray-800"}`}
         >
           {t("b2b")}
         </button>
         <button
           onClick={() => setContractType("uop")}
-          className={`px-4 py-2 rounded-r-lg ${contractType === "uop" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 rounded-r-lg transition-colors ${contractType === "uop" ? "bg-blue-700 text-white" : "bg-gray-200 text-gray-800"}`}
         >
           {t("uop")}
         </button>
       </div>
-      <Bar data={chartData} options={options} ref={ref} />
+      <div className="relative h-[400px]">
+        <Bar 
+          data={chartData} 
+          options={options} 
+          ref={ref} 
+          aria-label={t(`waterfall.title_${contractType}`)}
+        />
+      </div>
     </div>
   );
 });
