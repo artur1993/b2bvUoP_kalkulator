@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '../utils/test-utils';
+import { render, screen } from '../utils/test-utils';
 import { describe, it, expect, vi } from 'vitest';
 import ResultsDisplay from './ResultsDisplay';
 import '@testing-library/jest-dom';
@@ -51,14 +51,6 @@ const mockResultsB2bToUop = {
   break_even_invoice_amount: -1,
   break_even_gross_salary: 9000,
 };
-
-// Helper to format currency for assertions, handling non-breaking spaces
-const formatCurrencyForTest = (value) => {
-    return new Intl.NumberFormat('pl-PL', {
-      style: 'currency',
-      currency: 'PLN',
-    }).format(value).split(/\s/).join(' ');
-  };
 
 describe('ResultsDisplay Component', () => {
   it('should render null when no results are provided', () => {

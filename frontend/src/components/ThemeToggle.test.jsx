@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '../utils/test-utils';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import ThemeToggle from './ThemeToggle';
 
 describe('ThemeToggle', () => {
