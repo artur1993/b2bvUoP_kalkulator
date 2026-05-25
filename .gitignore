@@ -18,6 +18,8 @@ vite.log
 *_manual.log
 frontend/coverage/
 htmlcov/
+.flask.pid
+.vite.pid
 
 # Tooling / AI
 .playwright-mcp/
