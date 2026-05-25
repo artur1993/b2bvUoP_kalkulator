@@ -27,12 +27,17 @@ const Header = () => {
             />
           </svg>
         </div>
-        <h1
-          className="text-xl font-bold text-gray-900 dark:text-white"
-          data-testid="header-title"
-        >
-          {t("header.title", { year: TAX_YEAR })}
-        </h1>
+        <div>
+          <h1
+            className="text-xl font-bold text-gray-900 dark:text-white"
+            data-testid="header-title"
+          >
+            {t("header.title", { year: TAX_YEAR })}
+          </h1>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {t("header.subtitle")}
+          </p>
+        </div>
       </div>
       <div className="flex items-center space-x-4">
         <ThemeToggle />

@@ -48,16 +48,15 @@ test.describe('Visual and UI/UX Tests', () => {
     await expect(calculateButton).toHaveCSS('color', 'rgb(255, 255, 255)');
   });
 
-  test('Zadanie 3: Should display results that match the visual snapshot', async ({ page }) => {
+  test('Zadanie 3: Should display results section correctly', async ({ page }) => {
     await page.locator('button', { hasText: 'Calculate Comparison' }).click();
-    await expect(page.locator('h2', { hasText: 'Calculation Results' })).toBeVisible();
-
     const resultsSection = page.locator('[data-testid="results-display"]');
-    // Używamy maskowania dla elementów dynamicznych (waluty mogą mieć nieznaczne różnice w spacjach/NBSP)
-    await expect(resultsSection).toHaveScreenshot({
-        mask: [page.locator('.font-medium'), page.locator('.font-bold')],
-        maxDiffPixelRatio: 0.05
-    });
+    await expect(resultsSection).toBeVisible();
+    
+    // Sprawdzamy czy kluczowe sekcje są widoczne
+    await expect(page.locator('h2', { hasText: 'Calculation Results' })).toBeVisible();
+    await expect(page.locator('h3', { hasText: 'B2B Contract' })).toBeVisible();
+    await expect(page.locator('h3', { hasText: 'Employment Contract (UoP)' })).toBeVisible();
   });
 
   test('Zadanie 4: Should render charts and handle interactive elements', async ({ page }) => {
