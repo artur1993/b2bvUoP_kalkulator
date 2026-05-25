@@ -17,8 +17,8 @@ Każdy `text-gray-800` → `text-gray-800 dark:text-gray-100`.
 Każdy `text-gray-700` → `text-gray-700 dark:text-gray-300`.
 
 ## Acceptance
-- [ ] Wszystkie sekcje formularza wyglądają spójnie w dark mode
-- [ ] E2E test `darkmode.spec.js` (F05) zielony
+- [x] Wszystkie sekcje formularza wyglądają spójnie w dark mode
+- [x] E2E test `darkmode.spec.js` (F05) zielony
 
 ## Test plan
 ```bash

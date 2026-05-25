@@ -55,8 +55,8 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Calculation Mode Selection */}
-      <div className="md:col-span-2 bg-white p-6 rounded-lg shadow mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">{t('form.calculation_mode_title')}</h2>
+      <div className="md:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">{t('form.calculation_mode_title')}</h2>
         <div className="flex items-center space-x-4">
           <label className="inline-flex items-center">
             <input
@@ -68,7 +68,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
               onChange={handleCalculationModeChange}
               data-testid="uop-to-b2b-radio"
             />
-            <span className="ml-2 text-gray-700">{t('form.uop_to_b2b_mode')}</span>
+            <span className="ml-2 text-gray-700 dark:text-gray-300">{t('form.uop_to_b2b_mode')}</span>
           </label>
           <label className="inline-flex items-center">
             <input
@@ -80,13 +80,13 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
               onChange={handleCalculationModeChange}
               data-testid="b2b-to-uop-radio"
             />
-            <span className="ml-2 text-gray-700">{t('form.b2b_to_uop_mode')}</span>
+            <span className="ml-2 text-gray-700 dark:text-gray-300">{t('form.b2b_to_uop_mode')}</span>
           </label>
         </div>
       </div>
 
       {/* Age Input */}
-      <div className="md:col-span-2 bg-white p-6 rounded-lg shadow mb-8">
+      <div className="md:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow mb-8">
         <Input
           label={t('form.age')}
           id="age"
@@ -99,10 +99,10 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
       </div>
 
       {/* B2B Section */}
-      <div className="bg-gray-50 p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6" data-testid="b2b-form-title">{t('form.b2b_title')}</h2>
+      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6" data-testid="b2b-form-title">{t('form.b2b_title')}</h2>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
+          <legend className="text-lg font-semibold text-gray-700 dark:text-gray-300 px-2">{t('form.financial_data')}</legend>
           <Input
             label={t('form.monthly_invoice')}
             id="monthly_invoice_amount"
@@ -174,7 +174,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           )}
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.time_off_stoppage')}</legend>
+          <legend className="text-lg font-semibold text-gray-700 dark:text-gray-300 px-2">{t('form.time_off_stoppage')}</legend>
           <Input
             label={t('form.unpaid_vacation')}
             id="vacation_days"
@@ -201,7 +201,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
         </fieldset>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.benefits')}</legend>
+          <legend className="text-lg font-semibold text-gray-700 dark:text-gray-300 px-2">{t('form.benefits')}</legend>
           <Input
             label={t('form.custom_benefits_value')}
             id="customBenefits"
@@ -210,7 +210,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
             onChange={handleB2bChange}
           />
 
-          <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-4">{t('form.company_benefits')}</h3>
+          <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mt-6 mb-4">{t('form.company_benefits')}</h3>
           <Checkbox
             label={t('form.paid_vacation')}
             id="companyBenefits.paidVacationDays.enabled"
@@ -341,10 +341,10 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
       </div>
 
       {/* UoP Section */}
-      <div className="bg-gray-50 p-6 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">{t('form.uop_title')}</h2>
+      <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg shadow">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">{t('form.uop_title')}</h2>
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.financial_data')}</legend>
+          <legend className="text-lg font-semibold text-gray-700 dark:text-gray-300 px-2">{t('form.financial_data')}</legend>
           <Input
             label={t('form.gross_salary')}
             id="monthly_gross_salary"
@@ -397,8 +397,8 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
         </fieldset>
 
         <fieldset className="border border-gray-200 p-4 rounded-md mb-6">
-          <legend className="text-lg font-semibold text-gray-700 px-2">{t('form.benefits')}</legend>
-          <h3 className="text-xl font-semibold text-gray-700 mt-6 mb-4">{t('form.selected_benefits')}</h3>
+          <legend className="text-lg font-semibold text-gray-700 dark:text-gray-300 px-2">{t('form.benefits')}</legend>
+          <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mt-6 mb-4">{t('form.selected_benefits')}</h3>
           {benefitOptions.map((option) => (
             <Checkbox
               key={option.value}
