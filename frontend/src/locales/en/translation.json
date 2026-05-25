@@ -9,6 +9,7 @@
     "financial_data": "Financial Data",
     "monthly_invoice": "Monthly Invoice (PLN)",
     "business_costs": "Monthly Business Costs (PLN)",
+    "age": "Age",
     "zus_type": "ZUS Type",
     "zus_start_relief": "Start relief (first 6 months)",
     "zus_preferential": "Small Business (Preferential ZUS)",
