@@ -1,13 +1,14 @@
-import json
 import pytest
-from unittest.mock import patch
+
 from backend.app import app
+
 
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
+    app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
+
 
 @pytest.fixture
 def base_request():
@@ -23,16 +24,17 @@ def base_request():
             "vacation_days": 0,
             "age": 30,
             "customBenefits": 0,
-            "companyBenefits": {}
+            "companyBenefits": {},
         },
         "uop": {
             "monthly_gross_salary": 15000,
             "deductible_cost_settings": {"type": "standard"},
             "selected_benefits": [],
             "age": 30,
-            "youth_relief": False
-        }
+            "youth_relief": False,
+        },
     }
+
 
 # ... (pozostałe testy bez zmian)
 

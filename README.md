@@ -27,6 +27,10 @@ This tool provides a detailed financial comparison, taking into account taxes, s
     ```
 2.  **Create a virtual environment and install Python dependencies:**
     ```bash
+    # Using uv (recommended)
+    uv sync --extra dev
+
+    # Alternatively using pip
     python -m venv .venv
     source .venv/bin/activate
     pip install -e ".[dev]"
@@ -69,6 +73,17 @@ Backend tests now follow a naming convention to classify their purpose:
 To run the end-to-end (E2E) tests (JavaScript/Playwright):
 ```bash
 npm run test:e2e
+```
+
+### Pre-commit Hooks
+
+The project uses `pre-commit` to ensure code quality. To install the hooks locally, run:
+```bash
+pre-commit install
+```
+After installation, hooks will run automatically on every `git commit`. You can also run them manually on all files:
+```bash
+pre-commit run --all-files
 ```
 
 ### Internationalization (i18n)

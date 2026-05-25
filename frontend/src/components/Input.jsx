@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /**
  * A reusable Input component for forms.
@@ -11,12 +11,23 @@ import React from 'react';
  * @param {string} [props.description] - Optional description text for accessibility.
  * @param {object} props - Additional props to pass to the input element.
  */
-const Input = ({ label, id, type = 'text', value, onChange, description, ...props }) => {
+const Input = ({
+  label,
+  id,
+  type = "text",
+  value,
+  onChange,
+  description,
+  ...props
+}) => {
   const descriptionId = description ? `${id}-description` : undefined;
 
   return (
     <div className="mb-4">
-      <label htmlFor={id} className="block text-gray-700 text-sm font-bold mb-2">
+      <label
+        htmlFor={id}
+        className="block text-gray-700 text-sm font-bold mb-2"
+      >
         {label}
       </label>
       <input

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Bar, Pie } from 'react-chartjs-2';
+import React from "react";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,8 +9,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-} from 'chart.js';
-import { useTranslation } from 'react-i18next';
+} from "chart.js";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   CategoryScale,
@@ -19,10 +19,15 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 
-const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBarRef }) => {
+const ComparisonChart = ({
+  results,
+  barChartRef,
+  b2bStackedBarRef,
+  uopStackedBarRef,
+}) => {
   const { t } = useTranslation();
 
   if (!results) return null;
@@ -31,17 +36,17 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
 
   // Bar Chart Data
   const barChartData = {
-    labels: [t('charts.total_comparison_title')],
+    labels: [t("charts.total_comparison_title")],
     datasets: [
       {
-        label: t('form.uop_title'),
+        label: t("form.uop_title"),
         data: [uop_results.total_annual_value],
-        backgroundColor: '#4fd1c5', // secondary
+        backgroundColor: "#4fd1c5", // secondary
       },
       {
-        label: t('form.b2b_title'),
+        label: t("form.b2b_title"),
         data: [b2b_results.total_annual_value],
-        backgroundColor: '#2c5282', // primary
+        backgroundColor: "#2c5282", // primary
       },
     ],
   };
@@ -50,53 +55,53 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
       },
       title: {
         display: true,
-        text: t('charts.total_comparison_title'),
+        text: t("charts.total_comparison_title"),
       },
     },
   };
 
   // Stacked Bar Chart Data for B2B Breakdown
   const b2bStackedBarData = {
-    labels: [t('charts.b2b_breakdown_title')],
+    labels: [t("charts.b2b_breakdown_title")],
     datasets: [
       {
-        label: t('charts.net_income'),
+        label: t("charts.net_income"),
         data: [b2b_results.annual_net_income],
-        backgroundColor: '#4CAF50', // Green
+        backgroundColor: "#4CAF50", // Green
       },
       {
-        label: t('charts.zus'),
+        label: t("charts.zus"),
         data: [b2b_results.annual_zus],
-        backgroundColor: '#FFC107', // Amber
+        backgroundColor: "#FFC107", // Amber
       },
       {
-        label: t('charts.tax'),
+        label: t("charts.tax"),
         data: [b2b_results.annual_tax],
-        backgroundColor: '#FF9800', // Orange
+        backgroundColor: "#FF9800", // Orange
       },
       {
-        label: t('charts.business_costs'),
+        label: t("charts.business_costs"),
         data: [b2b_results.annual_business_costs],
-        backgroundColor: '#9E9E9E', // Grey
+        backgroundColor: "#9E9E9E", // Grey
       },
       {
-        label: t('charts.lost_revenue'),
+        label: t("charts.lost_revenue"),
         data: [b2b_results.annual_lost_revenue],
-        backgroundColor: '#F44336', // Red
+        backgroundColor: "#F44336", // Red
       },
       {
-        label: t('charts.company_benefits'),
+        label: t("charts.company_benefits"),
         data: [b2b_results.annual_company_benefits_value],
-        backgroundColor: '#2196F3', // Blue
+        backgroundColor: "#2196F3", // Blue
       },
       {
-        label: t('charts.custom_benefits'),
+        label: t("charts.custom_benefits"),
         data: [b2b_results.annual_custom_benefits_value],
-        backgroundColor: '#9C27B0', // Purple
+        backgroundColor: "#9C27B0", // Purple
       },
     ],
   };
@@ -105,11 +110,11 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
       },
       title: {
         display: true,
-        text: t('charts.b2b_breakdown_title'),
+        text: t("charts.b2b_breakdown_title"),
       },
     },
     scales: {
@@ -124,27 +129,27 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
 
   // Stacked Bar Chart Data for UoP Breakdown
   const uopStackedBarData = {
-    labels: [t('charts.uop_breakdown_title')],
+    labels: [t("charts.uop_breakdown_title")],
     datasets: [
       {
-        label: t('charts.net_income'),
+        label: t("charts.net_income"),
         data: [uop_results.annual_net_income],
-        backgroundColor: '#4CAF50', // Green
+        backgroundColor: "#4CAF50", // Green
       },
       {
-        label: t('charts.zus'),
+        label: t("charts.zus"),
         data: [uop_results.annual_zus],
-        backgroundColor: '#FFC107', // Amber
+        backgroundColor: "#FFC107", // Amber
       },
       {
-        label: t('charts.tax'),
+        label: t("charts.tax"),
         data: [uop_results.annual_tax],
-        backgroundColor: '#FF9800', // Orange
+        backgroundColor: "#FF9800", // Orange
       },
       {
-        label: t('charts.benefits'),
+        label: t("charts.benefits"),
         data: [uop_results.annual_benefits_value],
-        backgroundColor: '#2196F3', // Blue
+        backgroundColor: "#2196F3", // Blue
       },
     ],
   };
@@ -153,11 +158,11 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
       },
       title: {
         display: true,
-        text: t('charts.uop_breakdown_title'),
+        text: t("charts.uop_breakdown_title"),
       },
     },
     scales: {
@@ -171,16 +176,31 @@ const ComparisonChart = ({ results, barChartRef, b2bStackedBarRef, uopStackedBar
   };
 
   return (
-    <div className="mt-10 p-6 bg-white rounded-lg shadow-lg" data-testid="comparison-chart-section">
+    <div
+      className="mt-10 p-6 bg-white rounded-lg shadow-lg"
+      data-testid="comparison-chart-section"
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <Bar data={barChartData} options={barChartOptions} ref={barChartRef} />
+          <Bar
+            data={barChartData}
+            options={barChartOptions}
+            ref={barChartRef}
+          />
         </div>
         <div>
-          <Bar data={b2bStackedBarData} options={b2bStackedBarOptions} ref={b2bStackedBarRef} />
+          <Bar
+            data={b2bStackedBarData}
+            options={b2bStackedBarOptions}
+            ref={b2bStackedBarRef}
+          />
         </div>
         <div>
-          <Bar data={uopStackedBarData} options={uopStackedBarOptions} ref={uopStackedBarRef} />
+          <Bar
+            data={uopStackedBarData}
+            options={uopStackedBarOptions}
+            ref={uopStackedBarRef}
+          />
         </div>
       </div>
     </div>
