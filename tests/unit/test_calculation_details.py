@@ -1,5 +1,7 @@
 import unittest
+
 from backend.calculations import calculate_b2b_results, calculate_uop_results
+
 
 class TestCalculationDetails(unittest.TestCase):
 

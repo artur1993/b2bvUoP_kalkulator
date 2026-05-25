@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict
+from collections.abc import Callable
+from typing import Any
 
 from backend.domain.b2b.benefits import compute_benefits_value
 from backend.domain.b2b.health_contribution import compute_health_contribution
@@ -8,12 +9,12 @@ from backend.domain.b2b.social_contributions import compute_social_contributions
 
 
 def assemble_b2b_results(
-    b2b_data: Dict[str, Any],
-    config: Dict[str, Any],
-    progressive_tax: Callable[[float, Dict[str, Any]], float],
-    solidarity_tax: Callable[[float, Dict[str, Any]], float],
-) -> Dict[str, Any]:
-    monthly_business_costs = float(b2b_data.get('monthly_business_costs', 0))
+    b2b_data: dict[str, Any],
+    config: dict[str, Any],
+    progressive_tax: Callable[[float, dict[str, Any]], float],
+    solidarity_tax: Callable[[float, dict[str, Any]], float],
+) -> dict[str, Any]:
+    monthly_business_costs = float(b2b_data.get("monthly_business_costs", 0))
     annual_business_costs = monthly_business_costs * 12
     lost_revenue = compute_lost_revenue(b2b_data, config)
     social = compute_social_contributions(b2b_data, config)
@@ -49,7 +50,9 @@ def assemble_b2b_results(
     )
 
     return {
-        "annual_revenue": lost_revenue["annual_invoice_amount"] + lost_revenue["total_lost_revenue"],
+        "annual_revenue": (
+            lost_revenue["annual_invoice_amount"] + lost_revenue["total_lost_revenue"]
+        ),
         "annual_business_costs": annual_business_costs,
         "annual_zus": total_zus_contributions,
         "annual_tax": tax["annual_tax"],

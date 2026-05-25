@@ -1,5 +1,7 @@
 import unittest
+
 from backend.app import app
+
 
 class TestAnalysisEndpoints(unittest.TestCase):
 
@@ -36,7 +38,7 @@ class TestAnalysisEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertIsInstance(data, list)
         self.assertGreater(len(data), 0)
-        
+
         # Check the structure of the first element
         self.assertIn('b2b_rate', data[0])
         self.assertIn('net_difference', data[0])

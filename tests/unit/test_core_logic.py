@@ -1,6 +1,8 @@
 
 import unittest
+
 from backend.calculations import calculate_uop_results
+
 
 class TestUopKupLogic(unittest.TestCase):
 

@@ -1,7 +1,7 @@
-import json
 import pytest
-from unittest.mock import patch
+
 from backend.app import app
+
 
 @pytest.fixture
 def client():

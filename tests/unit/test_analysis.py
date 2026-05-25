@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch
+
 from backend.analysis import generate_executive_summary, get_risk_analysis
+
 
 class TestAnalysis(unittest.TestCase):
 

@@ -1,7 +1,10 @@
-import unittest
 import json
+import unittest
+
 import pytest
+
 from backend.app import app
+
 
 class ScenariosTestCase(unittest.TestCase):
     def setUp(self):
@@ -34,7 +37,7 @@ class ScenariosTestCase(unittest.TestCase):
         response = self.app.post('/api/calculate', data=json.dumps(request), content_type='application/json')
         data = json.loads(response.data)['b2b_results']
         # Full ZUS 2026 without sickness: (1103.27+452.16+94.39+138.47)*12 = 1788.29*12 = 21459.48 + Zdrowotna
-        assert data['annual_zus'] > 30000 
+        assert data['annual_zus'] > 30000
 
     def test_scenario_3_b2b_no_time_off_positive(self):
         request = self.base_request.copy()
@@ -189,6 +192,5 @@ class ScenariosTestCase(unittest.TestCase):
         data = json.loads(response.data)
         assert data['break_even_gross_salary'] == -1
 
-import pytest
 if __name__ == '__main__':
     unittest.main()

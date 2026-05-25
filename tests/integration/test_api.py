@@ -1,26 +1,25 @@
-import pytest
 from unittest.mock import patch
-import os
+
 
 def test_calculate_endpoint_positive(client):
     """Test successful calculation request."""
     data = {
         'b2b': {
-            'monthly_invoice_amount': 10000, 
-            'monthly_business_costs': 500, 
-            'age': 30, 
-            'vacation_days': 20, 
+            'monthly_invoice_amount': 10000,
+            'monthly_business_costs': 500,
+            'age': 30,
+            'vacation_days': 20,
             'sick_days': 5,
-            'stoppage_months': 0, 
-            'customBenefits': 0, 
-            'sickness_insurance': True, 
-            'zus_type': 'preferential', 
+            'stoppage_months': 0,
+            'customBenefits': 0,
+            'sickness_insurance': True,
+            'zus_type': 'preferential',
             'tax_form': 'lump_sum_it'
         },
         'uop': {
-            'monthly_gross_salary': 8000, 
-            'age': 30, 
-            'youth_relief': False, 
+            'monthly_gross_salary': 8000,
+            'age': 30,
+            'youth_relief': False,
             'deductible_cost_settings': {'type': 'standard'}
         },
         'calculation_mode': 'uop_to_b2b',
