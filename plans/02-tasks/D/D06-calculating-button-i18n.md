@@ -22,8 +22,8 @@ Tłumaczenia:
 - EN: „Calculating..."
 
 ## Acceptance
-- [ ] `git grep "'Calculating'" src/dashboard/` zwraca pusto
-- [ ] PL po kliknięciu „Oblicz" widzi „Obliczanie..."
+- [x] `git grep "'Calculating'" src/dashboard/` zwraca pusto
+- [x] PL po kliknięciu „Oblicz" widzi „Obliczanie..."
 
 ## Test plan
 ```bash

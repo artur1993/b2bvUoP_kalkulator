@@ -65,6 +65,7 @@
     "benefit_training": "Szkolenia",
     "benefit_ppk": "PPK",
     "calculate_button": "Porównaj",
+    "loading_button": "Obliczanie...",
     "calculation_mode_title": "Tryb Kalkulacji",
     "uop_to_b2b_mode": "UoP do B2B (Oblicz fakturę B2B, aby zrównać się z UoP)",
     "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)",
