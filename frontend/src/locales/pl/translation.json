@@ -155,9 +155,9 @@
         "Dochód (przed ZUS)": "Dochód (przed ZUS)",
         "Składki społeczne ZUS": "Składki społeczne ZUS",
         "Podstawa do opodatkowania": "Podstawa do opodatkowania",
-        "Podatek dochodowy": "Podatek dochodowy",
-        "Dochód po opodatkowaniu": "Dochód po opodatkowaniu",
-        "Składka zdrowotna": "Składka zdrowotna"
+        "Roczny podatek": "Roczny podatek",
+        "Składka zdrowotna ZUS": "Składka zdrowotna ZUS",
+        "Utracony przychód": "Utracony przychód"
       },
       "uop": {
         "Roczne wynagrodzenie brutto": "Roczne wynagrodzenie brutto",
