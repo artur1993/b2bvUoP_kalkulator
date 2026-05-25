@@ -102,7 +102,12 @@ const BreakEvenChart = forwardRef(({ b2b, uop, results }, ref) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-      <Line data={chartData} options={options} ref={ref} />
+      <Line 
+        data={chartData} 
+        options={options} 
+        ref={ref} 
+        aria-label={t("break_even.title")}
+      />
     </div>
   );
 });

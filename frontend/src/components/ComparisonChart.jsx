@@ -186,6 +186,7 @@ const ComparisonChart = ({
             data={barChartData}
             options={barChartOptions}
             ref={barChartRef}
+            aria-label={t("charts.total_comparison_title")}
           />
         </div>
         <div>
@@ -193,6 +194,7 @@ const ComparisonChart = ({
             data={b2bStackedBarData}
             options={b2bStackedBarOptions}
             ref={b2bStackedBarRef}
+            aria-label={t("charts.b2b_breakdown_title")}
           />
         </div>
         <div>
@@ -200,6 +202,7 @@ const ComparisonChart = ({
             data={uopStackedBarData}
             options={uopStackedBarOptions}
             ref={uopStackedBarRef}
+            aria-label={t("charts.uop_breakdown_title")}
           />
         </div>
       </div>
