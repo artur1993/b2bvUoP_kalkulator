@@ -14,7 +14,7 @@ echo "Starting B2B vs UoP Calculator..."
 echo "-> Starting Flask backend..."
 export FLASK_APP=backend/app.py
 export FLASK_ENV=development
-export PYTHONPATH=$PYTHONPATH:$(pwd)
+export PYTHONPATH="${PYTHONPATH:-}:$(pwd)"
 nohup flask run --host 0.0.0.0 --port 5001 &> flask.log &
 echo $! > .flask.pid
 
