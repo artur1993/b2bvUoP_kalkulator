@@ -42,7 +42,7 @@ describe('CalculatorForm', () => {
   };
 
   // Test Wrapper component to manage state
-  const TestWrapper = ({ initialB2b, initialUop, onCalculate, onExport, loading, initialCalculationMode }) => {
+  const TestWrapper = ({ initialB2b, initialUop, onCalculate, loading, initialCalculationMode }) => {
     const [state, dispatch] = useReducer(calculatorReducer, {
       ...initialState,
       b2bData: initialB2b,
@@ -71,7 +71,6 @@ describe('CalculatorForm', () => {
           initialB2b={b2b}
           initialUop={uop}
           onCalculate={mockOnCalculate}
-          onExport={mockOnExport}
           loading={false}
         />
     );

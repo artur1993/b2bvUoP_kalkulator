@@ -18,7 +18,7 @@ const WaterfallChart = forwardRef(({ results }, ref) => {
 
         const labels = [];
         const data = [];
-        let cumulative = 0;
+        let cumulative;
 
         if (type === 'b2b') {
             const {
@@ -101,7 +101,6 @@ const WaterfallChart = forwardRef(({ results }, ref) => {
                 label: t(`waterfall.title_${contractType}`),
                 data: data,
                 backgroundColor: (context) => {
-                    const value = context.dataset.data[context.dataIndex];
                     if (context.dataIndex === 0) return 'rgba(75, 192, 192, 0.6)'; // Start
                     if (context.dataIndex === data.length - 1) return 'rgba(54, 162, 235, 0.6)'; // End
                     return 'rgba(255, 99, 132, 0.6)'; // Decreases

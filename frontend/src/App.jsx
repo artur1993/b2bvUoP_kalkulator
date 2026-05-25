@@ -51,7 +51,7 @@ function App() {
       window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
       const res = await calculateResults(data);
       dispatch({ type: 'CALCULATE_SUCCESS', payload: res });
-    } catch (err) {
+    } catch {
       dispatch({ type: 'CALCULATE_FAILURE', payload: 'Failed to fetch results. Please check the console for more details.' });
     }
   };
@@ -61,7 +61,7 @@ function App() {
       const data = { b2b_results: results.b2b_results, uop_results: results.uop_results };
       const blob = await exportToExcel(data);
       saveAs(blob, 'kalkulator_wyniki.xlsx');
-    } catch (err) {
+    } catch {
       alert('Failed to export Excel. See console for details.');
     }
   };

@@ -144,7 +144,7 @@ const ResultsDisplay = ({ results, onExportExcel, calculationMode, 'data-testid'
         <div className="space-y-6 mt-8 border-t pt-8 dark:border-gray-700">
           <section className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl border-l-8 border-blue-500 print:bg-white print:text-black">
             <h3 className="text-xl font-bold text-blue-900 dark:text-blue-300 mb-2">{t('analysis.summary_title')}</h3>
-            <p className="italic text-blue-800 dark:text-blue-200">"{analysis.summary.recommendation}"</p>
+            <p className="italic text-blue-800 dark:text-blue-200">&quot;{analysis.summary.recommendation}&quot;</p>
           </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
