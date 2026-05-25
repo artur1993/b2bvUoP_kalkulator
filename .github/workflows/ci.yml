@@ -73,5 +73,11 @@ jobs:
         run: npx playwright install --with-deps
       - name: Build frontend
         run: cd frontend && npm ci && npm run build
+      - name: Start backend
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          uv run flask --app backend/app.py run --port 5001 &
+          # Wait for backend to be ready
+          timeout 60s bash -c 'until curl -s http://127.0.0.1:5001/api/calculate > /dev/null; do sleep 1; done' || (echo "Backend failed to start" && exit 1)
       - name: Run Playwright tests
         run: npm run test:e2e
