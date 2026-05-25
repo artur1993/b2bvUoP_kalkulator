@@ -187,5 +187,70 @@
   },
   "checklists": {
     "title": "Checklist Before Switching to B2B"
+  },
+  "sec": {
+    "profile": "Profile",
+    "b2b": "B2B",
+    "b2b_sub": "Invoice, ZUS, taxation",
+    "uop": "Employment Contract",
+    "uop_sub": "Salary, contributions, benefits",
+    "timeoff": "Time Off & Stoppage",
+    "timeoff_sub": "Days without income counted as loss",
+    "benefits_custom": "B2B Benefits Value"
+  },
+  "field_help": {
+    "age": "Age affects youth tax relief (UoP < 26)",
+    "monthly_invoice": "Net amount on VAT invoice per month",
+    "business_costs": "Business expenses: accounting, equipment, etc.",
+    "voluntary_sick": "Sickness contribution (2.45% of ZUS base) grants sick pay eligibility",
+    "ip_share": "Share of qualified IP income — remainder taxed at base rate",
+    "gross_salary": "Gross amount on employment contract",
+    "youth_relief": "PIT-0 tax relief for persons under 26",
+    "stoppage_months": "Months without clients/projects, no B2B income"
+  },
+  "res": {
+    "eyebrow": "VERDICT",
+    "live": "live",
+    "statement_b2b_wins": "B2B contract pays more",
+    "statement_uop_wins": "Employment contract pays more",
+    "statement_tie": "Results are similar",
+    "per_year": "per year",
+    "per_month": "per month",
+    "effective_rate": "effective rate",
+    "take_home": "Annual value",
+    "monthly_avg": "Monthly avg.",
+    "composition_title": "Where does every złoty go",
+    "composition_sub": "Breakdown of annual income",
+    "breakeven_title": "Break-even point",
+    "breakeven_sub": "At what B2B rate results are equal",
+    "breakeven_eq": "Parity threshold",
+    "breakeven_now": "Current rate",
+    "breakeven_gap": "Above threshold by",
+    "breakeven_below": "Below threshold by",
+    "detail_title": "Annual breakdown",
+    "export_share": "Share result",
+    "footnote": "Calculations based on 2026 regulations. Not tax advice.",
+    "legend": {
+      "net": "Net take-home",
+      "zus": "Total ZUS",
+      "tax": "Tax",
+      "costs": "Business costs",
+      "lost": "Lost revenue",
+      "benefits": "Benefits"
+    },
+    "detail": {
+      "gross_b2b": "Annual revenue",
+      "gross_uop": "Annual gross salary",
+      "business_costs": "Business costs",
+      "zus_social": "Total ZUS",
+      "zus_health": "Health contribution",
+      "kup": "Tax-deductible costs",
+      "tax": "Tax",
+      "lost_revenue": "Lost revenue",
+      "net": "Net take-home",
+      "custom_benefits": "B2B custom benefits",
+      "benefits": "UoP benefits",
+      "total": "Total value"
+    }
   }
 }

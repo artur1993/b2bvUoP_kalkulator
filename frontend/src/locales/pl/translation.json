@@ -187,5 +187,70 @@
   },
   "checklists": {
     "title": "Checklista Przed Przejściem na B2B"
+  },
+  "sec": {
+    "profile": "Profil",
+    "b2b": "B2B",
+    "b2b_sub": "Faktura, ZUS, opodatkowanie",
+    "uop": "Umowa o Pracę",
+    "uop_sub": "Wynagrodzenie, składki, benefity",
+    "timeoff": "Czas wolny i przestoje",
+    "timeoff_sub": "Dni bez przychodu liczone jako utrata",
+    "benefits_custom": "Wartość benefitów B2B"
+  },
+  "field_help": {
+    "age": "Wiek wpływa na ulgę dla młodych (UoP < 26 lat)",
+    "monthly_invoice": "Kwota netto na fakturze VAT miesięcznie",
+    "business_costs": "Koszty uzyskania przychodu: księgowość, sprzęt, etc.",
+    "voluntary_sick": "Składka chorobowa (2,45% od podstawy ZUS) uprawnia do zasiłku",
+    "ip_share": "Udział kwalifikowanego dochodu IP — reszta opodatkowana formą bazową",
+    "gross_salary": "Kwota brutto na umowie o pracę",
+    "youth_relief": "Ulga PIT-0 dla osób do 26 roku życia",
+    "stoppage_months": "Miesiące bez klientów/projektów, brak przychodu B2B"
+  },
+  "res": {
+    "eyebrow": "WERDYKT",
+    "live": "na żywo",
+    "statement_b2b_wins": "Kontrakt B2B daje więcej",
+    "statement_uop_wins": "Umowa o pracę daje więcej",
+    "statement_tie": "Wyniki zbliżone",
+    "per_year": "rocznie",
+    "per_month": "miesięcznie",
+    "effective_rate": "efektywna stawka",
+    "take_home": "Wartość roczna",
+    "monthly_avg": "Średnio mies.",
+    "composition_title": "Gdzie idzie każda złotówka",
+    "composition_sub": "Rozkład rocznego przychodu",
+    "breakeven_title": "Próg opłacalności",
+    "breakeven_sub": "Przy jakiej stawce B2B wyniki się wyrównują",
+    "breakeven_eq": "Próg parity",
+    "breakeven_now": "Aktualna stawka",
+    "breakeven_gap": "Powyżej progu o",
+    "breakeven_below": "Poniżej progu o",
+    "detail_title": "Roczne rozliczenie",
+    "export_share": "Udostępnij wynik",
+    "footnote": "Obliczenia według przepisów 2026. Nie stanowią porady podatkowej.",
+    "legend": {
+      "net": "Netto na rękę",
+      "zus": "ZUS łącznie",
+      "tax": "Podatek",
+      "costs": "Koszty firmowe",
+      "lost": "Utracony przychód",
+      "benefits": "Benefity"
+    },
+    "detail": {
+      "gross_b2b": "Przychód roczny",
+      "gross_uop": "Wynagrodzenie roczne brutto",
+      "business_costs": "Koszty firmowe",
+      "zus_social": "ZUS łącznie",
+      "zus_health": "Składka zdrowotna",
+      "kup": "Koszty uzysk. przychodu",
+      "tax": "Podatek",
+      "lost_revenue": "Utracony przychód",
+      "net": "Netto na rękę",
+      "custom_benefits": "Własne benefity B2B",
+      "benefits": "Benefity UoP",
+      "total": "Wartość całkowita"
+    }
   }
 }
