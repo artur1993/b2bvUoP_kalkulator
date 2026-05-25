@@ -33,9 +33,9 @@ label={t('form.paid_vacation_days_label')}
 ```
 
 ## Acceptance
-- [ ] `git grep '.replace(' src/dashboard/src/components/` zwraca pusto
-- [ ] Każdy zmieniony label ma osobny klucz w obu lokalach
-- [ ] Test parity i18n zielony (po F04)
+- [x] `git grep '.replace(' src/dashboard/src/components/` zwraca pusto
+- [x] Każdy zmieniony label ma osobny klucz w obu lokalach
+- [x] Test parity i18n zielony (po F04)
 
 ## Test plan
 ```bash

@@ -220,7 +220,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.paidVacationDays.enabled && (
             <Input
-              label={t('form.paid_vacation').replace(' (from company)', '') + ' Days'}
+              label={t('form.paid_vacation_days_label')}
               id="companyBenefits.paidVacationDays.days"
               type="number"
               value={b2bData.companyBenefits.paidVacationDays.days}
@@ -238,7 +238,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.paidSickDays.enabled && (
             <Input
-              label={t('form.paid_sick').replace(' (from company)', '') + ' Days'}
+              label={t('form.paid_sick_days_label')}
               id="companyBenefits.paidSickDays.days"
               type="number"
               value={b2bData.companyBenefits.paidSickDays.days}
@@ -256,7 +256,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.medicalCare.enabled && (
             <Input
-              label={t('form.medical_care').replace(' (from company)', '') + ' Value (PLN/year)'}
+              label={t('form.medical_care_value_label')}
               id="companyBenefits.medicalCare.value"
               type="number"
               value={b2bData.companyBenefits.medicalCare.value}
@@ -274,7 +274,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.lifeInsurance.enabled && (
             <Input
-              label={t('form.company_life_cover').replace(' (from company)', '') + ' Value (PLN/year)'}
+              label={t('form.life_insurance_value_label')}
               id="companyBenefits.lifeInsurance.value"
               type="number"
               value={b2bData.companyBenefits.lifeInsurance.value}
@@ -292,7 +292,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.sportCard.enabled && (
             <Input
-              label={t('form.sport_card').replace(' (from company)', '') + ' Value (PLN/year)'}
+              label={t('form.sport_card_value_label')}
               id="companyBenefits.sportCard.value"
               type="number"
               value={b2bData.companyBenefits.sportCard.value}
@@ -310,7 +310,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.trainingBudget.enabled && (
             <Input
-              label={t('form.training_budget').replace(' (from company)', '') + ' Value (PLN/year)'}
+              label={t('form.training_budget_value_label')}
               id="companyBenefits.trainingBudget.value"
               type="number"
               value={b2bData.companyBenefits.trainingBudget.value}
@@ -328,7 +328,7 @@ const CalculatorForm = ({ state, dispatch, handleCalculate }) => {
           />
           {b2bData.companyBenefits.otherBenefits.enabled && (
             <Input
-              label={t('form.other_benefits').replace(' (from company)', '') + ' Value (PLN/year)'}
+              label={t('form.other_benefits_value_label')}
               id="companyBenefits.otherBenefits.value"
               type="number"
               value={b2bData.companyBenefits.otherBenefits.value}
