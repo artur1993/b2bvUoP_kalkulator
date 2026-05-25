@@ -94,18 +94,18 @@ const BreakEvenChart = forwardRef(({ b2b, uop, results }, ref) => {
         },
         // Add a horizontal line at y=0
         afterBuildTicks: (axis) => {
-          axis.ticks.push({ value: 0, label: "Próg opłacalności" });
+          axis.ticks.push({ value: 0, label: t("break_even.threshold") });
         },
       },
     },
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mt-6">
-      <Line 
-        data={chartData} 
-        options={options} 
-        ref={ref} 
+    <div className="bg-white p-6 rounded-lg shadow-md mt-6" data-testid="break-even-chart">
+      <Line
+        data={chartData}
+        options={options}
+        ref={ref}
         aria-label={t("break_even.title")}
       />
     </div>

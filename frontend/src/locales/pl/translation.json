@@ -138,7 +138,8 @@
     "title": "Analiza Progu Opłacalności",
     "net_difference": "Różnica Netto (B2B - UoP)",
     "b2b_rate": "Miesięczna Stawka B2B (PLN)",
-    "net_difference_annual": "Roczna Różnica Netto (PLN)"
+    "net_difference_annual": "Roczna Różnica Netto (PLN)",
+    "threshold": "Próg opłacalności"
   },
   "report": {
     "input_summary_title": "Podsumowanie Parametrów Wejściowych",

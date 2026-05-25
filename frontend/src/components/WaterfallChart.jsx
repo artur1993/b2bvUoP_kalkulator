@@ -165,7 +165,7 @@ const WaterfallChart = forwardRef(({ results }, ref) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+    <div className="bg-white p-6 rounded-lg shadow-md mt-6" data-testid="waterfall-chart">
       <div className="flex justify-center mb-4">
         <button
           onClick={() => setContractType("b2b")}
