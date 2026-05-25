@@ -57,7 +57,7 @@ const formatCurrencyForTest = (value) => {
     return new Intl.NumberFormat('pl-PL', {
       style: 'currency',
       currency: 'PLN',
-    }).format(value).replace(/\s/g, ' ');
+    }).format(value).split(/\s/).join(' ');
   };
 
 describe('ResultsDisplay Component', () => {
