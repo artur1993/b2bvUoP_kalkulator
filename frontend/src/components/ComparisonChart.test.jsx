@@ -1,16 +1,16 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import ComparisonChart from './ComparisonChart';
-import React from 'react';
+import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import ComparisonChart from "./ComparisonChart";
+import React from "react";
 
 // Mock react-chartjs-2 components
-vi.mock('react-chartjs-2', () => ({
+vi.mock("react-chartjs-2", () => ({
   Bar: (props) => <div data-testid="mock-bar-chart" {...props} />,
   Pie: (props) => <div data-testid="mock-pie-chart" {...props} />,
 }));
 
 // Mock chart.js register
-vi.mock('chart.js', async (importOriginal) => {
+vi.mock("chart.js", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -21,7 +21,7 @@ vi.mock('chart.js', async (importOriginal) => {
   };
 });
 
-describe('ComparisonChart', () => {
+describe("ComparisonChart", () => {
   const mockResults = {
     b2b_results: {
       calkowita_roczna_wartosc: 120000,
@@ -37,13 +37,13 @@ describe('ComparisonChart', () => {
     },
   };
 
-  it('renders the chart section when results are provided', () => {
+  it("renders the chart section when results are provided", () => {
     render(<ComparisonChart results={mockResults} />);
     // The component renders a div with a specific class, we can check for that
-    expect(screen.getByTestId('comparison-chart-section')).toBeInTheDocument();
+    expect(screen.getByTestId("comparison-chart-section")).toBeInTheDocument();
   });
 
-  it('does not render if results are null', () => {
+  it("does not render if results are null", () => {
     const { container } = render(<ComparisonChart results={null} />);
     expect(container.firstChild).toBeNull();
   });

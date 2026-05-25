@@ -1,5 +1,5 @@
-import React from 'react';
-import Tooltip from './Tooltip';
+import React from "react";
+import Tooltip from "./Tooltip";
 
 /**
  * A reusable Select (dropdown) component for forms.
@@ -12,12 +12,23 @@ import Tooltip from './Tooltip';
  * @param {string} [props.description] - Optional description text for accessibility.
  * @param {object} props - Additional props to pass to the select element.
  */
-const Select = ({ label, id, value, onChange, options, description, ...props }) => {
+const Select = ({
+  label,
+  id,
+  value,
+  onChange,
+  options,
+  description,
+  ...props
+}) => {
   const descriptionId = description ? `${id}-description` : undefined;
 
   return (
     <div className="mb-4">
-      <label htmlFor={id} className="block text-gray-700 text-sm font-bold mb-2">
+      <label
+        htmlFor={id}
+        className="block text-gray-700 text-sm font-bold mb-2"
+      >
         {label}
       </label>
       <select
@@ -41,13 +52,15 @@ const Select = ({ label, id, value, onChange, options, description, ...props }) 
           {description}
         </p>
       )}
-      {options.map((option) => (
-        option.tooltip && value === option.value && (
-          <Tooltip key={option.value} text={option.tooltip}>
-            <span className="text-xs text-medium-contrast ml-2">?</span>
-          </Tooltip>
-        )
-      ))}
+      {options.map(
+        (option) =>
+          option.tooltip &&
+          value === option.value && (
+            <Tooltip key={option.value} text={option.tooltip}>
+              <span className="text-xs text-medium-contrast ml-2">?</span>
+            </Tooltip>
+          ),
+      )}
     </div>
   );
 };

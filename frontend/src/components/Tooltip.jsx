@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 /**
  * A reusable Tooltip component that displays a pop-up with text when hovered over its children.
@@ -10,7 +10,7 @@ const Tooltip = ({ text, children }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <div 
+    <div
       className="relative flex items-center"
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
