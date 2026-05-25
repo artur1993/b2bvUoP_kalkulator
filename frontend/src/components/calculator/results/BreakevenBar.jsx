@@ -49,7 +49,7 @@ export default function BreakevenBar({ result, monthlyInvoice, grossSalary, mode
           <span className="val">
             {fmt(breakeven)}{" "}
             <span style={{ color: "var(--text-subtle)", fontSize: 11, fontWeight: 400 }}>
-              / {i18n.language === "pl" ? "mies." : "mo"}
+              / {i18n.language?.startsWith("pl") ? "mies." : "mo"}
             </span>
           </span>
         </div>

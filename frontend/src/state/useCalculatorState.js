@@ -99,7 +99,7 @@ function mapResponseToResult(apiRes) {
       solidarity: uopR.annual_solidarity_tax || 0,
     },
     diff: (b2bR.total_annual_value || 0) - (uopR.total_annual_value || 0),
-    breakeven: apiRes.break_even_invoice_amount || apiRes.break_even_monthly_invoice || 0,
+    breakeven: apiRes.break_even_invoice_amount || apiRes.break_even_gross_salary || apiRes.break_even_monthly_invoice || 0,
     pension,
     raw: apiRes,
   };

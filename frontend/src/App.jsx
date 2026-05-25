@@ -113,13 +113,13 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div className="lang-toggle">
             <button
-              className={i18n.language === "pl" ? "active" : ""}
+              className={i18n.language?.startsWith("pl") ? "active" : ""}
               onClick={() => i18n.changeLanguage("pl")}
             >
               PL
             </button>
             <button
-              className={i18n.language === "en" ? "active" : ""}
+              className={i18n.language?.startsWith("en") ? "active" : ""}
               onClick={() => i18n.changeLanguage("en")}
             >
               EN
