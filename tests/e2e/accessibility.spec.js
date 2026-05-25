@@ -25,11 +25,20 @@ test.describe('Accessibility Audits (WCAG 2.1 A/AA)', () => {
     const resultsHeader = page.locator('h2', { hasText: 'Calculation Results' });
     await expect(resultsHeader).toBeVisible();
 
+    // Disable animations to prevent contrast issues during transitions
+    await page.addStyleTag({ content: `
+      *, *::before, *::after {
+        animation-duration: 0s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+      }
+    `});
+    await page.waitForTimeout(500); // Small buffer for any JS-driven state changes
+
     // 1. Full axe audit on results state
-    // We disable color-contrast rule for now as it requires significant design changes
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-      .disableRules(['color-contrast'])
       .analyze();
       
     expect(results.violations).toEqual([]);
