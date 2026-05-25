@@ -1,4 +1,4 @@
-from src.config import config_manager
+from backend.config import config_manager
 
 
 def test_config_loads_with_metadata():

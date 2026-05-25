@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from src.app import get_cors_origins, is_debug_enabled
+from backend.app import get_cors_origins, is_debug_enabled
 
 
 def test_debug_mode_disabled_by_default(monkeypatch):
@@ -71,7 +71,7 @@ def test_error_handler_no_traceback(client):
         'language': 'pl',
     }
 
-    with patch('src.services.calculation_service.calculate_b2b_results', side_effect=ValueError('secret crash detail')):
+    with patch('backend.services.calculation_service.calculate_b2b_results', side_effect=ValueError('secret crash detail')):
         response = client.post('/api/calculate', json=request_data)
 
     body = response.get_data(as_text=True)

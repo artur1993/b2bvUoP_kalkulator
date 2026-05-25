@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from src.config import config_manager
+from backend.config import config_manager
 
 def generate_executive_summary(b2b_results: Dict[str, Any], uop_results: Dict[str, Any], break_even_faktura: float, lang: str = 'en') -> Dict[str, Any]:
     """Generates a high-level executive summary and recommendation."""

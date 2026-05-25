@@ -26,12 +26,12 @@ Plus aktualizacja:
 - **D08c** — data + tests + tooling
 
 ## Acceptance
-- [ ] `ls src/` zwraca pusto / nie istnieje
-- [ ] `ls backend/` i `ls frontend/` zwracają strukturę z architektury docelowej
-- [ ] `pytest -q` zielony
-- [ ] `cd frontend && npm test -- --run` zielony
-- [ ] `./run_app.sh` startuje
-- [ ] CI zielony
+- [x] `ls src/` zwraca pusto / nie istnieje
+- [x] `ls backend/` i `ls frontend/` zwracają strukturę z architektury docelowej
+- [x] `pytest -q` zielony
+- [x] `cd frontend && npm test -- --run` zielony
+- [x] `./run_app.sh` startuje
+- [x] CI zielony
 
 ## Test plan
 ```bash

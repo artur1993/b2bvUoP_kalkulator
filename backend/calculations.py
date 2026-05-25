@@ -1,7 +1,7 @@
 import math
 from typing import Dict, Any, List
-from src.config import config_manager
-from src.domain.b2b.aggregate import assemble_b2b_results
+from backend.config import config_manager
+from backend.domain.b2b.aggregate import assemble_b2b_results
 
 def _calculate_progressive_tax(taxable_base: float, config: Dict[str, Any]) -> float:
     tax_threshold = config['tax_thresholds']['tax_scale'][0]['income']

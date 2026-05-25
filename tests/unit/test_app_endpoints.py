@@ -1,7 +1,7 @@
 import json
 import pytest
 from unittest.mock import patch
-from src.app import app
+from backend.app import app
 
 @pytest.fixture
 def client():
@@ -36,16 +36,16 @@ def base_request():
 
 # ... (pozostałe testy bez zmian)
 
-# @patch('src.app.send_from_directory')
-# @patch('src.app.os.path.exists', return_value=True)
+# @patch('backend.app.send_from_directory')
+# @patch('backend.app.os.path.exists', return_value=True)
 # def test_serve_static_file_positive(mock_exists, mock_send, client):
 #     mock_send.return_value = "mocked file content"
 #     response = client.get('/index.html')
 #     assert response.status_code == 200
 #     assert response.data == b"mocked file content"
 
-# @patch('src.app.send_from_directory')
-# @patch('src.app.os.path.exists', return_value=False)
+# @patch('backend.app.send_from_directory')
+# @patch('backend.app.os.path.exists', return_value=False)
 # def test_serve_nonexistent_file_negative(mock_exists, mock_send, client):
 #     mock_send.return_value = "mocked index.html"
 #     response = client.get('/nonexistent-file.html')

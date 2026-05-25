@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from src.app import app
+from backend.app import app
 
 @pytest.fixture
 def client():
@@ -8,7 +8,7 @@ def client():
     with app.test_client() as client:
         yield client
 
-@patch('src.app.calculate_break_even_analysis')
+@patch('backend.app.calculate_break_even_analysis')
 def test_break_even_analysis_endpoint_positive(mock_calculate, client):
     mock_calculate.return_value = {"some": "data"}
     response = client.post('/api/calculate/break-even-analysis', json={
@@ -34,7 +34,7 @@ def test_break_even_analysis_endpoint_positive(mock_calculate, client):
     assert response.status_code == 200
     assert response.json == {"some": "data"}
 
-@patch('src.app.run_full_calculation')
+@patch('backend.app.run_full_calculation')
 def test_calculate_endpoint_positive(mock_run_full_calculation, client):
     mock_run_full_calculation.return_value = {
         'b2b_results': {'total_annual_value': 120000},
@@ -98,7 +98,7 @@ def test_calculate_endpoint_rejects_removed_pension_field(client):
     assert response.status_code == 400
     assert response.json['error'] == 'Validation failed'
 
-@patch('src.app.Workbook')
+@patch('backend.app.Workbook')
 def test_export_to_excel_endpoint_positive(mock_workbook, client):
     mock_wb_instance = MagicMock()
     mock_workbook.return_value = mock_wb_instance

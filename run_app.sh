@@ -7,15 +7,17 @@ echo "Starting B2B vs UoP Calculator..."
 
 # Start Flask Backend in the background
 echo "-> Starting Flask backend..."
-export FLASK_APP=src/app.py
+export FLASK_APP=backend/app.py
 export FLASK_ENV=development
 export PYTHONPATH=$PYTHONPATH:$(pwd)
-flask run --host 0.0.0.0 --port 5001 &> flask.log &
+nohup flask run --host 0.0.0.0 --port 5001 &> flask.log &
 
 # Start Vite Frontend in the background and capture its output
 echo "-> Starting Vite frontend..."
 vite_output_file="vite_output.log"
-(cd src/dashboard && npm run dev -- --host > "../../$vite_output_file" 2>&1 &)
+pushd frontend > /dev/null
+nohup npm run dev -- --host > "../$vite_output_file" 2>&1 &
+popd > /dev/null
 
 echo "Waiting for Vite to start..."
 sleep 5 # Give Vite a moment to start up
