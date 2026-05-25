@@ -27,6 +27,10 @@ This tool provides a detailed financial comparison, taking into account taxes, s
     ```
 2.  **Create a virtual environment and install Python dependencies:**
     ```bash
+    # Using uv (recommended)
+    uv sync --extra dev
+
+    # Alternatively using pip
     python -m venv .venv
     source .venv/bin/activate
     pip install -e ".[dev]"

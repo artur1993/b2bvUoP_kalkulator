@@ -6,11 +6,10 @@ authors = [
     { name = "Artur", email = "artur@example.com" }
 ]
 dependencies = [
-    "Flask",
-    "Flask-Cors",
-    "openpyxl",
-    "matplotlib",
-    "pydantic"
+    "Flask>=3.0,<4.0",
+    "Flask-Cors>=4.0,<5.0",
+    "openpyxl>=3.1,<4.0",
+    "pydantic>=2.5,<3.0",
 ]
 requires-python = ">=3.10"
 
