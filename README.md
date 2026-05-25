@@ -75,6 +75,17 @@ To run the end-to-end (E2E) tests (JavaScript/Playwright):
 npm run test:e2e
 ```
 
+### Pre-commit Hooks
+
+The project uses `pre-commit` to ensure code quality. To install the hooks locally, run:
+```bash
+pre-commit install
+```
+After installation, hooks will run automatically on every `git commit`. You can also run them manually on all files:
+```bash
+pre-commit run --all-files
+```
+
 ### Internationalization (i18n)
 The application supports internationalization using `i18next` for the frontend.
 -   **Languages**: Currently supports English (`en`) and Polish (`pl`).
