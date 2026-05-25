@@ -6,11 +6,11 @@ import io
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-from src.calculations import (
+from backend.calculations import (
     calculate_break_even_analysis
 )
-from src.services.calculation_service import run_full_calculation
-from src.validation import (
+from backend.services.calculation_service import run_full_calculation
+from backend.validation import (
     BreakEvenAnalysisRequest,
     CalculationRequestModel,
     ExcelExportRequest,
@@ -24,7 +24,7 @@ def get_cors_origins():
     origins = os.environ.get('CORS_ORIGINS', 'http://localhost:5173')
     return [origin.strip() for origin in origins.split(',') if origin.strip()]
 
-app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'src/dashboard/dist'))
+app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'frontend/dist'))
 CORS(app, origins=get_cors_origins())
 
 # --- Configure Logging ---

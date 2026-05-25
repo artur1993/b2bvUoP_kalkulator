@@ -89,8 +89,8 @@ def test_calculate_endpoint_missing_data_negative(client):
     response = client.post('/api/calculate', json=data)
     assert response.status_code == 400
 
-@patch('src.app.os.path.exists', return_value=True)
-@patch('src.app.send_from_directory')
+@patch('backend.app.os.path.exists', return_value=True)
+@patch('backend.app.send_from_directory')
 def test_serve_static_files(mock_send, mock_exists, client):
     """Test serving static files (assets)."""
     mock_send.return_value = "mocked file"

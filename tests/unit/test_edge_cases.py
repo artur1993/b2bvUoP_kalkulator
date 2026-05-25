@@ -1,6 +1,6 @@
 import pytest
 
-from src.calculations import calculate_uop_results
+from backend.calculations import calculate_uop_results
 
 
 def test_author_costs_no_div_by_zero():

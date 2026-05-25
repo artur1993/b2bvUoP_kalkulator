@@ -1,13 +1,13 @@
 from typing import Any, Dict
 
-from src.analysis import generate_executive_summary, get_checklist, get_methodology, get_risk_analysis
-from src.calculations import (
+from backend.analysis import generate_executive_summary, get_checklist, get_methodology, get_risk_analysis
+from backend.calculations import (
     calculate_b2b_results,
     calculate_break_even,
     calculate_uop_break_even,
     calculate_uop_results,
 )
-from src.config import config_manager
+from backend.config import config_manager
 
 
 def run_full_calculation(request_data: Dict[str, Any]) -> Dict[str, Any]:

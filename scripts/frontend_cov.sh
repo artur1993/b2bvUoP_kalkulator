@@ -2,6 +2,6 @@
 
 # Skrypt do generowania raportu pokrycia kodu dla frontendu (JavaScript/React)
 
-cd src/dashboard
+cd frontend
 npm test -- --coverage
 cd ../..

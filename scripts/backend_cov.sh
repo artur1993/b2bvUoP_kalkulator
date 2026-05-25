@@ -3,7 +3,7 @@
 # --- Testy Jednostkowe ---
 echo "--- Pokrycie testów jednostkowych (Unit Tests) ---"
 echo "Poniższa lista 'Missing' wskazuje linie kodu niepokryte testami, co oznacza, że zawierające je funkcje nie są w pełni przetestowane."
-UNIT_COV_OUTPUT=$(pytest --color=no tests/unit/ --cov=src --cov-report=term-missing 2>&1)
+UNIT_COV_OUTPUT=$(pytest --color=no tests/unit/ --cov=backend --cov-report=term-missing 2>&1)
 echo "$UNIT_COV_OUTPUT"
 UNIT_COV=$(echo "$UNIT_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//')
 
@@ -11,7 +11,7 @@ UNIT_COV=$(echo "$UNIT_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%
 echo ""
 echo "--- Pokrycie testów integracyjnych (Integration Tests) ---"
 echo "Poniższa lista 'Missing' wskazuje linie kodu niepokryte testami, co oznacza, że zawierające je funkcje nie są w pełni przetestowane."
-INT_COV_OUTPUT=$(pytest --color=no tests/integration/ --cov=src --cov-report=term-missing 2>&1)
+INT_COV_OUTPUT=$(pytest --color=no tests/integration/ --cov=backend --cov-report=term-missing 2>&1)
 echo "$INT_COV_OUTPUT"
 INT_COV=$(echo "$INT_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//')
 
@@ -19,7 +19,7 @@ INT_COV=$(echo "$INT_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//
 echo ""
 echo "--- Łączne pokrycie testów (Unit + Integration Tests) ---"
 echo "Poniższa lista 'Missing' wskazuje linie kodu niepokryte testami, co oznacza, że zawierające je funkcje nie są w pełni przetestowane."
-COMBINED_COV_OUTPUT=$(pytest --color=no tests/ --cov=src --cov-report=term-missing 2>&1)
+COMBINED_COV_OUTPUT=$(pytest --color=no tests/ --cov=backend --cov-report=term-missing 2>&1)
 echo "$COMBINED_COV_OUTPUT"
 COMBINED_COV=$(echo "$COMBINED_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | sed 's/%//')
 
@@ -27,15 +27,15 @@ COMBINED_COV=$(echo "$COMBINED_COV_OUTPUT" | grep 'TOTAL' | awk '{print $NF}' | 
 echo ""
 echo "--- Pokrycie Funkcji (Function Coverage) ---"
 echo "Poniższa lista 'Missing' wskazuje linie kodu, które nie zostały wykonane. W kontekście pokrycia funkcji, oznacza to, że funkcje zawierające te linie nie zostały w pełni wywołane lub przetestowane."
-FUNCTION_COV_OUTPUT=$(pytest --color=no --cov=src --cov-report=term-missing 2>&1)
+FUNCTION_COV_OUTPUT=$(pytest --color=no --cov=backend --cov-report=term-missing 2>&1)
 echo "$FUNCTION_COV_OUTPUT"
 
 # Generowanie raportu JSON dla pokrycia funkcji
-coverage run --source=src -m pytest tests/
+coverage run --source=backend -m pytest tests/
 coverage json -o coverage_report.json
 
 # Obliczanie procentowego pokrycia funkcji
-FUNCTION_PERCENTAGE=$(python scripts/calculate_function_coverage.py coverage_report.json src)
+FUNCTION_PERCENTAGE=$(python scripts/calculate_function_coverage.py coverage_report.json backend)
 echo "Procentowe pokrycie funkcji: ${FUNCTION_PERCENTAGE}%"
 
 # --- Podsumowanie Klasyfikacji ---

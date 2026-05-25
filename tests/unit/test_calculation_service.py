@@ -1,4 +1,4 @@
-from src.services.calculation_service import run_full_calculation
+from backend.services.calculation_service import run_full_calculation
 
 
 def _request(calculation_mode='uop_to_b2b'):

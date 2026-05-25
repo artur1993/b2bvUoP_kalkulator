@@ -1,6 +1,6 @@
 import unittest
-from src.calculations import calculate_b2b_results, calculate_uop_results, compute_solidarity_tax
-from src.config import config_manager
+from backend.calculations import calculate_b2b_results, calculate_uop_results, compute_solidarity_tax
+from backend.config import config_manager
 
 
 def test_solidarity_tax_below_threshold():

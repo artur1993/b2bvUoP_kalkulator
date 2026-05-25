@@ -1,10 +1,10 @@
 from typing import Any, Callable, Dict
 
-from src.domain.b2b.benefits import compute_benefits_value
-from src.domain.b2b.health_contribution import compute_health_contribution
-from src.domain.b2b.income_tax import compute_income_tax
-from src.domain.b2b.lost_revenue import compute_lost_revenue
-from src.domain.b2b.social_contributions import compute_social_contributions
+from backend.domain.b2b.benefits import compute_benefits_value
+from backend.domain.b2b.health_contribution import compute_health_contribution
+from backend.domain.b2b.income_tax import compute_income_tax
+from backend.domain.b2b.lost_revenue import compute_lost_revenue
+from backend.domain.b2b.social_contributions import compute_social_contributions
 
 
 def assemble_b2b_results(

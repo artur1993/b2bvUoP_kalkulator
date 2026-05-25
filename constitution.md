@@ -24,8 +24,8 @@ Zmiana stacku wymaga jawnej zmiany konstytucji.
 ### Backend
 - Każdy endpoint przyjmujący JSON ma walidację Pydantic. Bez wyjątków.
 - Funkcje obliczeniowe typują parametry jako modele Pydantic, nie `Dict[str, Any]`.
-- Stałe regulacyjne (stawki, progi, limity) **WYŁĄCZNIE** w `dane_wejsciowe_kalkulator.json` z metadanymi: `source_url`, `source_checked_at` (ISO date), `valid_from`, `valid_to`.
-- Linting: `ruff` (domyślna konfiguracja + isort), `mypy --strict` dla `src/`.
+- Stałe regulacyjne (stawki, progi, limity) **WYŁĄCZNIE** w `data/dane_wejsciowe_kalkulator.json` z metadanymi: `source_url`, `source_checked_at` (ISO date), `valid_from`, `valid_to`.
+- Linting: `ruff` (domyślna konfiguracja + isort), `mypy --strict` dla `backend/`.
 - **Brak** `app.debug=True` w produkcji. Tryb debug wyłącznie przez ENV `FLASK_ENV=development`.
 - Error handlery zwracają **stałą** wiadomość. Szczegóły wyłącznie do `app.logger.exception(...)`.
 
@@ -36,7 +36,7 @@ Zmiana stacku wymaga jawnej zmiany konstytucji.
 - Linting: ESLint flat config + Prettier; CI fails on warnings.
 
 ### Testy
-- Backend: minimum 80% pokrycia dla `src/calculations.py` i `src/validation.py`.
+- Backend: minimum 80% pokrycia dla `backend/calculations.py` i `backend/validation.py`.
 - Frontend: jeden render-test per komponent.
 - E2E: smoke test całkowitego flow (formularz → wynik) MUSI być zielony.
 - Każda zmiana w `calculations.py` = nowy test z **konkretnymi liczbami** (nie samymi kluczami).
@@ -58,7 +58,7 @@ Zmiana stacku wymaga jawnej zmiany konstytucji.
 
 ## Audyt config
 
-Każda wartość regulacyjna w `dane_wejsciowe_kalkulator.json` ma cztery pola metadanych:
+Każda wartość regulacyjna w `data/dane_wejsciowe_kalkulator.json` ma cztery pola metadanych:
 
 ```json
 {

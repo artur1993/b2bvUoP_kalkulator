@@ -1,7 +1,7 @@
 import unittest
 import json
 import pytest
-from src.app import app
+from backend.app import app
 
 class ScenariosTestCase(unittest.TestCase):
     def setUp(self):

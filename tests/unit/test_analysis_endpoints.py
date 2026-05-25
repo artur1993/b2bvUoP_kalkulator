@@ -1,5 +1,5 @@
 import unittest
-from src.app import app
+from backend.app import app
 
 class TestAnalysisEndpoints(unittest.TestCase):
 
