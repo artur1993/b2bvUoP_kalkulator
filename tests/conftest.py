@@ -5,10 +5,13 @@ from backend.app import app as flask_app
 
 @pytest.fixture
 def app():
-    flask_app.config.update({
-        "TESTING": True,
-    })
+    flask_app.config.update(
+        {
+            "TESTING": True,
+        }
+    )
     return flask_app
+
 
 @pytest.fixture
 def client(app):
