@@ -1,30 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "class",
+  darkMode: ["selector", "[data-theme='dark']"],
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: "#2563eb",
-          dark: "#3b82f6",
-        },
-        secondary: {
-          DEFAULT: "#64748b",
-          dark: "#94a3b8",
-        },
-        surface: {
-          DEFAULT: "#ffffff",
-          dark: "#1e293b",
-        },
-        background: {
-          DEFAULT: "#f8fafc",
-          dark: "#0f172a",
-        },
-        accent: {
-          DEFAULT: "#10b981",
-          dark: "#34d399",
-        },
+        bg: "var(--bg)",
+        surface: "var(--surface)",
+        "surface-2": "var(--surface-2)",
+        border: "var(--border)",
+        "border-strong": "var(--border-strong)",
+        accent: "var(--accent)",
+        "accent-soft": "var(--accent-soft)",
+        text: "var(--text)",
+        muted: "var(--text-muted)",
+        subtle: "var(--text-subtle)",
+        positive: "var(--positive)",
+        negative: "var(--negative)",
+      },
+      fontFamily: {
+        sans: ["Geist", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
     },
   },
