@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Tooltip from "./Tooltip";
 
 function fmt(n) {
   return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN", maximumFractionDigits: 0 }).format(n);
@@ -84,7 +85,11 @@ export default function CompositionBars({ result }) {
         ].map((item) => (
           <span key={item.kind} className={`legend-item ${item.kind}`}>
             <span className="legend-dot" />
-            {item.label}
+            {item.kind === "lost" ? (
+              <Tooltip text={t("tooltip.lost_revenue")}>
+                <span>{item.label}</span>
+              </Tooltip>
+            ) : item.label}
           </span>
         ))}
       </div>

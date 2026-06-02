@@ -256,6 +256,11 @@ export default function App() {
               help={t("field_help.youth_relief")}
               control={<Toggle value={s.youthRelief} onChange={s.setYouthRelief} data-testid="youth-relief-uop" />}
             />
+            <Field
+              label={t("form.annual_bonus")}
+              help={t("field_help.annual_bonus")}
+              control={<Slider value={s.uopBonusPct} onChange={s.setUopBonusPct} min={0} max={100} step={5} suffix="%" />}
+            />
 
             <SubsecTitle>{t("form.benefits")}</SubsecTitle>
             <Field
@@ -267,6 +272,11 @@ export default function App() {
                   options={uopBenefitOptions}
                 />
               }
+            />
+            <Field
+              label={t("form.uop_custom_benefits")}
+              help={t("field_help.uop_custom_benefits")}
+              control={<NumberInput value={s.uopCustomBenefitsValue} onChange={s.setUopCustomBenefitsValue} suffix="zł" step={500} />}
             />
           </FormCluster>
 

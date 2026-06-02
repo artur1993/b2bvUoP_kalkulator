@@ -41,6 +41,8 @@ class UoPDataModel(BaseModel):
     selected_benefits: list[str] = []
     age: int = Field(..., ge=18, le=100)
     youth_relief: bool = False
+    annual_bonus_pct: float = Field(0.0, ge=0, le=200)
+    custom_benefits_value: float = Field(0.0, ge=0, le=10_000_000)
 
     @model_validator(mode="after")
     def validate_youth_relief_age(self) -> Self:

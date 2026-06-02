@@ -45,6 +45,8 @@ function mapFormToPayload(s) {
         creative_work_percentage: s.creativePct,
       },
       youth_relief: s.youthRelief,
+      annual_bonus_pct: s.uopBonusPct,
+      custom_benefits_value: s.uopCustomBenefitsValue,
       selected_benefits: s.uopBenefits
         .map((b) => UOP_BENEFITS_MAP[b])
         .filter(Boolean),
@@ -93,6 +95,7 @@ function mapResponseToResult(apiRes) {
       tax: uopR.annual_tax || 0,
       kup: uopSteps.annual_deductible_costs || 0,
       benefits: uopR.annual_benefits_value || 0,
+      customBenefits: uopR.annual_custom_benefits_value || 0,
       totalValue: uopR.total_annual_value || 0,
       monthly: uopR.monthly_net_income || 0,
       effective: uopR.annual_gross_salary > 0 ? (uopR.annual_tax || 0) / uopR.annual_gross_salary : 0,
@@ -136,10 +139,12 @@ export function useCalculatorState() {
   const [kupType, setKupType] = useState("standard");
   const [creativePct, setCreativePct] = useState(70);
   const [youthRelief, setYouthRelief] = useState(false);
+  const [uopBonusPct, setUopBonusPct] = useState(0);
   const [unpaidVacation, setUnpaidVacation] = useState(20);
   const [unpaidSick, setUnpaidSick] = useState(5);
   const [stoppageMonths, setStoppageMonths] = useState(0);
   const [customBenefitsValue, setCustomBenefitsValue] = useState(0);
+  const [uopCustomBenefitsValue, setUopCustomBenefitsValue] = useState(0);
   const [uopBenefits, setUopBenefits] = useState(["medical", "sport"]);
 
   const [result, setResult] = useState(null);
@@ -160,9 +165,10 @@ export function useCalculatorState() {
   const formState = {
     mode, age, monthlyInvoice, businessCosts, zusType, voluntarySick,
     taxForm, ipShare, ipBoxBaseForm, grossSalary, kupType, creativePct,
-    youthRelief, unpaidVacation, unpaidSick, stoppageMonths,
-    customBenefitsValue, uopBenefits,
+    youthRelief, uopBonusPct, unpaidVacation, unpaidSick, stoppageMonths,
+    customBenefitsValue, uopCustomBenefitsValue, uopBenefits,
   };
+  const uopBenefitsKey = JSON.stringify(uopBenefits);
 
   useEffect(() => {
     if (abortRef.current) abortRef.current.abort();
@@ -197,8 +203,8 @@ export function useCalculatorState() {
   }, [
     mode, age, monthlyInvoice, businessCosts, zusType, voluntarySick,
     taxForm, ipShare, ipBoxBaseForm, grossSalary, kupType, creativePct,
-    youthRelief, unpaidVacation, unpaidSick, stoppageMonths,
-    customBenefitsValue, JSON.stringify(uopBenefits),
+    youthRelief, uopBonusPct, unpaidVacation, unpaidSick, stoppageMonths,
+    customBenefitsValue, uopCustomBenefitsValue, uopBenefitsKey,
   ]);
 
   const handleExportExcel = useCallback(async () => {
@@ -247,10 +253,12 @@ export function useCalculatorState() {
     kupType, setKupType,
     creativePct, setCreativePct,
     youthRelief, setYouthRelief,
+    uopBonusPct, setUopBonusPct,
     unpaidVacation, setUnpaidVacation,
     unpaidSick, setUnpaidSick,
     stoppageMonths, setStoppageMonths,
     customBenefitsValue, setCustomBenefitsValue,
+    uopCustomBenefitsValue, setUopCustomBenefitsValue,
     uopBenefits, setUopBenefits,
     // result + status
     result, loading, error,

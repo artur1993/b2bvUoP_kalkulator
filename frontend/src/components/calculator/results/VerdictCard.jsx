@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Tooltip from "./Tooltip";
 
 function fmt(n) {
   return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN", maximumFractionDigits: 0 }).format(n);
@@ -47,7 +48,9 @@ export default function VerdictCard({ result, lang }) {
       <div className={`verdict-number${winner === "uop" ? " negative" : ""}`}>
         {winner !== "tie" && "+"}{fmt(absDiff)}
         <span style={{ fontSize: 16, color: "var(--text-muted)", marginLeft: 8, fontWeight: 500 }}>
-          {t("res.per_year") || "rocznie"}
+          <Tooltip text={t("tooltip.effective_rate")}>
+            <span>{t("res.per_year") || "rocznie"}</span>
+          </Tooltip>
         </span>
       </div>
 
@@ -57,11 +60,15 @@ export default function VerdictCard({ result, lang }) {
           <span className="val">{fmt(absDiff / 12)}</span>
         </div>
         <div>
-          <span className="label">{t("res.effective_rate") || "eff. rate"} B2B</span>
+          <Tooltip text={t("tooltip.effective_rate")}>
+            <span className="label">{t("res.effective_rate") || "eff. rate"} B2B</span>
+          </Tooltip>
           <span className="val">{fmtPct(b2b.effective)}</span>
         </div>
         <div>
-          <span className="label">{t("res.effective_rate") || "eff. rate"} UoP</span>
+          <Tooltip text={t("tooltip.effective_rate")}>
+            <span className="label">{t("res.effective_rate") || "eff. rate"} UoP</span>
+          </Tooltip>
           <span className="val">{fmtPct(uop.effective)}</span>
         </div>
       </div>
