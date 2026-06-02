@@ -27,12 +27,14 @@
     "ip_box_base_tax_scale": "Skala podatkowa",
     "ip_box_warning": "IP Box wymaga prowadzenia ewidencji kwalifikowanych dochodów oraz obliczenia wskaźnika nexus. Skonsultuj się z księgowym przed wyborem tej formy.",
     "youth_relief": "Ulga dla Młodych",
+    "annual_bonus": "Premia roczna",
     "time_off_stoppage": "Czas Wolny i Przestoje",
     "unpaid_vacation": "Roczne Dni Urlopu (bezpłatne)",
     "unpaid_sick": "Roczne Dni Chorobowego (bezpłatne)",
     "stoppage_months": "Miesiące Przestoju/Braku Projektów",
     "benefits": "Benefity",
     "custom_benefits_value": "Własna Roczna Wartość Benefitów (PLN)",
+    "uop_custom_benefits": "Własne benefity UoP",
     "company_benefits": "Benefity od Firmy",
     "paid_vacation": "Płatne Dni Urlopu (od firmy)",
     "paid_sick": "Płatne Dni Chorobowe (od firmy)",
@@ -206,7 +208,14 @@
     "ip_share": "Udział kwalifikowanego dochodu IP — reszta opodatkowana formą bazową",
     "gross_salary": "Kwota brutto na umowie o pracę",
     "youth_relief": "Ulga PIT-0 dla osób do 26 roku życia",
+    "annual_bonus": "% rocznego brutto — np. 10% = jeden dodatkowy miesiąc. Doliczana do netto po uwzględnieniu PIT.",
+    "uop_custom_benefits": "Roczna wartość benefitów pozapłacowych (opieka medyczna, karta sportowa, szkolenia itp.) — wpisz wartość jeśli chcesz ją uwzględnić własnoręcznie.",
     "stoppage_months": "Miesiące bez klientów/projektów, brak przychodu B2B"
+  },
+  "tooltip": {
+    "effective_rate": "Podatek dochodowy podzielony przez przychód brutto. Nie uwzględnia ZUS ani kosztów firmowych.",
+    "breakeven": "Stawka faktury B2B (lub brutto UoP), przy której obie formy dają identyczną wartość całkowitą — przy obecnych ustawieniach ZUS, podatku i kosztów.",
+    "lost_revenue": "B2B-owiec nie dostaje płatnego urlopu ani zwolnienia. Każdy dzień wolny = brak faktury. Dla 20 dni urlopu to ok. 8,3% rocznego przychodu."
   },
   "res": {
     "eyebrow": "WERDYKT",
@@ -249,6 +258,7 @@
       "lost_revenue": "Utracony przychód",
       "net": "Netto na rękę",
       "custom_benefits": "Własne benefity B2B",
+      "uop_custom_benefits": "Własne benefity UoP",
       "benefits": "Benefity UoP",
       "total": "Wartość całkowita"
     }

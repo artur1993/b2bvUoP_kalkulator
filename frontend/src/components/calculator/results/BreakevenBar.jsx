@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Tooltip from "./Tooltip";
 
 function fmt(n) {
   return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN", maximumFractionDigits: 0 }).format(n);
@@ -25,7 +26,11 @@ export default function BreakevenBar({ result, monthlyInvoice, grossSalary, mode
   return (
     <div className="breakeven" data-testid="breakeven-bar">
       <div className="breakeven-head">
-        <h4>{t("res.breakeven_title") || "Próg opłacalności"}</h4>
+        <h4>
+          <Tooltip text={t("tooltip.breakeven")}>
+            <span>{t("res.breakeven_title") || "Próg opłacalności"}</span>
+          </Tooltip>
+        </h4>
         <span className="hint">{t("res.breakeven_sub")}</span>
       </div>
 

@@ -53,6 +53,7 @@ export default function DetailTable({ result }) {
           {uop.kup > 0 && <Row label={t("res.detail.kup") || "KUP"} value={uop.kup} minus />}
           {uop.tax > 0 && <Row label={t("res.detail.tax") || "Podatek"} value={uop.tax} minus />}
           <Row label={t("res.detail.net") || "Netto na rękę"} value={uop.net} />
+          {uop.customBenefits > 0 && <Row label={t("res.detail.uop_custom_benefits") || "Własne benefity UoP"} value={uop.customBenefits} />}
           {uop.benefits > 0 && <Row label={t("res.detail.benefits") || "Benefity UoP"} value={uop.benefits} />}
           <Row label={t("res.detail.total") || "Wartość całkowita"} value={uop.totalValue} total />
         </div>

@@ -27,12 +27,14 @@
     "ip_box_base_tax_scale": "Tax scale",
     "ip_box_warning": "IP Box requires records of qualified income and calculating the nexus ratio. Consult your accountant before choosing this form.",
     "youth_relief": "Youth Tax Relief",
+    "annual_bonus": "Annual bonus",
     "time_off_stoppage": "Time Off & Stoppage",
     "unpaid_vacation": "Annual Vacation Days (unpaid)",
     "unpaid_sick": "Annual Sick Days (unpaid)",
     "stoppage_months": "Months of Stoppage/No Projects",
     "benefits": "Benefits",
     "custom_benefits_value": "Custom Annual Benefits Value (PLN)",
+    "uop_custom_benefits": "UoP custom benefits",
     "company_benefits": "Company Provided Benefits",
     "paid_vacation": "Paid Vacation Days (from company)",
     "paid_sick": "Paid Sick Days (from company)",
@@ -206,7 +208,14 @@
     "ip_share": "Share of qualified IP income — remainder taxed at base rate",
     "gross_salary": "Gross amount on employment contract",
     "youth_relief": "PIT-0 tax relief for persons under 26",
+    "annual_bonus": "% of annual gross — e.g. 10% = one extra month. Added to net after income tax.",
+    "uop_custom_benefits": "Annual value of non-wage benefits (healthcare, sport card, training, etc.) — enter a value to include them manually.",
     "stoppage_months": "Months without clients/projects, no B2B income"
+  },
+  "tooltip": {
+    "effective_rate": "Income tax divided by gross revenue. Does not include ZUS contributions or business costs.",
+    "breakeven": "The B2B invoice amount (or UoP gross salary) at which both contract forms yield identical total value — at current ZUS, tax, and cost settings.",
+    "lost_revenue": "B2B contractors have no paid leave. Every day off = no invoice. 20 vacation days ≈ 8.3% of annual revenue lost."
   },
   "res": {
     "eyebrow": "VERDICT",
@@ -249,6 +258,7 @@
       "lost_revenue": "Lost revenue",
       "net": "Net take-home",
       "custom_benefits": "B2B custom benefits",
+      "uop_custom_benefits": "UoP custom benefits",
       "benefits": "UoP benefits",
       "total": "Total value"
     }

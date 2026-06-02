@@ -160,6 +160,17 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         - annual_tax
         - annual_ppk_employee_contribution
     )
+    annual_bonus_pct = float(uop_data.get("annual_bonus_pct", 0))
+    annual_bonus_gross = cumulative_gross * (annual_bonus_pct / 100.0)
+    if annual_bonus_gross > 0:
+        bonus_tax = _calculate_progressive_tax(
+            annual_tax_base + annual_bonus_gross, config
+        ) - _calculate_progressive_tax(annual_tax_base, config)
+        annual_bonus_net = max(0.0, annual_bonus_gross - bonus_tax)
+    else:
+        annual_bonus_net = 0.0
+        bonus_tax = 0.0
+    annual_net += annual_bonus_net
 
     benefits_value = sum(
         float(config["benefits"][b]) for b in selected_benefits if b in config["benefits"]
@@ -171,6 +182,8 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         annual_ppk_employer_net = max(0.0, annual_ppk_employer_contribution - ppk_employer_tax)
         benefits_value += annual_ppk_employer_net
 
+    uop_custom_benefits = float(uop_data.get("custom_benefits_value", 0))
+    benefits_value += uop_custom_benefits
     total_uop_value = annual_net + benefits_value
 
     return {
@@ -179,6 +192,9 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         "annual_tax": annual_tax,
         "annual_solidarity_tax": annual_solidarity_tax,
         "annual_benefits_value": benefits_value,
+        "annual_bonus_gross": annual_bonus_gross,
+        "annual_bonus_net": annual_bonus_net,
+        "annual_custom_benefits_value": uop_custom_benefits,
         "annual_net_income": annual_net,
         "total_annual_value": total_uop_value,
         "monthly_net_income": total_uop_value / 12,
