@@ -32,7 +32,8 @@ function mapFormToPayload(s) {
       tax_form: TAX_MAP[s.taxForm] || s.taxForm,
       ip_box_qualified_share: s.ipShare,
       ip_box_base_form: s.ipBoxBaseForm,
-      vacation_days: s.unpaidVacation,
+      public_holidays_paid: s.holidaysPaid,
+      vacation_days: Math.max(0, s.totalVacation - s.paidVacation),
       sick_days: s.unpaidSick,
       stoppage_months: s.stoppageMonths,
       customBenefits: s.customBenefitsValue,
@@ -140,7 +141,9 @@ export function useCalculatorState() {
   const [creativePct, setCreativePct] = useState(70);
   const [youthRelief, setYouthRelief] = useState(false);
   const [uopBonusPct, setUopBonusPct] = useState(0);
-  const [unpaidVacation, setUnpaidVacation] = useState(20);
+  const [holidaysPaid, setHolidaysPaid] = useState(true);
+  const [totalVacation, setTotalVacation] = useState(20);
+  const [paidVacation, setPaidVacation] = useState(0);
   const [unpaidSick, setUnpaidSick] = useState(5);
   const [stoppageMonths, setStoppageMonths] = useState(0);
   const [customBenefitsValue, setCustomBenefitsValue] = useState(0);
@@ -165,7 +168,7 @@ export function useCalculatorState() {
   const formState = {
     mode, age, monthlyInvoice, businessCosts, zusType, voluntarySick,
     taxForm, ipShare, ipBoxBaseForm, grossSalary, kupType, creativePct,
-    youthRelief, uopBonusPct, unpaidVacation, unpaidSick, stoppageMonths,
+    youthRelief, uopBonusPct, holidaysPaid, totalVacation, paidVacation, unpaidSick, stoppageMonths,
     customBenefitsValue, uopCustomBenefitsValue, uopBenefits,
   };
   const uopBenefitsKey = JSON.stringify(uopBenefits);
@@ -203,7 +206,7 @@ export function useCalculatorState() {
   }, [
     mode, age, monthlyInvoice, businessCosts, zusType, voluntarySick,
     taxForm, ipShare, ipBoxBaseForm, grossSalary, kupType, creativePct,
-    youthRelief, uopBonusPct, unpaidVacation, unpaidSick, stoppageMonths,
+    youthRelief, uopBonusPct, holidaysPaid, totalVacation, paidVacation, unpaidSick, stoppageMonths,
     customBenefitsValue, uopCustomBenefitsValue, uopBenefitsKey,
   ]);
 
@@ -254,7 +257,9 @@ export function useCalculatorState() {
     creativePct, setCreativePct,
     youthRelief, setYouthRelief,
     uopBonusPct, setUopBonusPct,
-    unpaidVacation, setUnpaidVacation,
+    holidaysPaid, setHolidaysPaid,
+    totalVacation, setTotalVacation,
+    paidVacation, setPaidVacation,
     unpaidSick, setUnpaidSick,
     stoppageMonths, setStoppageMonths,
     customBenefitsValue, setCustomBenefitsValue,

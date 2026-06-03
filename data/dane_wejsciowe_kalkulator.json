@@ -99,7 +99,8 @@
   },
   "general_data": {
     "working_days_annually": 252,
-    "working_days_monthly": 21
+    "working_days_monthly": 21,
+    "public_holidays_per_year": 13
   },
   "analiza_ryzyka": {
     "pl": {
