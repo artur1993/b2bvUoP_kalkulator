@@ -24,10 +24,21 @@ def compute_lost_revenue(b2b_data: dict[str, Any], config: dict[str, Any]) -> di
     lost_revenue_vacation = unpaid_vacation_days * daily_rate
     lost_revenue_sickness = unpaid_sick_days * daily_rate * sick_leave_payment
     lost_revenue_stoppage = float(b2b_data.get("stoppage_months", 0)) * monthly_invoice_amount
-    total_lost_revenue = lost_revenue_vacation + lost_revenue_sickness + lost_revenue_stoppage
+    annual_lost_holidays = 0.0
+    if not b2b_data.get("public_holidays_paid", True):
+        holidays = config["general_data"]["public_holidays_per_year"]
+        annual_lost_holidays = holidays * daily_rate
+
+    total_lost_revenue = (
+        lost_revenue_vacation
+        + lost_revenue_sickness
+        + lost_revenue_stoppage
+        + annual_lost_holidays
+    )
 
     return {
         "daily_rate": daily_rate,
         "total_lost_revenue": total_lost_revenue,
+        "annual_lost_holidays": annual_lost_holidays,
         "annual_invoice_amount": (monthly_invoice_amount * 12) - total_lost_revenue,
     }

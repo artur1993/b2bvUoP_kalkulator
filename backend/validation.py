@@ -19,6 +19,7 @@ class B2BDataModel(BaseModel):
     tax_form: str = Field(..., pattern="^(lump_sum_it|flat_tax|tax_scale|ip_box)$")
     zus_type: str = Field(..., pattern="^(start_relief|preferential|full)$")
     sickness_insurance: bool = False
+    public_holidays_paid: bool = True
     ip_box_qualified_share: float = Field(100.0, ge=0, le=100)
     ip_box_base_form: str = Field("flat_tax", pattern="^(flat_tax|tax_scale)$")
     monthly_business_costs: float = Field(0.0, ge=0, le=10_000_000)

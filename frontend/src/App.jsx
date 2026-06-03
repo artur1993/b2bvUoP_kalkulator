@@ -283,8 +283,18 @@ export default function App() {
           {/* Time off */}
           <FormCluster title={t("sec.timeoff") || t("form.time_off_stoppage")} sub={t("sec.timeoff_sub")}>
             <Field
+              label={t("form.holidays_paid")}
+              help={t("field_help.holidays_paid")}
+              control={<Toggle value={s.holidaysPaid} onChange={s.setHolidaysPaid} />}
+            />
+            <Field
               label={t("form.unpaid_vacation")}
-              control={<Slider value={s.unpaidVacation} onChange={s.setUnpaidVacation} min={0} max={40} step={1} suffix="d" />}
+              control={<Slider value={s.totalVacation} onChange={s.setTotalVacation} min={0} max={40} step={1} suffix="d" />}
+            />
+            <Field
+              label={t("form.paid_vacation")}
+              help={t("field_help.paid_vacation")}
+              control={<Slider value={s.paidVacation} onChange={s.setPaidVacation} min={0} max={40} step={1} suffix="d" />}
             />
             <Field
               label={t("form.unpaid_sick")}

@@ -58,6 +58,7 @@ def assemble_b2b_results(
         "annual_tax": tax["annual_tax"],
         "annual_solidarity_tax": tax["annual_solidarity_tax"],
         "annual_lost_revenue": lost_revenue["total_lost_revenue"],
+        "annual_lost_holidays": lost_revenue["annual_lost_holidays"],
         "annual_net_income": annual_net_income,
         "annual_company_benefits_value": benefits["annual_company_benefits_value"],
         "annual_custom_benefits_value": benefits["annual_custom_benefits_value"],
