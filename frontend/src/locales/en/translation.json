@@ -267,7 +267,27 @@
       "custom_benefits": "B2B custom benefits",
       "uop_custom_benefits": "UoP custom benefits",
       "benefits": "UoP benefits",
-      "total": "Total value"
+      "total": "Total value",
+      "kup_tooltip": {
+        "title": "Tax-deductible costs (KUP)",
+        "type": "Type",
+        "type_author": "50% copyright costs",
+        "type_standard": "Standard (250 PLN/mo.)",
+        "type_elevated": "Elevated (300 PLN/mo.)",
+        "type_none": "None",
+        "creative_pct": "Creative work %",
+        "annual": "Annual KUP",
+        "limit": "Annual limit",
+        "limit_reached": "limit reached"
+      },
+      "tax_tooltip": {
+        "title": "Income tax (progressive scale)",
+        "taxable_base": "Taxable base",
+        "first_bracket": "1st bracket",
+        "second_bracket": "2nd bracket",
+        "tax_free": "Tax-free allowance",
+        "total": "Total tax"
+      }
     }
   }
 }

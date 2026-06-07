@@ -1,14 +1,68 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Tooltip from "./Tooltip";
 
 function fmt(n) {
   return new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN", maximumFractionDigits: 0 }).format(n);
 }
 
-function Row({ label, value, minus, total }) {
+function KupTooltipContent({ kb, t }) {
+  if (!kb) return null;
+  const typeLabels = {
+    author_50: t("detail.kup_tooltip.type_author"),
+    standard: t("detail.kup_tooltip.type_standard"),
+    elevated: t("detail.kup_tooltip.type_elevated"),
+    none: t("detail.kup_tooltip.type_none"),
+  };
+  return (
+    <div>
+      <strong>{t("detail.kup_tooltip.title")}</strong>
+      <div style={{ marginTop: 4 }}>{t("detail.kup_tooltip.type")}: {typeLabels[kb.type] || kb.type}</div>
+      {kb.type === "author_50" && (
+        <div>{t("detail.kup_tooltip.creative_pct")}: {kb.creative_work_percentage}%</div>
+      )}
+      <div>{t("detail.kup_tooltip.annual")}: {fmt(kb.annual_amount)}</div>
+      {kb.type === "author_50" && (
+        <div>
+          {t("detail.kup_tooltip.limit")}: {fmt(kb.limit)}
+          {kb.limit_reached ? ` ⚠ ${t("detail.kup_tooltip.limit_reached")}` : " ✓"}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TaxTooltipContent({ tb, t }) {
+  if (!tb) return null;
+  return (
+    <div>
+      <strong>{t("detail.tax_tooltip.title")}</strong>
+      <div style={{ marginTop: 4 }}>{t("detail.tax_tooltip.taxable_base")}: {fmt(tb.annual_taxable_base)}</div>
+      <div style={{ marginTop: 4 }}>
+        {t("detail.tax_tooltip.first_bracket")} ({fmt(tb.base_first_bracket)} × 12%): {fmt(tb.tax_first_bracket)}
+      </div>
+      {tb.base_second_bracket > 0 && (
+        <div>
+          {t("detail.tax_tooltip.second_bracket")} ({fmt(tb.base_second_bracket)} × 32%): {fmt(tb.tax_second_bracket)}
+        </div>
+      )}
+      <div>
+        {t("detail.tax_tooltip.tax_free")} ({fmt(tb.tax_free_amount)} × 12%): −{fmt(tb.tax_reducing_applied)}
+      </div>
+      <div style={{ borderTop: "1px solid var(--border-muted)", marginTop: 4, paddingTop: 4 }}>
+        <strong>{t("detail.tax_tooltip.total")}: {fmt(tb.annual_net_tax)}</strong>
+      </div>
+    </div>
+  );
+}
+
+function Row({ label, value, minus, total, tooltip }) {
+  const labelEl = tooltip
+    ? <Tooltip text={tooltip} width={300}>{label}</Tooltip>
+    : label;
   return (
     <div className={`detail-row${total ? " total" : ""}`}>
-      <span className="k">{label}</span>
+      <span className="k">{labelEl}</span>
       <span className="v">
         {minus && value > 0 ? `−${fmt(value)}` : fmt(value)}
       </span>
@@ -50,8 +104,22 @@ export default function DetailTable({ result }) {
           {(uop.zusSocial + uop.zusHealth) > 0 && (
             <Row label={t("res.detail.zus_social") || "ZUS"} value={uop.zusSocial + uop.zusHealth} minus />
           )}
-          {uop.kup > 0 && <Row label={t("res.detail.kup") || "KUP"} value={uop.kup} minus />}
-          {uop.tax > 0 && <Row label={t("res.detail.tax") || "Podatek"} value={uop.tax} minus />}
+          {uop.kup > 0 && (
+            <Row
+              label={t("res.detail.kup") || "KUP"}
+              value={uop.kup}
+              minus
+              tooltip={uop.kupBreakdown ? <KupTooltipContent kb={uop.kupBreakdown} t={t} /> : null}
+            />
+          )}
+          {uop.tax > 0 && (
+            <Row
+              label={t("res.detail.tax") || "Podatek"}
+              value={uop.tax}
+              minus
+              tooltip={uop.taxBreakdown ? <TaxTooltipContent tb={uop.taxBreakdown} t={t} /> : null}
+            />
+          )}
           <Row label={t("res.detail.net") || "Netto na rękę"} value={uop.net} />
           {uop.customBenefits > 0 && <Row label={t("res.detail.uop_custom_benefits") || "Własne benefity UoP"} value={uop.customBenefits} />}
           {uop.benefits > 0 && <Row label={t("res.detail.benefits") || "Benefity UoP"} value={uop.benefits} />}

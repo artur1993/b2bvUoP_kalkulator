@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-export default function Tooltip({ text, children }) {
+export default function Tooltip({ text, children, width = 240 }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
 
@@ -29,7 +29,7 @@ export default function Tooltip({ text, children }) {
         ?
       </button>
       {visible && (
-        <div style={{ position: "absolute", bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)", background: "var(--surface)", border: "1px solid var(--border-strong)", borderRadius: "var(--radius)", padding: "8px 10px", fontSize: 12, lineHeight: 1.5, color: "var(--text-muted)", width: 240, zIndex: 100, boxShadow: "var(--shadow-card)", pointerEvents: "none" }}>
+        <div style={{ position: "absolute", bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)", background: "var(--surface)", border: "1px solid var(--border-strong)", borderRadius: "var(--radius)", padding: "8px 10px", fontSize: 12, lineHeight: 1.5, color: "var(--text-muted)", width, zIndex: 100, boxShadow: "var(--shadow-card)", pointerEvents: "none" }}>
           {text}
         </div>
       )}
