@@ -153,6 +153,14 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
     annual_tax += annual_solidarity_tax
     annual_tax_without_ppk_employer += annual_solidarity_tax_without_ppk_employer
 
+    _tax_threshold = float(config["tax_thresholds"]["tax_scale"][0]["income"])
+    _tax_reducing = float(config["tax_thresholds"]["tax_reducing_amount"])
+    _base_first = min(annual_tax_base, _tax_threshold)
+    _base_second = max(0.0, annual_tax_base - _tax_threshold)
+    _tax_first_raw = math.ceil(_base_first * 0.12)
+    _tax_second_raw = math.ceil(_base_second * 0.32)
+    _tax_reducing_applied = min(float(_tax_first_raw), _tax_reducing)
+
     annual_net = (
         cumulative_gross
         - annual_social_contributions
@@ -205,6 +213,24 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
             "annual_ppk_employer_net": annual_ppk_employer_net,
             "annual_solidarity_tax": annual_solidarity_tax,
             "monthly_calculations": monthly_calculations,
+            "kup_breakdown": {
+                "type": deductible_cost_type,
+                "creative_work_percentage": round(creative_work_percentage * 100, 1),
+                "annual_amount": annual_deductible_costs,
+                "limit": author_costs_limit,
+                "limit_reached": deductible_cost_type == "author_50"
+                and cumulative_author_costs >= author_costs_limit,
+            },
+            "tax_breakdown": {
+                "annual_taxable_base": annual_tax_base,
+                "base_first_bracket": _base_first,
+                "base_second_bracket": _base_second,
+                "tax_first_bracket": float(_tax_first_raw),
+                "tax_second_bracket": float(_tax_second_raw),
+                "tax_reducing_applied": _tax_reducing_applied,
+                "tax_free_amount": float(config["tax_thresholds"]["tax_free_amount"]),
+                "annual_net_tax": max(0.0, annual_tax - annual_solidarity_tax),
+            },
         },
     }
 

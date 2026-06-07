@@ -112,6 +112,8 @@ function mapResponseToResult(apiRes) {
       zusHealth: uopZusHealth,
       tax: uopR.annual_tax || 0,
       kup: uopSteps.annual_deductible_costs || 0,
+      kupBreakdown: uopSteps.kup_breakdown || null,
+      taxBreakdown: uopSteps.tax_breakdown || null,
       benefits: uopR.annual_benefits_value || 0,
       customBenefits: uopR.annual_custom_benefits_value || 0,
       totalValue: uopR.total_annual_value || 0,

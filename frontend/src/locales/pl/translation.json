@@ -267,7 +267,27 @@
       "custom_benefits": "Własne benefity B2B",
       "uop_custom_benefits": "Własne benefity UoP",
       "benefits": "Benefity UoP",
-      "total": "Wartość całkowita"
+      "total": "Wartość całkowita",
+      "kup_tooltip": {
+        "title": "Koszty uzysk. przychodu (KUP)",
+        "type": "Typ",
+        "type_author": "50% kosztów autorskich",
+        "type_standard": "Standardowy (250 zł/mies.)",
+        "type_elevated": "Podwyższony (300 zł/mies.)",
+        "type_none": "Brak",
+        "creative_pct": "% pracy twórczej",
+        "annual": "KUP roczne",
+        "limit": "Limit roczny",
+        "limit_reached": "limit wyczerpany"
+      },
+      "tax_tooltip": {
+        "title": "Podatek PIT (skala podatkowa)",
+        "taxable_base": "Podstawa opodatkowania",
+        "first_bracket": "I próg",
+        "second_bracket": "II próg",
+        "tax_free": "Kwota wolna",
+        "total": "Podatek razem"
+      }
     }
   }
 }
