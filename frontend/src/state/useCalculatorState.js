@@ -21,8 +21,13 @@ const TAX_MAP = {
   ipbox: "ip_box",
 };
 
+// Employer ZUS overhead on top of gross salary (super-gross conversion):
+// emerytalne 9.76% + rentowe 6.50% + wypadkowe 1.67% + FP/FS 2.45% + FGŚP 0.10%
+const EMPLOYER_ZUS_OVERHEAD = 0.2048;
+const PPK_EMPLOYER_RATE = 0.015;
+
 function mapFormToPayload(s) {
-  return {
+  const payload = {
     calculation_mode: s.mode,
     b2b: {
       monthly_invoice_amount: s.monthlyInvoice,
@@ -54,6 +59,18 @@ function mapFormToPayload(s) {
       age: s.age,
     },
   };
+
+  if (s.mode === "employer_budget") {
+    const ppkSelected = (s.uopBenefits ?? []).includes("ppk");
+    const employerMultiplier =
+      1 + EMPLOYER_ZUS_OVERHEAD + (ppkSelected ? PPK_EMPLOYER_RATE : 0);
+    payload.b2b.monthly_invoice_amount = s.employerBudget;
+    payload.uop.monthly_gross_salary = Math.round(
+      s.employerBudget / employerMultiplier,
+    );
+  }
+
+  return payload;
 }
 
 function mapResponseToResult(apiRes) {
@@ -149,6 +166,7 @@ export function useCalculatorState() {
   const [customBenefitsValue, setCustomBenefitsValue] = useState(0);
   const [uopCustomBenefitsValue, setUopCustomBenefitsValue] = useState(0);
   const [uopBenefits, setUopBenefits] = useState(["medical", "sport"]);
+  const [employerBudget, setEmployerBudget] = useState(20000);
 
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -169,7 +187,7 @@ export function useCalculatorState() {
     mode, age, monthlyInvoice, businessCosts, zusType, voluntarySick,
     taxForm, ipShare, ipBoxBaseForm, grossSalary, kupType, creativePct,
     youthRelief, uopBonusPct, holidaysPaid, totalVacation, paidVacation, unpaidSick, stoppageMonths,
-    customBenefitsValue, uopCustomBenefitsValue, uopBenefits,
+    customBenefitsValue, uopCustomBenefitsValue, uopBenefits, employerBudget,
   };
   const uopBenefitsKey = JSON.stringify(uopBenefits);
 
@@ -207,7 +225,7 @@ export function useCalculatorState() {
     mode, age, monthlyInvoice, businessCosts, zusType, voluntarySick,
     taxForm, ipShare, ipBoxBaseForm, grossSalary, kupType, creativePct,
     youthRelief, uopBonusPct, holidaysPaid, totalVacation, paidVacation, unpaidSick, stoppageMonths,
-    customBenefitsValue, uopCustomBenefitsValue, uopBenefitsKey,
+    customBenefitsValue, uopCustomBenefitsValue, uopBenefitsKey, employerBudget,
   ]);
 
   const handleExportExcel = useCallback(async () => {
@@ -265,6 +283,7 @@ export function useCalculatorState() {
     customBenefitsValue, setCustomBenefitsValue,
     uopCustomBenefitsValue, setUopCustomBenefitsValue,
     uopBenefits, setUopBenefits,
+    employerBudget, setEmployerBudget,
     // result + status
     result, loading, error,
     // actions

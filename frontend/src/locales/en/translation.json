@@ -73,6 +73,9 @@
     "calculation_mode_title": "Calculation Mode",
     "uop_to_b2b_mode": "UoP to B2B (Calculate B2B invoice to match UoP)",
     "b2b_to_uop_mode": "B2B to UoP (Calculate UoP salary to match B2B)",
+    "employer_budget_mode": "Employer budget",
+    "employer_budget_section": "Company budget",
+    "employer_budget": "Monthly employer budget",
     "kup_tooltip": "Tax-deductible costs (KUP) are expenses incurred to generate revenue. Standard KUP for employees is 250 PLN/month (3000 PLN/year). For employees commuting from another town, it is 300 PLN/month (3600 PLN/year). Creators can benefit from 50% KUP, but not more than 120,000 PLN per year."
   },
   "results": {
@@ -202,6 +205,7 @@
     "benefits_custom": "B2B Benefits Value"
   },
   "field_help": {
+    "employer_budget": "Total amount the company is willing to spend on this position. For B2B = invoice amount (company pays net; they reclaim VAT). For UoP = total employer cost / super-gross (gross + employer ZUS ~20.5%: pension 9.76%, disability 6.50%, accident 1.67%, FP/FS 2.45%, FGŚP 0.10%). Large IT firms ≥10 employees have 0.67% accident rate (≈19.5%). If PPK selected: +1.5%. All other B2B and UoP settings still apply.",
     "age": "Age affects youth tax relief (UoP < 26)",
     "monthly_invoice": "Net amount on VAT invoice per month",
     "business_costs": "Business expenses: accounting, equipment, etc.",

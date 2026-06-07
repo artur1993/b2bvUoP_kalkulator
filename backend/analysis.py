@@ -6,7 +6,7 @@ from backend.config import config_manager
 def generate_executive_summary(
     b2b_results: dict[str, Any],
     uop_results: dict[str, Any],
-    break_even_faktura: float,
+    break_even_faktura: float | None,
     lang: str = "en",
 ) -> dict[str, Any]:
     """Generates a high-level executive summary and recommendation."""
