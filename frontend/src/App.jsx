@@ -156,6 +156,13 @@ export default function App() {
             >
               {t("form.b2b_to_uop_mode")}
             </button>
+            <button
+              className={s.mode === "employer_budget" ? "active" : ""}
+              onClick={() => s.setMode("employer_budget")}
+              data-testid="employer-budget-radio"
+            >
+              {t("form.employer_budget_mode")}
+            </button>
           </div>
 
           {/* Profile */}
@@ -175,14 +182,34 @@ export default function App() {
             />
           </FormCluster>
 
+          {/* Employer budget (only in employer_budget mode) */}
+          {s.mode === "employer_budget" && (
+            <FormCluster badge="💼" title={t("form.employer_budget_section")}>
+              <Field
+                label={t("form.employer_budget")}
+                help={t("field_help.employer_budget")}
+                control={
+                  <NumberInput
+                    value={s.employerBudget}
+                    onChange={s.setEmployerBudget}
+                    suffix="zł"
+                    step={500}
+                  />
+                }
+              />
+            </FormCluster>
+          )}
+
           {/* B2B */}
           <FormCluster badge="B2B" badgeClass="b2b" title={t("sec.b2b") || t("form.b2b_title")} sub={t("sec.b2b_sub")}>
             <SubsecTitle>{i18n.language === "pl" ? "Finanse" : "Financials"}</SubsecTitle>
-            <Field
-              label={t("form.monthly_invoice")}
-              help={t("field_help.monthly_invoice")}
-              control={<NumberInput value={s.monthlyInvoice} onChange={s.setMonthlyInvoice} suffix="zł" step={500} />}
-            />
+            {s.mode !== "employer_budget" && (
+              <Field
+                label={t("form.monthly_invoice")}
+                help={t("field_help.monthly_invoice")}
+                control={<NumberInput value={s.monthlyInvoice} onChange={s.setMonthlyInvoice} suffix="zł" step={500} />}
+              />
+            )}
             <Field
               label={t("form.business_costs")}
               help={t("field_help.business_costs")}
@@ -235,11 +262,13 @@ export default function App() {
           {/* UoP */}
           <FormCluster badge="UoP" badgeClass="uop" title={t("sec.uop") || t("form.uop_title")} sub={t("sec.uop_sub")}>
             <SubsecTitle>{i18n.language === "pl" ? "Finanse" : "Financials"}</SubsecTitle>
-            <Field
-              label={t("form.gross_salary")}
-              help={t("field_help.gross_salary")}
-              control={<NumberInput value={s.grossSalary} onChange={s.setGrossSalary} suffix="zł" step={500} />}
-            />
+            {s.mode !== "employer_budget" && (
+              <Field
+                label={t("form.gross_salary")}
+                help={t("field_help.gross_salary")}
+                control={<NumberInput value={s.grossSalary} onChange={s.setGrossSalary} suffix="zł" step={500} />}
+              />
+            )}
             <Field
               label={t("form.kup_type")}
               control={<PillList value={s.kupType} onChange={s.setKupType} options={kupOptions} />}
@@ -351,7 +380,9 @@ export default function App() {
               <VerdictCard result={s.result} lang={i18n.language} />
               <ResultTiles result={s.result} lang={i18n.language} />
               <CompositionBars result={s.result} />
-              <BreakevenBar result={s.result} monthlyInvoice={s.monthlyInvoice} grossSalary={s.grossSalary} mode={s.mode} />
+              {s.mode !== "employer_budget" && (
+                <BreakevenBar result={s.result} monthlyInvoice={s.monthlyInvoice} grossSalary={s.grossSalary} mode={s.mode} />
+              )}
               <DetailTable result={s.result} />
               {s.result.pension && <PensionNote pension={s.result.pension} />}
               <div className="footer-actions">

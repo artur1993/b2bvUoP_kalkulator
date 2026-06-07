@@ -24,9 +24,13 @@ def run_full_calculation(request_data: dict[str, Any]) -> dict[str, Any]:
     b2b_results = calculate_b2b_results(b2b_data)
     uop_results = calculate_uop_results(uop_data)
 
-    break_even_point = -1.0
+    break_even_point: float | None = -1.0
     break_even_key = "break_even_invoice_amount"
-    if calculation_mode == "uop_to_b2b":
+    if calculation_mode == "employer_budget":
+        # In employer budget mode both sides are derived from a fixed total cost,
+        # so a break-even point is not meaningful.
+        break_even_point = None
+    elif calculation_mode == "uop_to_b2b":
         break_even_point = calculate_break_even(uop_results["total_annual_value"], b2b_data)
     elif calculation_mode == "b2b_to_uop":
         break_even_point = calculate_uop_break_even(b2b_results["total_annual_value"], uop_data)

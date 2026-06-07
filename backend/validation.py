@@ -55,7 +55,7 @@ class UoPDataModel(BaseModel):
 class CalculationRequestModel(BaseModel):
     b2b: B2BDataModel
     uop: UoPDataModel
-    calculation_mode: str = Field(..., pattern="^(uop_to_b2b|b2b_to_uop)$")
+    calculation_mode: str = Field(..., pattern="^(uop_to_b2b|b2b_to_uop|employer_budget)$")
     language: str | None = "pl"
 
 

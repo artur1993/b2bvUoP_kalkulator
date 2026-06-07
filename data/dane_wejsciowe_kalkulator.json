@@ -39,7 +39,12 @@
     "break_even_analysis_min_multiplier": 0.8,
     "break_even_analysis_max_multiplier": 2.5,
     "tax_scale_health_rate": 0.09,
-    "flat_tax_health_rate": 0.049
+    "flat_tax_health_rate": 0.049,
+    "uop_pension_employer": 0.0976,
+    "uop_disability_employer": 0.065,
+    "uop_accident_employer": 0.0167,
+    "uop_fp_fs_employer": 0.0245,
+    "uop_fgsp_employer": 0.001
   },
   "zus_2026": {
     "thirty_times_limit_uop": 282600,

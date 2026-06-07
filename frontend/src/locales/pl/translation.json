@@ -73,6 +73,9 @@
     "calculation_mode_title": "Tryb Kalkulacji",
     "uop_to_b2b_mode": "UoP do B2B (Oblicz fakturę B2B, aby zrównać się z UoP)",
     "b2b_to_uop_mode": "B2B do UoP (Oblicz wynagrodzenie UoP, aby zrównać się z B2B)",
+    "employer_budget_mode": "Budżet pracodawcy",
+    "employer_budget_section": "Budżet firmy",
+    "employer_budget": "Miesięczny budżet pracodawcy",
     "kup_tooltip": "Koszty uzyskania przychodów (KUP) to wydatki poniesione w celu osiągnięcia przychodów. Standardowe KUP dla pracowników wynoszą 250 zł/mies. (3000 zł rocznie). Dla pracowników dojeżdżających z innej miejscowości wynoszą 300 zł/mies. (3600 zł rocznie). Twórcy mogą korzystać z 50% KUP, ale nie więcej niż 120 000 zł rocznie."
   },
   "results": {
@@ -202,6 +205,7 @@
     "benefits_custom": "Wartość benefitów B2B"
   },
   "field_help": {
+    "employer_budget": "Kwota którą firma jest w stanie przeznaczyć na to stanowisko. Dla B2B = kwota faktury (firma płaci netto, VAT odlicza). Dla UoP = super-brutto (brutto + ZUS pracodawcy ~20.5%: emerytalny 9.76%, rentowy 6.50%, wypadkowy 1.67%, FP/FS 2.45%, FGŚP 0.10%). Duże firmy IT ≥10 os. mają wypadkowe 0.67% (≈19.5%). Jeśli PPK włączone: +1.5%. Pozostałe ustawienia B2B i UoP obowiązują bez zmian.",
     "age": "Wiek wpływa na ulgę dla młodych (UoP < 26 lat)",
     "monthly_invoice": "Kwota netto na fakturze VAT miesięcznie",
     "business_costs": "Koszty uzyskania przychodu: księgowość, sprzęt, etc.",

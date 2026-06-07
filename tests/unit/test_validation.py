@@ -175,7 +175,7 @@ def test_calculation_request_valid():
     CalculationRequestModel(**_valid_calculation_request())
 
 
-@pytest.mark.parametrize("mode", ["uop_to_b2b", "b2b_to_uop"])
+@pytest.mark.parametrize("mode", ["uop_to_b2b", "b2b_to_uop", "employer_budget"])
 def test_calculation_request_modes(mode):
     data = _valid_calculation_request()
     data["calculation_mode"] = mode

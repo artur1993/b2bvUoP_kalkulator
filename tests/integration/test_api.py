@@ -68,6 +68,35 @@ def test_calculate_endpoint_rejects_removed_pension_field(client):
     assert response.status_code == 400
 
 
+def test_calculate_endpoint_employer_budget_positive(client):
+    """Employer budget mode returns 200 with break-even fields nulled out."""
+    data = {
+        "b2b": {
+            "monthly_invoice_amount": 27000,
+            "monthly_business_costs": 500,
+            "age": 30,
+            "zus_type": "full",
+            "tax_form": "flat_tax",
+        },
+        "uop": {
+            "monthly_gross_salary": 22412,
+            "age": 30,
+            "deductible_cost_settings": {"type": "standard"},
+        },
+        "calculation_mode": "employer_budget",
+        "language": "pl",
+    }
+    response = client.post("/api/calculate", json=data)
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert "b2b_results" in json_data
+    assert "uop_results" in json_data
+    # No break-even is meaningful in employer budget mode.
+    assert json_data.get("break_even_invoice_amount") is None
+    assert json_data.get("break_even_gross_salary") is None
+    assert json_data["analysis"]["summary"]["break_even_faktura"] is None
+
+
 def test_calculate_endpoint_invalid_mode_negative(client):
     """Test calculation with invalid mode."""
     data = {
