@@ -9,23 +9,23 @@ function fmt(n) {
 function KupTooltipContent({ kb, t }) {
   if (!kb) return null;
   const typeLabels = {
-    author_50: t("detail.kup_tooltip.type_author"),
-    standard: t("detail.kup_tooltip.type_standard"),
-    elevated: t("detail.kup_tooltip.type_elevated"),
-    none: t("detail.kup_tooltip.type_none"),
+    author_50: t("res.detail.kup_tooltip.type_author"),
+    standard: t("res.detail.kup_tooltip.type_standard"),
+    elevated: t("res.detail.kup_tooltip.type_elevated"),
+    none: t("res.detail.kup_tooltip.type_none"),
   };
   return (
     <div>
-      <strong>{t("detail.kup_tooltip.title")}</strong>
-      <div style={{ marginTop: 4 }}>{t("detail.kup_tooltip.type")}: {typeLabels[kb.type] || kb.type}</div>
+      <strong>{t("res.detail.kup_tooltip.title")}</strong>
+      <div style={{ marginTop: 4 }}>{t("res.detail.kup_tooltip.type")}: {typeLabels[kb.type] || kb.type}</div>
       {kb.type === "author_50" && (
-        <div>{t("detail.kup_tooltip.creative_pct")}: {kb.creative_work_percentage}%</div>
+        <div>{t("res.detail.kup_tooltip.creative_pct")}: {kb.creative_work_percentage}%</div>
       )}
-      <div>{t("detail.kup_tooltip.annual")}: {fmt(kb.annual_amount)}</div>
+      <div>{t("res.detail.kup_tooltip.annual")}: {fmt(kb.annual_amount)}</div>
       {kb.type === "author_50" && (
         <div>
-          {t("detail.kup_tooltip.limit")}: {fmt(kb.limit)}
-          {kb.limit_reached ? ` ⚠ ${t("detail.kup_tooltip.limit_reached")}` : " ✓"}
+          {t("res.detail.kup_tooltip.limit")}: {fmt(kb.limit)}
+          {kb.limit_reached ? ` ⚠ ${t("res.detail.kup_tooltip.limit_reached")}` : " ✓"}
         </div>
       )}
     </div>
@@ -36,21 +36,21 @@ function TaxTooltipContent({ tb, t }) {
   if (!tb) return null;
   return (
     <div>
-      <strong>{t("detail.tax_tooltip.title")}</strong>
-      <div style={{ marginTop: 4 }}>{t("detail.tax_tooltip.taxable_base")}: {fmt(tb.annual_taxable_base)}</div>
+      <strong>{t("res.detail.tax_tooltip.title")}</strong>
+      <div style={{ marginTop: 4 }}>{t("res.detail.tax_tooltip.taxable_base")}: {fmt(tb.annual_taxable_base)}</div>
       <div style={{ marginTop: 4 }}>
-        {t("detail.tax_tooltip.first_bracket")} ({fmt(tb.base_first_bracket)} × 12%): {fmt(tb.tax_first_bracket)}
+        {t("res.detail.tax_tooltip.first_bracket")} ({fmt(tb.base_first_bracket)} × 12%): {fmt(tb.tax_first_bracket)}
       </div>
       {tb.base_second_bracket > 0 && (
         <div>
-          {t("detail.tax_tooltip.second_bracket")} ({fmt(tb.base_second_bracket)} × 32%): {fmt(tb.tax_second_bracket)}
+          {t("res.detail.tax_tooltip.second_bracket")} ({fmt(tb.base_second_bracket)} × 32%): {fmt(tb.tax_second_bracket)}
         </div>
       )}
       <div>
-        {t("detail.tax_tooltip.tax_free")} ({fmt(tb.tax_free_amount)} × 12%): −{fmt(tb.tax_reducing_applied)}
+        {t("res.detail.tax_tooltip.tax_free")} ({fmt(tb.tax_free_amount)} × 12%): −{fmt(tb.tax_reducing_applied)}
       </div>
       <div style={{ borderTop: "1px solid var(--border-muted)", marginTop: 4, paddingTop: 4 }}>
-        <strong>{t("detail.tax_tooltip.total")}: {fmt(tb.annual_net_tax)}</strong>
+        <strong>{t("res.detail.tax_tooltip.total")}: {fmt(tb.annual_net_tax)}</strong>
       </div>
     </div>
   );
