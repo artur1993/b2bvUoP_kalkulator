@@ -91,7 +91,8 @@
   },
   "ppk": {
     "employee_rate": 0.02,
-    "employer_rate": 0.015
+    "employer_rate": 0.015,
+    "state_annual_subsidy": 240
   },
   "uop_days_off": {
     "vacation": { "days": 26, "payment_percentage": 1.0 },

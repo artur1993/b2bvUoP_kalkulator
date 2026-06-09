@@ -267,6 +267,7 @@
       "custom_benefits": "Własne benefity B2B",
       "uop_custom_benefits": "Własne benefity UoP",
       "benefits": "Benefity UoP",
+      "ppk_capital": "Oszczędności PPK (Twój kapitał)",
       "total": "Wartość całkowita",
       "kup_tooltip": {
         "title": "Koszty uzysk. przychodu (KUP)",
@@ -287,6 +288,13 @@
         "second_bracket": "II próg",
         "tax_free": "Kwota wolna",
         "total": "Podatek razem"
+      },
+      "ppk_tooltip": {
+        "title": "Kapitał PPK",
+        "note": "Na rękę masz mniej, ale te środki zostają Twoim kapitałem na koncie PPK.",
+        "employee": "Wpłata pracownika (2%)",
+        "employer": "Wpłata pracodawcy (1,5%)",
+        "state": "Dopłata państwa"
       }
     }
   }

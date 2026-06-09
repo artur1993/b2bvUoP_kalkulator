@@ -267,6 +267,7 @@
       "custom_benefits": "B2B custom benefits",
       "uop_custom_benefits": "UoP custom benefits",
       "benefits": "UoP benefits",
+      "ppk_capital": "PPK savings (your capital)",
       "total": "Total value",
       "kup_tooltip": {
         "title": "Tax-deductible costs (KUP)",
@@ -287,6 +288,13 @@
         "second_bracket": "2nd bracket",
         "tax_free": "Tax-free allowance",
         "total": "Total tax"
+      },
+      "ppk_tooltip": {
+        "title": "PPK capital",
+        "note": "You take home less, but this money stays your capital in your PPK account.",
+        "employee": "Employee contribution (2%)",
+        "employer": "Employer contribution (1.5%)",
+        "state": "State subsidy"
       }
     }
   }

@@ -184,15 +184,29 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         float(config["benefits"][b]) for b in selected_benefits if b in config["benefits"]
     )
     annual_ppk_employer_net = 0.0
+    annual_ppk_state_subsidy = 0.0
+    annual_ppk_capital = 0.0
     if ppk_selected:
         # Uproszczenie: PIT od dopłaty pracodawcy to różnica podatku z/bez tej dopłaty.
         ppk_employer_tax = max(0.0, annual_tax - annual_tax_without_ppk_employer)
         annual_ppk_employer_net = max(0.0, annual_ppk_employer_contribution - ppk_employer_tax)
-        benefits_value += annual_ppk_employer_net
+        # Dopłata roczna państwa (nieopodatkowana). Założenie: pełna eligibility —
+        # roczne wpłaty podstawowe pracownika spełnione przez cały rok.
+        annual_ppk_state_subsidy = float(ppk_rates.get("state_annual_subsidy", 0))
+        # Kapitał PPK = środki realnie trafiające na konto pracownika i pozostające
+        # jego majątkiem: wpłata pracownika (2%) + wpłata pracodawcy BRUTTO (1,5%,
+        # cała zasila konto — PIT od niej obciąża już netto powyżej) + dopłata państwa.
+        annual_ppk_capital = (
+            annual_ppk_employee_contribution
+            + annual_ppk_employer_contribution
+            + annual_ppk_state_subsidy
+        )
 
     uop_custom_benefits = float(uop_data.get("custom_benefits_value", 0))
     benefits_value += uop_custom_benefits
-    total_uop_value = annual_net + benefits_value
+    # Kapitał PPK nie jest "benefitem" jak karta/medyk (to oszczędność pracownika),
+    # ale podnosi całkowitą wartość pakietu UoP — pokazywany w osobnej linii.
+    total_uop_value = annual_net + benefits_value + annual_ppk_capital
 
     return {
         "annual_gross_salary": cumulative_gross,
@@ -203,6 +217,7 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         "annual_bonus_gross": annual_bonus_gross,
         "annual_bonus_net": annual_bonus_net,
         "annual_custom_benefits_value": uop_custom_benefits,
+        "annual_ppk_capital": annual_ppk_capital,
         "annual_net_income": annual_net,
         "total_annual_value": total_uop_value,
         "monthly_net_income": total_uop_value / 12,
@@ -211,6 +226,7 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
             "annual_ppk_employee_contribution": annual_ppk_employee_contribution,
             "annual_ppk_employer_contribution": annual_ppk_employer_contribution,
             "annual_ppk_employer_net": annual_ppk_employer_net,
+            "annual_ppk_state_subsidy": annual_ppk_state_subsidy,
             "annual_solidarity_tax": annual_solidarity_tax,
             "monthly_calculations": monthly_calculations,
             "kup_breakdown": {

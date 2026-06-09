@@ -56,15 +56,28 @@ function TaxTooltipContent({ tb, t }) {
   );
 }
 
-function Row({ label, value, minus, total, tooltip }) {
+function PpkTooltipContent({ pb, t }) {
+  if (!pb) return null;
+  return (
+    <div>
+      <strong>{t("res.detail.ppk_tooltip.title")}</strong>
+      <div style={{ marginTop: 4 }}>{t("res.detail.ppk_tooltip.note")}</div>
+      <div style={{ marginTop: 4 }}>{t("res.detail.ppk_tooltip.employee")}: {fmt(pb.employee)}</div>
+      <div>{t("res.detail.ppk_tooltip.employer")}: {fmt(pb.employer)}</div>
+      {pb.state > 0 && <div>{t("res.detail.ppk_tooltip.state")}: {fmt(pb.state)}</div>}
+    </div>
+  );
+}
+
+function Row({ label, value, minus, plus, total, accent, tooltip }) {
   const labelEl = tooltip
     ? <Tooltip text={tooltip} width={300}>{label}</Tooltip>
     : label;
   return (
-    <div className={`detail-row${total ? " total" : ""}`}>
+    <div className={`detail-row${total ? " total" : ""}${accent ? " accent" : ""}`}>
       <span className="k">{labelEl}</span>
       <span className="v">
-        {minus && value > 0 ? `−${fmt(value)}` : fmt(value)}
+        {plus ? `+${fmt(value)}` : minus && value > 0 ? `−${fmt(value)}` : fmt(value)}
       </span>
     </div>
   );
@@ -123,6 +136,15 @@ export default function DetailTable({ result }) {
           <Row label={t("res.detail.net") || "Netto na rękę"} value={uop.net} />
           {uop.customBenefits > 0 && <Row label={t("res.detail.uop_custom_benefits") || "Własne benefity UoP"} value={uop.customBenefits} />}
           {uop.benefits > 0 && <Row label={t("res.detail.benefits") || "Benefity UoP"} value={uop.benefits} />}
+          {uop.ppkCapital > 0 && (
+            <Row
+              label={t("res.detail.ppk_capital") || "Oszczędności PPK (Twój kapitał)"}
+              value={uop.ppkCapital}
+              plus
+              accent
+              tooltip={<PpkTooltipContent pb={uop.ppkBreakdown} t={t} />}
+            />
+          )}
           <Row label={t("res.detail.total") || "Wartość całkowita"} value={uop.totalValue} total />
         </div>
       </div>

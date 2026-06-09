@@ -116,6 +116,12 @@ function mapResponseToResult(apiRes) {
       taxBreakdown: uopSteps.tax_breakdown || null,
       benefits: uopR.annual_benefits_value || 0,
       customBenefits: uopR.annual_custom_benefits_value || 0,
+      ppkCapital: uopR.annual_ppk_capital || 0,
+      ppkBreakdown: {
+        employee: uopSteps.annual_ppk_employee_contribution || 0,
+        employer: uopSteps.annual_ppk_employer_contribution || 0,
+        state: uopSteps.annual_ppk_state_subsidy || 0,
+      },
       totalValue: uopR.total_annual_value || 0,
       monthly: uopR.monthly_net_income || 0,
       effective: uopR.annual_gross_salary > 0 ? (uopR.annual_tax || 0) / uopR.annual_gross_salary : 0,
