@@ -193,12 +193,12 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         # Dopłata roczna państwa (nieopodatkowana). Założenie: pełna eligibility —
         # roczne wpłaty podstawowe pracownika spełnione przez cały rok.
         annual_ppk_state_subsidy = float(ppk_rates.get("state_annual_subsidy", 0))
-        # Kapitał PPK = środki realnie trafiające na konto pracownika i pozostające
-        # jego majątkiem: wpłata pracownika (2%) + wpłata pracodawcy BRUTTO (1,5%,
-        # cała zasila konto — PIT od niej obciąża już netto powyżej) + dopłata państwa.
+        # Kapitał PPK = środki realnie na koncie po podatku:
+        # wpłata pracownika (2%) + wpłata pracodawcy netto po PIT (1,5% minus podatek)
+        # + dopłata państwa (nieopodatkowana).
         annual_ppk_capital = (
             annual_ppk_employee_contribution
-            + annual_ppk_employer_contribution
+            + annual_ppk_employer_net
             + annual_ppk_state_subsidy
         )
 

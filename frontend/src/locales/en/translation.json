@@ -293,7 +293,7 @@
         "title": "PPK capital",
         "note": "You take home less, but this money stays your capital in your PPK account.",
         "employee": "Employee contribution (2%)",
-        "employer": "Employer contribution (1.5%)",
+        "employer": "Employer contribution (1.5%, after PIT)",
         "state": "State subsidy"
       }
     }

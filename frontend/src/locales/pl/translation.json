@@ -293,7 +293,7 @@
         "title": "Kapitał PPK",
         "note": "Na rękę masz mniej, ale te środki zostają Twoim kapitałem na koncie PPK.",
         "employee": "Wpłata pracownika (2%)",
-        "employer": "Wpłata pracodawcy (1,5%)",
+        "employer": "Wpłata pracodawcy (1,5%, po PIT)",
         "state": "Dopłata państwa"
       }
     }

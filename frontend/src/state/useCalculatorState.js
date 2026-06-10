@@ -119,7 +119,7 @@ function mapResponseToResult(apiRes) {
       ppkCapital: uopR.annual_ppk_capital || 0,
       ppkBreakdown: {
         employee: uopSteps.annual_ppk_employee_contribution || 0,
-        employer: uopSteps.annual_ppk_employer_contribution || 0,
+        employer: uopSteps.annual_ppk_employer_net || 0,
         state: uopSteps.annual_ppk_state_subsidy || 0,
       },
       totalValue: uopR.total_annual_value || 0,
