@@ -242,12 +242,22 @@ class TestCalculations(unittest.TestCase):
 
         self.assertAlmostEqual(results["steps"]["annual_ppk_employer_contribution"], 1800, places=2)
         self.assertAlmostEqual(results["steps"]["annual_ppk_employer_net"], 1584, delta=50)
+        # PPK nie jest już doliczane do "benefitów" (karta/medyk) — jest osobnym kapitałem.
+        self.assertEqual(results["annual_benefits_value"], 0)
+        # Dopłata roczna państwa.
+        self.assertAlmostEqual(results["steps"]["annual_ppk_state_subsidy"], 240, places=2)
+        # Kapitał PPK = wpłata pracownika (2%) + pracodawcy netto po PIT + dopłata państwa.
+        # employer_net ≈ 1584 (1800 brutto minus ~216 PIT), total ≈ 4224.
+        employer_net = results["steps"]["annual_ppk_employer_net"]
         self.assertAlmostEqual(
-            results["annual_benefits_value"], results["steps"]["annual_ppk_employer_net"], places=2
+            results["annual_ppk_capital"],
+            2400 + employer_net + 240,
+            places=2,
         )
+        # Cała wartość PPK ponad netto to właśnie kapitał (brak innych benefitów/custom).
         self.assertAlmostEqual(
             results["total_annual_value"] - results["annual_net_income"],
-            results["steps"]["annual_ppk_employer_net"],
+            results["annual_ppk_capital"],
             places=2,
         )
 
@@ -262,9 +272,11 @@ class TestCalculations(unittest.TestCase):
         )
 
         self.assertEqual(results["annual_benefits_value"], 0)
+        self.assertEqual(results["annual_ppk_capital"], 0)
         self.assertEqual(results["steps"]["annual_ppk_employee_contribution"], 0)
         self.assertEqual(results["steps"]["annual_ppk_employer_contribution"], 0)
         self.assertEqual(results["steps"]["annual_ppk_employer_net"], 0)
+        self.assertEqual(results["steps"]["annual_ppk_state_subsidy"], 0)
 
 
 if __name__ == "__main__":
