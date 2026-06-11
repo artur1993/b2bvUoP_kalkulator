@@ -254,6 +254,57 @@ class TestCalculations(unittest.TestCase):
             with_ppk["steps"]["annual_ppk_employee_contribution"], 2400, places=2
         )
 
+    def test_youth_relief_below_limit_fully_exempts_revenue_positive(self):
+        # 84 000 przychodu < 85 528: całość zwolniona, zero podstawy i podatku.
+        results = calculate_uop_results(
+            {
+                "monthly_gross_salary": 7000,
+                "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+                "youth_relief": True,
+                "selected_benefits": [],
+            }
+        )
+
+        self.assertEqual(results["annual_tax"], 0)
+        self.assertEqual(results["steps"]["tax_breakdown"]["annual_taxable_base"], 0)
+        # KUP przysługują tylko od przychodu opodatkowanego — tu brak.
+        self.assertEqual(results["steps"]["annual_deductible_costs"], 0)
+
+    def test_youth_relief_exempts_revenue_not_income_positive(self):
+        # 180 000 przychodu: zwolnione 85 528 PRZYCHODU. Od nadwyżki odliczalne są
+        # tylko składki na nią przypadające (art. 26 ust. 1 pkt 2) i KUP za miesiące
+        # z przychodem opodatkowanym: podstawa = 94 472 − 12 952,11 − 1 750 ≈ 79 770.
+        results = calculate_uop_results(
+            {
+                "monthly_gross_salary": 15000,
+                "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+                "youth_relief": True,
+                "selected_benefits": [],
+            }
+        )
+
+        self.assertAlmostEqual(
+            results["steps"]["tax_breakdown"]["annual_taxable_base"], 79769.90, delta=1
+        )
+        self.assertAlmostEqual(results["annual_tax"], 5973, delta=2)
+
+    def test_youth_relief_covers_bonus_within_limit_positive(self):
+        # Pensja 72 000 + premia 7 200 < 85 528: premia bez PIT, ale ze składkami.
+        results = calculate_uop_results(
+            {
+                "monthly_gross_salary": 6000,
+                "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+                "youth_relief": True,
+                "selected_benefits": [],
+                "annual_bonus_pct": 10,
+            }
+        )
+        bonus = results["steps"]["bonus_breakdown"]
+
+        self.assertEqual(bonus["tax"], 0)
+        self.assertGreater(bonus["social_contributions"], 0)
+        self.assertGreater(bonus["health_contribution"], 0)
+
     def test_annual_bonus_is_subject_to_zus_and_health_positive(self):
         base_data = {
             "monthly_gross_salary": 10000,

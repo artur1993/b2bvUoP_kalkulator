@@ -51,6 +51,14 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
     youth_relief_limit = float(config["tax_thresholds"]["youth_relief_limit"])
     author_costs_limit = float(config["tax_thresholds"]["author_tax_deductible_costs_limit"])
 
+    # Ulga dla młodych (art. 21 ust. 1 pkt 148 PIT) zwalnia PRZYCHÓD do limitu
+    # rocznego — nie jest odliczeniem od dochodu. Pula zwolnienia konsumowana
+    # narastająco: pensja zasadnicza, wpłata pracodawcy PPK, na końcu premia.
+    youth_relief_remaining = (
+        youth_relief_limit if uop_data.get("youth_relief", False) else 0.0
+    )
+    annual_exempt_revenue = 0.0
+
     annual_social_contributions = 0.0
     annual_health_contribution = 0.0
     annual_deductible_costs = 0.0
@@ -88,25 +96,42 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         monthly_health_contribution = health_base * regulatory_rates["uop_health_employee"]
         annual_health_contribution += monthly_health_contribution
 
+        # Część przychodu zwolniona ulgą dla młodych. Składki przypadające na
+        # przychód zwolniony nie podlegają odliczeniu (art. 26 ust. 1 pkt 2),
+        # a KUP przysługują wyłącznie od części opodatkowanej.
+        monthly_exempt = min(monthly_gross_salary, youth_relief_remaining)
+        youth_relief_remaining -= monthly_exempt
+        annual_exempt_revenue += monthly_exempt
+        taxable_gross = monthly_gross_salary - monthly_exempt
+        taxable_share = (
+            taxable_gross / monthly_gross_salary if monthly_gross_salary > 0 else 0.0
+        )
+        deductible_social = monthly_social * taxable_share
+
         monthly_costs = 0.0
         if deductible_cost_type == "standard":
-            monthly_costs = float(config["tax_deductible_costs"]["standard"])
+            if taxable_gross > 0:
+                monthly_costs = float(config["tax_deductible_costs"]["standard"])
         elif deductible_cost_type == "elevated":
-            monthly_costs = float(config["tax_deductible_costs"]["elevated"])
+            if taxable_gross > 0:
+                monthly_costs = float(config["tax_deductible_costs"]["elevated"])
         elif deductible_cost_type == "author_50":
-            if cumulative_author_costs < author_costs_limit:
-                creative_income = monthly_gross_salary * creative_work_percentage
-                author_costs_base = creative_income - (monthly_social * creative_work_percentage)
+            # Art. 22 ust. 9aa: suma 50% KUP i przychodu zwolnionego ulgą dla
+            # młodych nie może przekroczyć rocznego limitu KUP autorskich.
+            author_limit_effective = max(0.0, author_costs_limit - annual_exempt_revenue)
+            if cumulative_author_costs < author_limit_effective:
+                creative_income = taxable_gross * creative_work_percentage
+                author_costs_base = creative_income - (deductible_social * creative_work_percentage)
                 potential_costs = (
                     author_costs_base * regulatory_rates["author_tax_deductible_cost_share"]
                 )
-                if cumulative_author_costs + potential_costs > author_costs_limit:
-                    monthly_costs = author_costs_limit - cumulative_author_costs
-                    cumulative_author_costs = author_costs_limit
+                if cumulative_author_costs + potential_costs > author_limit_effective:
+                    monthly_costs = author_limit_effective - cumulative_author_costs
+                    cumulative_author_costs = author_limit_effective
                 else:
                     monthly_costs = potential_costs
                     cumulative_author_costs += potential_costs
-            else:
+            elif taxable_gross > 0:
                 monthly_costs = float(config["tax_deductible_costs"]["standard"])
 
         annual_deductible_costs += monthly_costs
@@ -122,9 +147,16 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         # Wpłata pracownika do PPK jest finansowana z wynagrodzenia po opodatkowaniu —
         # nie pomniejsza podstawy PIT (obniża wyłącznie netto).
         monthly_tax_base_without_ppk_employer = max(
-            0.0, monthly_gross_salary - monthly_social - monthly_costs
+            0.0, taxable_gross - deductible_social - monthly_costs
         )
-        monthly_tax_base = monthly_tax_base_without_ppk_employer + monthly_ppk_employer
+        # Wpłata pracodawcy PPK to też przychód ze stosunku pracy — korzysta
+        # z pozostałej puli zwolnienia ulgi dla młodych.
+        ppk_employer_exempt = min(monthly_ppk_employer, youth_relief_remaining)
+        youth_relief_remaining -= ppk_employer_exempt
+        annual_exempt_revenue += ppk_employer_exempt
+        monthly_tax_base = monthly_tax_base_without_ppk_employer + (
+            monthly_ppk_employer - ppk_employer_exempt
+        )
         annual_tax_base += monthly_tax_base
         annual_tax_base_without_ppk_employer += monthly_tax_base_without_ppk_employer
 
@@ -136,12 +168,6 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
                 "ppk_employee_contribution": monthly_ppk_employee,
                 "ppk_employer_contribution": monthly_ppk_employer,
             }
-        )
-
-    if uop_data.get("youth_relief", False):
-        annual_tax_base = max(0.0, annual_tax_base - youth_relief_limit)
-        annual_tax_base_without_ppk_employer = max(
-            0.0, annual_tax_base_without_ppk_employer - youth_relief_limit
         )
 
     annual_tax = _calculate_progressive_tax(annual_tax_base, config)
@@ -186,7 +212,15 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         bonus_health = (annual_bonus_gross - bonus_social) * regulatory_rates[
             "uop_health_employee"
         ]
-        bonus_taxable = max(0.0, annual_bonus_gross - bonus_social)
+        # Premia korzysta z puli zwolnienia ulgi dla młodych pozostałej po pensji
+        # zasadniczej; składki od części zwolnionej nie podlegają odliczeniu.
+        bonus_exempt = min(annual_bonus_gross, youth_relief_remaining)
+        youth_relief_remaining -= bonus_exempt
+        bonus_taxable_share = (annual_bonus_gross - bonus_exempt) / annual_bonus_gross
+        bonus_taxable = max(
+            0.0,
+            (annual_bonus_gross - bonus_exempt) - bonus_social * bonus_taxable_share,
+        )
         bonus_tax = _calculate_progressive_tax(
             annual_tax_base + bonus_taxable, config
         ) - _calculate_progressive_tax(annual_tax_base, config)
@@ -266,7 +300,8 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
                 "annual_amount": annual_deductible_costs,
                 "limit": author_costs_limit,
                 "limit_reached": deductible_cost_type == "author_50"
-                and cumulative_author_costs >= author_costs_limit,
+                and cumulative_author_costs
+                >= max(0.0, author_costs_limit - annual_exempt_revenue),
             },
             "tax_breakdown": {
                 "annual_taxable_base": annual_tax_base,
