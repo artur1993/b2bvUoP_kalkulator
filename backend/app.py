@@ -30,6 +30,10 @@ def get_cors_origins() -> list[str]:
 app = Flask(__name__, static_folder=os.path.join(BASE_DIR, "frontend/dist"))
 CORS(app, origins=get_cors_origins())
 
+# Żądania kalkulatora to pojedyncze kilobajty — twardy limit odcina
+# gigantyczne payloady zanim trafią do parsera JSON (Flask zwraca 413).
+app.config["MAX_CONTENT_LENGTH"] = 64 * 1024
+
 # --- Configure Logging ---
 file_handler = RotatingFileHandler("flask.log", maxBytes=1024 * 1024 * 10, backupCount=10)
 file_handler.setFormatter(
