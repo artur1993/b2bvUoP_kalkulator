@@ -12,6 +12,11 @@ def compute_health_contribution(
     minimum_health_annual = cast(float, config["zus_2026"]["minimum_health_annual_2026"])
     regulatory_rates = config["regulatory_rates"]
 
+    # IP Box to preferencja PIT, nie odrębny tytuł składkowy — zdrowotną liczy się
+    # według formy opodatkowania, na której rozliczana jest reszta dochodu.
+    if tax_form == "ip_box":
+        tax_form = b2b_data.get("ip_box_base_form", "flat_tax")
+
     if tax_form == "tax_scale":
         income_for_health = max(
             0.0, annual_invoice_amount - annual_business_costs - annual_social_contributions
