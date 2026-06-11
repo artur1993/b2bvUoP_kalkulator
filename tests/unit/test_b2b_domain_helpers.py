@@ -23,9 +23,50 @@ def test_compute_lost_revenue_accounts_for_paid_time_off():
         config,
     )
 
+    # 6 niepłatnych dni urlopu + 3 niepłatne chore dni (pełna stawka, brak
+    # dobrowolnego chorobowego) + 1 miesiąc przestoju.
     assert result["daily_rate"] == 1000
-    assert result["total_lost_revenue"] == 29400
-    assert result["annual_invoice_amount"] == 222600
+    assert result["total_lost_revenue"] == 30000
+    assert result["annual_invoice_amount"] == 222000
+
+
+def test_compute_lost_revenue_sickness_insurance_grants_zus_benefit_positive():
+    config = config_manager.get_config()
+    base_data = {
+        "monthly_invoice_amount": 21000,
+        "vacation_days": 0,
+        "sick_days": 5,
+        "stoppage_months": 0,
+        "zus_type": "full",
+    }
+    without_insurance = compute_lost_revenue(base_data, config)
+    with_insurance = compute_lost_revenue({**base_data, "sickness_insurance": True}, config)
+
+    # Zasiłek = 80% × (5 652 × (1 − 13,71%)) / 30 ≈ 130,06 zł/dzień × 5 dni.
+    zus_base = config["zus_2026"]["full"]["base"]
+    daily_benefit = 0.8 * zus_base * (1 - 0.1371) / 30
+    assert without_insurance["total_lost_revenue"] == 5000
+    assert abs(
+        with_insurance["total_lost_revenue"] - (5000 - 5 * daily_benefit)
+    ) < 0.01
+
+
+def test_compute_lost_revenue_start_relief_has_no_sick_benefit_negative():
+    # Ulga na start = brak ubezpieczeń społecznych, więc brak zasiłku chorobowego.
+    config = config_manager.get_config()
+    result = compute_lost_revenue(
+        {
+            "monthly_invoice_amount": 21000,
+            "vacation_days": 0,
+            "sick_days": 5,
+            "stoppage_months": 0,
+            "zus_type": "start_relief",
+            "sickness_insurance": True,
+        },
+        config,
+    )
+
+    assert result["total_lost_revenue"] == 5000
 
 
 def test_compute_social_contributions_respects_sickness_toggle():
@@ -148,5 +189,6 @@ def test_compute_benefits_value_sums_days_and_cash_benefits():
         config=config,
     )
 
-    assert result["annual_company_benefits_value"] == 3800
+    # 2 dni urlopu + 1 chory dzień (pełna stawka) + 1000 medical.
+    assert result["annual_company_benefits_value"] == 4000
     assert result["annual_custom_benefits_value"] == 1200

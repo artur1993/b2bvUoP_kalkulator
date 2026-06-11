@@ -22,7 +22,25 @@ def compute_lost_revenue(b2b_data: dict[str, Any], config: dict[str, Any]) -> di
     unpaid_sick_days = max(0, int(b2b_data.get("sick_days", 0)) - paid_sick_days)
 
     lost_revenue_vacation = unpaid_vacation_days * daily_rate
-    lost_revenue_sickness = unpaid_sick_days * daily_rate * sick_leave_payment
+    # Chory dzień bez zlecenia to utrata pełnej stawki dziennej. Dobrowolne
+    # chorobowe daje zasiłek 80% podstawy zasiłkowej ZUS (podstawa wymiaru
+    # składek pomniejszona o 13,71%, dzielona na 30 dni) — zasiłek liczy się
+    # od podstawy ZUS, nie od stawki z faktury.
+    lost_revenue_sickness = unpaid_sick_days * daily_rate
+    if b2b_data.get("sickness_insurance"):
+        rates = config["regulatory_rates"]
+        employee_rate_total = (
+            rates["uop_pension_employee"]
+            + rates["uop_disability_employee"]
+            + rates["uop_sickness_employee"]
+        )
+        zus_base = float(
+            config["zus_2026"].get(b2b_data.get("zus_type", "full"), {}).get("base", 0)
+        )
+        daily_sick_benefit = sick_leave_payment * zus_base * (1 - employee_rate_total) / 30
+        lost_revenue_sickness = max(
+            0.0, lost_revenue_sickness - unpaid_sick_days * daily_sick_benefit
+        )
     lost_revenue_stoppage = float(b2b_data.get("stoppage_months", 0)) * monthly_invoice_amount
     annual_lost_holidays = 0.0
     if not b2b_data.get("public_holidays_paid", True):
