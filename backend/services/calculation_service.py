@@ -36,11 +36,25 @@ def run_full_calculation(request_data: dict[str, Any]) -> dict[str, Any]:
         break_even_point = calculate_uop_break_even(b2b_results["total_annual_value"], uop_data)
         break_even_key = "break_even_gross_salary"
 
+    config = config_manager.get_config()
+    regulatory_rates = config["regulatory_rates"]
     return {
         "b2b_results": b2b_results,
         "uop_results": uop_results,
         break_even_key: break_even_point,
-        "pension_limits_2026": config_manager.get_config()["pension_limits_2026"],
+        "pension_limits_2026": config["pension_limits_2026"],
+        # Stawki potrzebne frontendowi (m.in. konwersja super-brutto → brutto
+        # w trybie employer_budget) — jedynym źródłem stałych jest config JSON.
+        "config_rates": {
+            "uop_employer_overhead": (
+                regulatory_rates["uop_pension_employer"]
+                + regulatory_rates["uop_disability_employer"]
+                + regulatory_rates["uop_accident_employer"]
+                + regulatory_rates["uop_fp_fs_employer"]
+                + regulatory_rates["uop_fgsp_employer"]
+            ),
+            "ppk_employer_rate": config["ppk"]["employer_rate"],
+        },
         "analysis": {
             "summary": generate_executive_summary(b2b_results, uop_results, break_even_point, lang),
             "risk": get_risk_analysis(lang),

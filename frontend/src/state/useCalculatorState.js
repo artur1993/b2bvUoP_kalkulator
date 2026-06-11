@@ -21,12 +21,13 @@ const TAX_MAP = {
   ipbox: "ip_box",
 };
 
-// Employer ZUS overhead on top of gross salary (super-gross conversion):
-// emerytalne 9.76% + rentowe 6.50% + wypadkowe 1.67% + FP/FS 2.45% + FGŚP 0.10%
-const EMPLOYER_ZUS_OVERHEAD = 0.2048;
-const PPK_EMPLOYER_RATE = 0.015;
+// Fallbacki na pierwsze żądanie (zanim API zwróci config_rates) — właściwe
+// stawki przychodzą w odpowiedzi /api/calculate i pochodzą wyłącznie
+// z data/dane_wejsciowe_kalkulator.json.
+const FALLBACK_EMPLOYER_ZUS_OVERHEAD = 0.2048;
+const FALLBACK_PPK_EMPLOYER_RATE = 0.015;
 
-function mapFormToPayload(s) {
+function mapFormToPayload(s, configRates) {
   const payload = {
     calculation_mode: s.mode,
     b2b: {
@@ -62,8 +63,12 @@ function mapFormToPayload(s) {
 
   if (s.mode === "employer_budget") {
     const ppkSelected = (s.uopBenefits ?? []).includes("ppk");
+    const employerOverhead =
+      configRates?.uop_employer_overhead ?? FALLBACK_EMPLOYER_ZUS_OVERHEAD;
+    const ppkEmployerRate =
+      configRates?.ppk_employer_rate ?? FALLBACK_PPK_EMPLOYER_RATE;
     const employerMultiplier =
-      1 + EMPLOYER_ZUS_OVERHEAD + (ppkSelected ? PPK_EMPLOYER_RATE : 0);
+      1 + employerOverhead + (ppkSelected ? ppkEmployerRate : 0);
     payload.b2b.monthly_invoice_amount = s.employerBudget;
     payload.uop.monthly_gross_salary = Math.round(
       s.employerBudget / employerMultiplier,
@@ -84,9 +89,8 @@ function mapResponseToResult(apiRes) {
   const b2bZusSocial = b2bSteps.annual_social_contributions || 0;
   const b2bZusHealth = b2bSteps.annual_health_contribution || 0;
   const uopZus = uopR.annual_zus || 0;
-  const uopZusHealth = uopSteps.annual_health_contribution ||
-    uopSteps.annual_health_insurance || 0;
-  const uopZusSocial = uopZusHealth > 0 ? uopZus - uopZusHealth : uopZus;
+  const uopZusHealth = uopSteps.annual_health_contribution || 0;
+  const uopZusSocial = uopSteps.annual_social_contributions || (uopZus - uopZusHealth);
 
   const pension = apiRes.pension_limits_2026 || null;
 
@@ -182,6 +186,9 @@ export function useCalculatorState() {
   const [theme, setThemeState] = useState(readTheme);
 
   const abortRef = useRef(null);
+  // Ostatnio otrzymane stawki z API (config_rates) — używane przy konwersji
+  // super-brutto → brutto, bez wciągania `result` w zależności efektu.
+  const configRatesRef = useRef(null);
 
   useEffect(() => {
     applyTheme(theme);
@@ -208,9 +215,10 @@ export function useCalculatorState() {
       setLoading(true);
       setError(null);
       try {
-        const payload = mapFormToPayload(formState);
+        const payload = mapFormToPayload(formState, configRatesRef.current);
         const apiRes = await calculateResults(payload);
         if (!controller.signal.aborted) {
+          configRatesRef.current = apiRes?.config_rates || configRatesRef.current;
           setResult(mapResponseToResult(apiRes));
         }
       } catch (err) {

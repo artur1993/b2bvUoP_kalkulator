@@ -34,20 +34,22 @@ function KupTooltipContent({ kb, t }) {
 
 function TaxTooltipContent({ tb, t }) {
   if (!tb) return null;
+  const rateFirst = Math.round((tb.rate_first_bracket ?? 0.12) * 100);
+  const rateSecond = Math.round((tb.rate_second_bracket ?? 0.32) * 100);
   return (
     <div>
       <strong>{t("res.detail.tax_tooltip.title")}</strong>
       <div style={{ marginTop: 4 }}>{t("res.detail.tax_tooltip.taxable_base")}: {fmt(tb.annual_taxable_base)}</div>
       <div style={{ marginTop: 4 }}>
-        {t("res.detail.tax_tooltip.first_bracket")} ({fmt(tb.base_first_bracket)} × 12%): {fmt(tb.tax_first_bracket)}
+        {t("res.detail.tax_tooltip.first_bracket")} ({fmt(tb.base_first_bracket)} × {rateFirst}%): {fmt(tb.tax_first_bracket)}
       </div>
       {tb.base_second_bracket > 0 && (
         <div>
-          {t("res.detail.tax_tooltip.second_bracket")} ({fmt(tb.base_second_bracket)} × 32%): {fmt(tb.tax_second_bracket)}
+          {t("res.detail.tax_tooltip.second_bracket")} ({fmt(tb.base_second_bracket)} × {rateSecond}%): {fmt(tb.tax_second_bracket)}
         </div>
       )}
       <div>
-        {t("res.detail.tax_tooltip.tax_free")} ({fmt(tb.tax_free_amount)} × 12%): −{fmt(tb.tax_reducing_applied)}
+        {t("res.detail.tax_tooltip.tax_free")} ({fmt(tb.tax_free_amount)} × {rateFirst}%): −{fmt(tb.tax_reducing_applied)}
       </div>
       <div style={{ borderTop: "1px solid var(--border-muted)", marginTop: 4, paddingTop: 4 }}>
         <strong>{t("res.detail.tax_tooltip.total")}: {fmt(tb.annual_net_tax)}</strong>
