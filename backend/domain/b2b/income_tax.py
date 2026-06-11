@@ -25,14 +25,19 @@ def compute_income_tax(
             - annual_social_contributions,
         )
         annual_tax = float(round(tax_base * config["tax_thresholds"]["lump_sum_it"]))
-        annual_solidarity_tax = solidarity_tax(tax_base, config)
+        # Przychody opodatkowane ryczałtem nie wchodzą do podstawy daniny
+        # solidarnościowej — art. 30h ust. 2 PIT wymienia wyłącznie dochody
+        # z art. 27, 30b, 30c i 30f.
         return {
-            "annual_tax": annual_tax + annual_solidarity_tax,
-            "annual_solidarity_tax": annual_solidarity_tax,
+            "annual_tax": annual_tax,
+            "annual_solidarity_tax": 0.0,
             "taxable_base": tax_base,
         }
 
     income = annual_invoice_amount - annual_business_costs - annual_social_contributions
+    # Podstawa daniny solidarnościowej (art. 30h ust. 2): dochód pomniejszony
+    # o składki społeczne, ale bez odliczenia składki zdrowotnej.
+    solidarity_base = max(0.0, income)
     if tax_form == "flat_tax":
         health_deduction_limit = cast(
             float, config["tax_thresholds"]["health_contribution_deduction_limit_flat_tax"]
@@ -57,10 +62,13 @@ def compute_income_tax(
             else math.ceil(other_base * config["tax_thresholds"]["flat_tax"])
         )
         annual_tax = float(qualified_tax + other_tax)
+        # Dochód z kwalifikowanych IP (art. 30ca) nie wchodzi do podstawy daniny —
+        # danina tylko od części opodatkowanej skalą/liniowo.
+        solidarity_base = other_base
     else:
         annual_tax = 0.0
 
-    annual_solidarity_tax = solidarity_tax(max(0.0, taxable_base), config)
+    annual_solidarity_tax = solidarity_tax(solidarity_base, config)
     return {
         "annual_tax": annual_tax + annual_solidarity_tax,
         "annual_solidarity_tax": annual_solidarity_tax,
