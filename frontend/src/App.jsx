@@ -131,6 +131,7 @@ export default function App() {
             className="icon-btn"
             data-testid="theme-toggle"
             aria-pressed={s.theme === "dark"}
+            aria-label={t("aria.theme_toggle")}
             onClick={s.toggleTheme}
           >
             {s.theme === "dark" ? <SunIcon /> : <MoonIcon />}
@@ -204,7 +205,7 @@ export default function App() {
 
           {/* B2B */}
           <FormCluster badge="B2B" badgeClass="b2b" title={t("sec.b2b") || t("form.b2b_title")} sub={t("sec.b2b_sub")}>
-            <SubsecTitle>{i18n.language === "pl" ? "Finanse" : "Financials"}</SubsecTitle>
+            <SubsecTitle>{t("sec.subsec_financials")}</SubsecTitle>
             {s.mode !== "employer_budget" && (
               <Field
                 label={t("form.monthly_invoice")}
@@ -226,10 +227,10 @@ export default function App() {
             <Field
               label={t("form.voluntary_sick_leave")}
               help={t("field_help.voluntary_sick")}
-              control={<Toggle value={s.voluntarySick} onChange={s.setVoluntarySick} />}
+              control={<Toggle value={s.voluntarySick} onChange={s.setVoluntarySick} aria-label={t("form.voluntary_sick_leave")} />}
             />
 
-            <SubsecTitle>{i18n.language === "pl" ? "Opodatkowanie" : "Taxation"}</SubsecTitle>
+            <SubsecTitle>{t("sec.subsec_taxation")}</SubsecTitle>
             <Field
               label={t("form.tax_form")}
               control={<PillList value={s.taxForm} onChange={s.setTaxForm} options={taxOptions} />}
@@ -263,7 +264,7 @@ export default function App() {
 
           {/* UoP */}
           <FormCluster badge="UoP" badgeClass="uop" title={t("sec.uop") || t("form.uop_title")} sub={t("sec.uop_sub")}>
-            <SubsecTitle>{i18n.language === "pl" ? "Finanse" : "Financials"}</SubsecTitle>
+            <SubsecTitle>{t("sec.subsec_financials")}</SubsecTitle>
             {s.mode !== "employer_budget" && (
               <Field
                 label={t("form.gross_salary")}
@@ -278,14 +279,14 @@ export default function App() {
             {s.kupType === "creative" && (
               <Field
                 label={t("form.creative_work_percentage")}
-                help={i18n.language === "pl" ? "Limit roczny KUP autorskich: 120 000 zł" : "Annual KUP cap: 120,000 PLN"}
+                help={t("field_help.creative_kup_cap")}
                 control={<Slider value={s.creativePct} onChange={s.setCreativePct} min={0} max={100} step={5} suffix="%" />}
               />
             )}
             <Field
               label={t("form.youth_relief")}
               help={t("field_help.youth_relief")}
-              control={<Toggle value={s.youthRelief} onChange={s.setYouthRelief} data-testid="youth-relief-uop" />}
+              control={<Toggle value={s.youthRelief} onChange={s.setYouthRelief} aria-label={t("form.youth_relief")} data-testid="youth-relief-uop" />}
             />
             <Field
               label={t("form.annual_bonus")}
@@ -316,7 +317,7 @@ export default function App() {
             <Field
               label={t("form.holidays_paid")}
               help={t("field_help.holidays_paid")}
-              control={<Toggle value={s.holidaysPaid} onChange={s.setHolidaysPaid} />}
+              control={<Toggle value={s.holidaysPaid} onChange={s.setHolidaysPaid} aria-label={t("form.holidays_paid")} />}
             />
             <Field
               label={t("form.unpaid_vacation")}
@@ -348,7 +349,7 @@ export default function App() {
         </div>
 
         {/* RIGHT: Results */}
-        <div className="col-results" data-testid="results-display">
+        <div className="col-results" data-testid="results-display" aria-live="polite" aria-atomic="false">
           {s.loading && !s.result && (
             <div className="results-loading">
               <div className="spinner" />
@@ -359,7 +360,7 @@ export default function App() {
             <div className="results-empty">
               <div className="icon">⟳</div>
               <div style={{ fontSize: 13 }}>
-                {i18n.language === "pl" ? "Wypełnij formularz aby zobaczyć wyniki" : "Fill in the form to see results"}
+                {t("results.empty_hint")}
               </div>
             </div>
           )}
@@ -379,6 +380,7 @@ export default function App() {
 
           {s.result && (
             <>
+              <h2 className="results-title">{t("results.title")}</h2>
               <VerdictCard result={s.result} lang={i18n.language} />
               <ResultTiles result={s.result} lang={i18n.language} />
               <CompositionBars result={s.result} />
