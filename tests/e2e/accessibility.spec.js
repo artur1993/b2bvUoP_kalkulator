@@ -39,15 +39,13 @@ test.describe('Accessibility Audits (WCAG 2.1 A/AA)', () => {
     await page.waitForSelector('[data-testid="results-display"]');
     await page.waitForTimeout(500); // Small buffer for any JS-driven state changes
 
-    // Try to get results (auto-calc with defaults, may or may not succeed depending on backend)
+    // Results must be visible — backend is required (Flask webServer started by Playwright)
     const verdictCard = page.locator('[data-testid="verdict-card"]');
-    const hasResults = await verdictCard.isVisible({ timeout: 8000 }).catch(() => false);
+    await expect(verdictCard).toBeVisible({ timeout: 15000 });
 
-    if (hasResults) {
-      // Results are visible — check the results heading
-      const resultsHeader = page.locator('h2', { hasText: 'Calculation Results' });
-      await expect(resultsHeader).toBeVisible();
-    }
+    // Check the results heading
+    const resultsHeader = page.locator('h2', { hasText: 'Calculation Results' });
+    await expect(resultsHeader).toBeVisible();
 
     // 1. Full axe audit on current state (form + results or empty state)
     const results = await new AxeBuilder({ page })
