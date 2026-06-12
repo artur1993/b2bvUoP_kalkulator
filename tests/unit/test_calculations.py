@@ -230,6 +230,48 @@ class TestCalculations(unittest.TestCase):
             with_ppk["steps"]["annual_ppk_employee_contribution"], 2400, places=2
         )
 
+    def test_annual_bonus_is_subject_to_zus_and_health_positive(self):
+        base_data = {
+            "monthly_gross_salary": 10000,
+            "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+            "youth_relief": False,
+            "selected_benefits": [],
+        }
+        results = calculate_uop_results({**base_data, "annual_bonus_pct": 10})
+        bonus = results["steps"]["bonus_breakdown"]
+
+        # 12 000 premii: społeczne 13,71% = 1 645,20; zdrowotna 9% od pomniejszonej
+        # bazy = 931,93; PIT marginalny 12% od dochodu z premii.
+        self.assertAlmostEqual(results["annual_bonus_gross"], 12000, places=2)
+        self.assertAlmostEqual(bonus["social_contributions"], 12000 * 0.1371, places=2)
+        self.assertAlmostEqual(
+            bonus["health_contribution"], (12000 - 12000 * 0.1371) * 0.09, places=2
+        )
+        self.assertAlmostEqual(bonus["tax"], 1243, delta=2)
+        self.assertAlmostEqual(
+            results["annual_bonus_net"],
+            12000 - bonus["social_contributions"] - bonus["health_contribution"] - bonus["tax"],
+            places=2,
+        )
+        # Netto z premii to mniej niż ~75% brutto premii (ZUS + zdrowotna + PIT).
+        self.assertLess(results["annual_bonus_net"], 12000 * 0.75)
+
+    def test_annual_bonus_respects_thirty_times_limit_neutral(self):
+        # 25 000/mies. = 300 000 rocznie > 282 600: limit emerytalno-rentowej
+        # wyczerpany pensją zasadniczą, od premii tylko chorobowa (2,45%).
+        results = calculate_uop_results(
+            {
+                "monthly_gross_salary": 25000,
+                "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+                "youth_relief": False,
+                "selected_benefits": [],
+                "annual_bonus_pct": 10,
+            }
+        )
+        bonus = results["steps"]["bonus_breakdown"]
+
+        self.assertAlmostEqual(bonus["social_contributions"], bonus["gross"] * 0.0245, places=2)
+
     def test_ppk_employee_contribution_does_not_reduce_tax_base_positive(self):
         base_data = {
             "monthly_gross_salary": 10000,

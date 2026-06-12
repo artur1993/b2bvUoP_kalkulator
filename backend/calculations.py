@@ -173,12 +173,34 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
     annual_bonus_pct = float(uop_data.get("annual_bonus_pct", 0))
     annual_bonus_gross = cumulative_gross * (annual_bonus_pct / 100.0)
     if annual_bonus_gross > 0:
+        # Premia to przychód ze stosunku pracy — podlega pełnemu oskładkowaniu:
+        # emerytalna i rentowa do limitu 30-krotności (łącznie z pensją zasadniczą),
+        # chorobowa i zdrowotna bez limitu. PIT i danina liczone marginalnie.
+        bonus_pension_base = min(
+            annual_bonus_gross, max(0.0, thirty_times_limit - cumulative_gross)
+        )
+        bonus_social = bonus_pension_base * (
+            regulatory_rates["uop_pension_employee"]
+            + regulatory_rates["uop_disability_employee"]
+        ) + annual_bonus_gross * regulatory_rates["uop_sickness_employee"]
+        bonus_health = (annual_bonus_gross - bonus_social) * regulatory_rates[
+            "uop_health_employee"
+        ]
+        bonus_taxable = max(0.0, annual_bonus_gross - bonus_social)
         bonus_tax = _calculate_progressive_tax(
-            annual_tax_base + annual_bonus_gross, config
+            annual_tax_base + bonus_taxable, config
         ) - _calculate_progressive_tax(annual_tax_base, config)
-        annual_bonus_net = max(0.0, annual_bonus_gross - bonus_tax)
+        bonus_tax += (
+            compute_solidarity_tax(annual_tax_base + bonus_taxable, config)
+            - annual_solidarity_tax
+        )
+        annual_bonus_net = max(
+            0.0, annual_bonus_gross - bonus_social - bonus_health - bonus_tax
+        )
     else:
         annual_bonus_net = 0.0
+        bonus_social = 0.0
+        bonus_health = 0.0
         bonus_tax = 0.0
     annual_net += annual_bonus_net
 
@@ -230,6 +252,13 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
             "annual_ppk_employer_net": annual_ppk_employer_net,
             "annual_ppk_state_subsidy": annual_ppk_state_subsidy,
             "annual_solidarity_tax": annual_solidarity_tax,
+            "bonus_breakdown": {
+                "gross": annual_bonus_gross,
+                "social_contributions": bonus_social,
+                "health_contribution": bonus_health,
+                "tax": bonus_tax,
+                "net": annual_bonus_net,
+            },
             "monthly_calculations": monthly_calculations,
             "kup_breakdown": {
                 "type": deductible_cost_type,
