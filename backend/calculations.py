@@ -119,8 +119,10 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         annual_ppk_employee_contribution += monthly_ppk_employee
         annual_ppk_employer_contribution += monthly_ppk_employer
 
+        # Wpłata pracownika do PPK jest finansowana z wynagrodzenia po opodatkowaniu —
+        # nie pomniejsza podstawy PIT (obniża wyłącznie netto).
         monthly_tax_base_without_ppk_employer = max(
-            0.0, monthly_gross_salary - monthly_social - monthly_costs - monthly_ppk_employee
+            0.0, monthly_gross_salary - monthly_social - monthly_costs
         )
         monthly_tax_base = monthly_tax_base_without_ppk_employer + monthly_ppk_employer
         annual_tax_base += monthly_tax_base

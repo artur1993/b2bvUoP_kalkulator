@@ -230,6 +230,26 @@ class TestCalculations(unittest.TestCase):
             with_ppk["steps"]["annual_ppk_employee_contribution"], 2400, places=2
         )
 
+    def test_ppk_employee_contribution_does_not_reduce_tax_base_positive(self):
+        base_data = {
+            "monthly_gross_salary": 10000,
+            "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+            "youth_relief": False,
+            "selected_benefits": [],
+        }
+        without_ppk = calculate_uop_results(base_data)
+        with_ppk = calculate_uop_results({**base_data, "selected_benefits": ["ppk"]})
+
+        # Wpłata pracownika (2%) jest z netto — podatkowo neutralna. Jedyna różnica
+        # w PIT to opodatkowanie wpłaty pracodawcy (1800 zł × 12% = 216 zł).
+        self.assertAlmostEqual(with_ppk["annual_tax"] - without_ppk["annual_tax"], 216, delta=1)
+        self.assertAlmostEqual(
+            with_ppk["steps"]["tax_breakdown"]["annual_taxable_base"]
+            - without_ppk["steps"]["tax_breakdown"]["annual_taxable_base"],
+            with_ppk["steps"]["annual_ppk_employer_contribution"],
+            places=2,
+        )
+
     def test_ppk_employer_contribution_is_taxed_benefit(self):
         results = calculate_uop_results(
             {
