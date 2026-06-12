@@ -71,7 +71,13 @@ backend/
 frontend/             # React frontend (Vite + Tailwind + Chart.js + i18next)
   src/
     App.jsx
-    components/       # UI components (CalculatorForm, ResultsDisplay, charts, etc.)
+    components/calculator/   # Redesigned UI components:
+                             #   form: FormCluster, Field, controls/ (NumberInput, PillList,
+                             #         Toggle, Slider, CheckList)
+                             #   results/ (VerdictCard, ResultTiles, CompositionBars,
+                             #             BreakevenBar, DetailTable, PensionNote)
+    state/useCalculatorState.js  # All form state, debounced auto-recalc (250 ms),
+                                 #   mapFormToPayload, mapResponseToResult
     services/api.js   # All axios calls to Flask API
     locales/          # i18n translations (en/, pl/)
 data/dane_wejsciowe_kalkulator.json   # All tax/ZUS constants for 2026
@@ -81,7 +87,7 @@ tests/
   e2e/                # Playwright browser tests
 ```
 
-**Key data flow:** `CalculatorForm` → `services/api.js` → `POST /api/calculate` → Pydantic `@validate(...)` → `run_full_calculation` → domain calculation helpers → JSON response → `ResultsDisplay` + chart components.
+**Key data flow:** `App.jsx` + `useCalculatorState` (debounce 250 ms, auto-recalc on every field change) → `mapFormToPayload` → `services/api.js` → `POST /api/calculate` → Pydantic `@validate(...)` → `run_full_calculation` → domain calculation helpers → JSON response (including `config_rates`) → `mapResponseToResult` → `calculator/results/` components (VerdictCard, ResultTiles, CompositionBars, BreakevenBar, DetailTable, PensionNote).
 
 **Config singleton:** `config_manager` in `backend/config.py` is a thread-safe singleton. Access constants via `config_manager.get_config()` in any Python module. Never import constants directly.
 
