@@ -20,24 +20,48 @@ def test_solidarity_tax_above_threshold():
     assert compute_solidarity_tax(1200000, config_manager.get_config()) == 8000
 
 
-def test_b2b_high_income_includes_solidarity_tax():
+def _high_income_b2b_data(tax_form, **overrides):
     data = {
         "monthly_invoice_amount": 100000,
         "monthly_business_costs": 0,
         "zus_type": "full",
         "sickness_insurance": False,
-        "tax_form": "lump_sum_it",
+        "tax_form": tax_form,
         "vacation_days": 0,
         "sick_days": 0,
         "stoppage_months": 0,
         "customBenefits": 0,
         "companyBenefits": {},
     }
+    data.update(overrides)
+    return data
 
-    results = calculate_b2b_results(data)
 
-    assert results["annual_solidarity_tax"] > 0
+def test_b2b_lump_sum_high_income_excludes_solidarity_tax_negative():
+    # Przychody ryczałtowe nie wchodzą do podstawy daniny (art. 30h ust. 2 PIT).
+    results = calculate_b2b_results(_high_income_b2b_data("lump_sum_it"))
+
+    assert results["annual_solidarity_tax"] == 0
+
+
+def test_b2b_flat_tax_high_income_includes_solidarity_tax_positive():
+    results = calculate_b2b_results(_high_income_b2b_data("flat_tax"))
+
+    # Podstawa daniny = dochód − składki społeczne (bez odliczenia zdrowotnej):
+    # 1 200 000 − 21 459,48 = 1 178 540,52 → 4% nadwyżki ponad 1 mln = 7 141,62.
+    assert abs(results["annual_solidarity_tax"] - 7141.62) < 0.01
     assert results["annual_tax"] > results["annual_solidarity_tax"]
+
+
+def test_b2b_ip_box_qualified_income_excludes_solidarity_tax_negative():
+    # Dochód z kwalifikowanych IP (art. 30ca) nie jest objęty daniną.
+    results = calculate_b2b_results(
+        _high_income_b2b_data(
+            "ip_box", ip_box_qualified_share=100, ip_box_base_form="flat_tax"
+        )
+    )
+
+    assert results["annual_solidarity_tax"] == 0
 
 
 class TestCalculations(unittest.TestCase):
