@@ -138,6 +138,45 @@ function mapResponseToResult(apiRes) {
   };
 }
 
+const VALID_MODES = ["uop_to_b2b", "b2b_to_uop", "employer_budget"];
+const VALID_ZUS = new Set(Object.keys(ZUS_MAP)); // start, pref, full
+const VALID_TAX = new Set(Object.keys(TAX_MAP)); // flat_it, linear, scale, ipbox
+
+function parsePositiveNumber(raw) {
+  if (raw === null || raw === undefined) return null;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 0) return null;
+  return n;
+}
+
+function readInitialStateFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+
+    const rawMode = params.get("mode");
+    const mode = rawMode && VALID_MODES.includes(rawMode) ? rawMode : null;
+
+    const rawInv = params.get("inv");
+    const monthlyInvoice = parsePositiveNumber(rawInv);
+
+    const rawSal = params.get("sal");
+    const grossSalary = parsePositiveNumber(rawSal);
+
+    const rawAge = params.get("age");
+    const age = parsePositiveNumber(rawAge);
+
+    const rawZus = params.get("zus");
+    const zusType = rawZus && VALID_ZUS.has(rawZus) ? rawZus : null;
+
+    const rawTax = params.get("tax");
+    const taxForm = rawTax && VALID_TAX.has(rawTax) ? rawTax : null;
+
+    return { mode, monthlyInvoice, grossSalary, age, zusType, taxForm };
+  } catch {
+    return {};
+  }
+}
+
 function readTheme() {
   try {
     return localStorage.getItem("theme") || "light";
@@ -156,16 +195,18 @@ function applyTheme(theme) {
 }
 
 export function useCalculatorState() {
-  const [mode, setMode] = useState("uop_to_b2b");
-  const [age, setAge] = useState(32);
-  const [monthlyInvoice, setMonthlyInvoice] = useState(18000);
+  const [urlInit] = useState(() => readInitialStateFromUrl());
+
+  const [mode, setMode] = useState(() => urlInit.mode ?? "uop_to_b2b");
+  const [age, setAge] = useState(() => urlInit.age ?? 32);
+  const [monthlyInvoice, setMonthlyInvoice] = useState(() => urlInit.monthlyInvoice ?? 18000);
   const [businessCosts, setBusinessCosts] = useState(800);
-  const [zusType, setZusType] = useState("pref");
+  const [zusType, setZusType] = useState(() => urlInit.zusType ?? "pref");
   const [voluntarySick, setVoluntarySick] = useState(true);
-  const [taxForm, setTaxForm] = useState("flat_it");
+  const [taxForm, setTaxForm] = useState(() => urlInit.taxForm ?? "flat_it");
   const [ipShare, setIpShare] = useState(70);
   const [ipBoxBaseForm, setIpBoxBaseForm] = useState("flat_tax");
-  const [grossSalary, setGrossSalary] = useState(14500);
+  const [grossSalary, setGrossSalary] = useState(() => urlInit.grossSalary ?? 14500);
   const [kupType, setKupType] = useState("standard");
   const [creativePct, setCreativePct] = useState(70);
   const [youthRelief, setYouthRelief] = useState(false);
