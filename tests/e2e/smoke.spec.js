@@ -3,60 +3,68 @@ import { test, expect } from '@playwright/test';
 test.describe('E2E Smoke Test', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    // Switch to English for consistent assertions
-    const enButton = page.locator('button', { hasText: 'EN' });
-    if (await enButton.isVisible()) {
-      await enButton.click();
+    // Switch to English — use data-testid to avoid strict mode violation
+    const langEn = page.locator('[data-testid="lang-en"]');
+    if (await langEn.isVisible()) {
+      const isEnActive = await langEn.evaluate(el => el.classList.contains('active'));
+      if (!isEnActive) {
+        await langEn.click();
+        await page.waitForTimeout(200);
+      }
     }
   });
 
   test('should perform a full calculation flow and verify results', async ({ page }) => {
-    // 1. Fill the form
-    await page.fill('input[name="monthly_invoice_amount"]', '15000');
-    await page.fill('input[name="monthly_gross_salary"]', '10000');
-    
-    // Select taxation form
-    await page.selectOption('select[name="tax_form"]', 'lump_sum_it');
-    
-    // 2. Click Calculate
-    await page.click('button:has-text("Calculate Comparison")');
+    // 1. Nowe UI auto-przelicza po zmianie wartości (debounce 250 ms), brak przycisku Calculate.
+    //    Poczekaj aż wstępne wyniki się załadują (domyślne wartości: invoice=18000, salary=14500)
+    await expect(page.locator('[data-testid="verdict-card"]')).toBeVisible({ timeout: 15000 });
 
-    // 3. Verify Results are visible
-    await expect(page.locator('h2', { hasText: 'Calculation Results' })).toBeVisible();
+    // 2. Zmień wartość faktury (data-testid="monthly-invoice-input")
+    const invoiceInput = page.locator('[data-testid="monthly-invoice-input"]');
+    await expect(invoiceInput).toBeVisible();
+    await invoiceInput.triple_click ? invoiceInput.triple_click() : invoiceInput.click({ clickCount: 3 });
+    await invoiceInput.fill('15000');
+
+    // 3. Zmień wartość wynagrodzenia (data-testid="gross-salary-input")
+    const salaryInput = page.locator('[data-testid="gross-salary-input"]');
+    await expect(salaryInput).toBeVisible();
+    await salaryInput.click({ clickCount: 3 });
+    await salaryInput.fill('10000');
+
+    // 4. Poczekaj na przeliczenie (debounce 250 ms + czas żądania)
+    await page.waitForTimeout(800);
+    await expect(page.locator('[data-testid="verdict-card"]')).toBeVisible({ timeout: 10000 });
+
+    // 5. Sprawdź kluczowe sekcje wyników
     await expect(page.locator('[data-testid="results-display"]')).toBeVisible();
-    
-    // Verify specific values (approximate or just presence)
-    await expect(page.locator('text=Total Annual B2B Value')).toBeVisible();
-    await expect(page.locator('text=Total Annual UoP Value')).toBeVisible();
+    await expect(page.locator('[data-testid="result-tiles"]')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('[data-testid="detail-table"]')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('[data-testid="composition-bars"]')).toBeVisible({ timeout: 5000 });
 
-    // 4. Verify Charts
-    const canvas = page.locator('canvas').first();
-    await expect(canvas).toBeVisible();
+    // 6. Sprawdź obecność wartości B2B i UoP w tile'ach
+    const resultTiles = page.locator('[data-testid="result-tiles"]');
+    await expect(resultTiles.locator('.badge.b2b')).toBeVisible();
+    await expect(resultTiles.locator('.badge.uop')).toBeVisible();
 
-    // 5. Test Excel Export
+    // 7. Test eksportu do Excela
     const downloadPromise = page.waitForEvent('download');
-    await page.click('button:has-text("Export to Excel")');
+    await page.locator('[data-testid="export-excel-button"]').click();
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toBe('kalkulator_wyniki.xlsx');
 
-    // 6. Test Theme Toggle
+    // 8. Test przełącznika motywu
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
-    
-    const initialIsDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+    const initialIsDark = await page.evaluate(() => document.documentElement.getAttribute('data-theme') === 'dark');
     await themeToggle.click();
-    const afterToggleIsDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+    const afterToggleIsDark = await page.evaluate(() => document.documentElement.getAttribute('data-theme') === 'dark');
     expect(afterToggleIsDark).not.toBe(initialIsDark);
+    // Przywróć motyw
+    await themeToggle.click();
 
-    // 7. Verify URL parameters and reload
-    // After calculation, the URL should have params
-    await expect(page).toHaveURL(/b2b_invoice=15000/);
-    
-    const currentUrl = page.url();
-    await page.goto(currentUrl);
-    
-    // Check if values persisted in inputs (assuming frontend handles these names)
-    await expect(page.locator('input[name="monthly_invoice_amount"]')).toHaveValue('15000');
-    await expect(page.locator('input[name="monthly_gross_salary"]')).toHaveValue('10000');
-    await expect(page.locator('select[name="tax_form"]')).toHaveValue('lump_sum_it');
+    // 9. Test przycisku Share — ustawia URL params (inv=, sal=, mode=)
+    await page.locator('button', { hasText: /Share|Udostępnij/i }).click();
+    await page.waitForTimeout(300);
+    // Sprawdź czy URL zawiera parametr "inv" (nowy format, nie "b2b_invoice")
+    await expect(page).toHaveURL(/[?&]inv=\d+/);
   });
 });

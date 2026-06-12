@@ -115,12 +115,14 @@ export default function App() {
             <button
               className={i18n.language?.startsWith("pl") ? "active" : ""}
               onClick={() => i18n.changeLanguage("pl")}
+              data-testid="lang-pl"
             >
               PL
             </button>
             <button
               className={i18n.language?.startsWith("en") ? "active" : ""}
               onClick={() => i18n.changeLanguage("en")}
+              data-testid="lang-en"
             >
               EN
             </button>
@@ -207,7 +209,7 @@ export default function App() {
               <Field
                 label={t("form.monthly_invoice")}
                 help={t("field_help.monthly_invoice")}
-                control={<NumberInput value={s.monthlyInvoice} onChange={s.setMonthlyInvoice} suffix="zł" step={500} />}
+                control={<NumberInput value={s.monthlyInvoice} onChange={s.setMonthlyInvoice} suffix="zł" step={500} data-testid="monthly-invoice-input" />}
               />
             )}
             <Field
@@ -266,7 +268,7 @@ export default function App() {
               <Field
                 label={t("form.gross_salary")}
                 help={t("field_help.gross_salary")}
-                control={<NumberInput value={s.grossSalary} onChange={s.setGrossSalary} suffix="zł" step={500} />}
+                control={<NumberInput value={s.grossSalary} onChange={s.setGrossSalary} suffix="zł" step={500} data-testid="gross-salary-input" />}
               />
             )}
             <Field
