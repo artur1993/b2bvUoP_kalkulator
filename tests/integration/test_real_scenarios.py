@@ -121,8 +121,9 @@ def test_case_c_senior_ip_box_partial_qualified(client):
     assert response.status_code == 200
     res = response.json
     
-    # Oczekiwane (snapshot po Fazie B):
-    # B2B: ~174256, UoP: ~145919, BE_GROSS: 22700
-    assert pytest.approx(res["b2b_results"]["total_annual_value"], abs=2000) == 174256
+    # Oczekiwane (snapshot po poprawce zdrowotnej IP Box — liczona wg formy bazowej,
+    # tu liniowej 4,9% dochodu, zamiast rocznego minimum):
+    # B2B: ~169500, UoP: ~145919, BE_GROSS: 21900
+    assert pytest.approx(res["b2b_results"]["total_annual_value"], abs=2000) == 169500
     assert pytest.approx(res["uop_results"]["total_annual_value"], abs=1500) == 145919
-    assert pytest.approx(res["break_even_gross_salary"], abs=1000) == 22700
+    assert pytest.approx(res["break_even_gross_salary"], abs=1000) == 21900

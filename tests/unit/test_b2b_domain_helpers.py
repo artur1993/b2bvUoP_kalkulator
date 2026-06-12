@@ -72,6 +72,48 @@ def test_compute_health_contribution_uses_lump_sum_thresholds():
     assert result == config["zus_2026"]["health_lump_sum_thresholds"][1]["contribution"] * 12
 
 
+def test_compute_health_contribution_ip_box_flat_base_uses_income_positive():
+    config = config_manager.get_config()
+
+    result = compute_health_contribution(
+        {"tax_form": "ip_box", "ip_box_base_form": "flat_tax"},
+        config,
+        annual_invoice_amount=240000,
+        annual_business_costs=0,
+        annual_social_contributions=0,
+    )
+
+    assert result == 240000 * config["regulatory_rates"]["flat_tax_health_rate"]
+
+
+def test_compute_health_contribution_ip_box_scale_base_uses_income_positive():
+    config = config_manager.get_config()
+
+    result = compute_health_contribution(
+        {"tax_form": "ip_box", "ip_box_base_form": "tax_scale"},
+        config,
+        annual_invoice_amount=240000,
+        annual_business_costs=0,
+        annual_social_contributions=0,
+    )
+
+    assert result == 240000 * config["regulatory_rates"]["tax_scale_health_rate"]
+
+
+def test_compute_health_contribution_ip_box_low_income_hits_minimum_neutral():
+    config = config_manager.get_config()
+
+    result = compute_health_contribution(
+        {"tax_form": "ip_box", "ip_box_base_form": "flat_tax"},
+        config,
+        annual_invoice_amount=12000,
+        annual_business_costs=0,
+        annual_social_contributions=0,
+    )
+
+    assert result == config["zus_2026"]["minimum_health_annual_2026"]
+
+
 def test_compute_income_tax_splits_ip_box_qualified_income():
     config = config_manager.get_config()
 
