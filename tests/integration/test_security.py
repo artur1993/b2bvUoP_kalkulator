@@ -15,6 +15,41 @@ def test_debug_mode_enabled_via_env(monkeypatch):
     assert is_debug_enabled() is True
 
 
+def test_oversized_payload_rejected_with_413_negative(client):
+    # Payload powyżej MAX_CONTENT_LENGTH (64 KiB) ma być odcięty przed parsowaniem.
+    oversized = {"b2b": {"junk": "x" * (80 * 1024)}}
+    response = client.post("/api/calculate", json=oversized)
+    assert response.status_code == 413
+
+
+def test_normal_payload_within_limit_accepted_positive(client):
+    request_data = {
+        "calculation_mode": "uop_to_b2b",
+        "b2b": {
+            "monthly_invoice_amount": 18000,
+            "tax_form": "lump_sum_it",
+            "zus_type": "full",
+            "sickness_insurance": False,
+            "monthly_business_costs": 0,
+            "vacation_days": 0,
+            "sick_days": 0,
+            "stoppage_months": 0,
+            "age": 30,
+            "customBenefits": 0,
+            "companyBenefits": {},
+        },
+        "uop": {
+            "monthly_gross_salary": 12000,
+            "deductible_cost_settings": {"type": "standard"},
+            "selected_benefits": [],
+            "age": 30,
+            "youth_relief": False,
+        },
+    }
+    response = client.post("/api/calculate", json=request_data)
+    assert response.status_code == 200
+
+
 def test_break_even_garbage_payload_returns_400(client):
     response = client.post("/api/calculate/break-even-analysis", json={"junk": 1})
 

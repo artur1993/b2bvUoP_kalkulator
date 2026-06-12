@@ -4,6 +4,7 @@ from typing import Any, Self
 
 from flask import current_app, g, jsonify, request
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
+from werkzeug.exceptions import HTTPException
 
 
 class BenefitModel(BaseModel):
@@ -90,6 +91,10 @@ def validate(model_class: type[BaseModel]) -> Callable[[Callable[..., Any]], Cal
                     jsonify({"error": "Validation failed", "details": details}),
                     400,
                 )
+            except HTTPException:
+                # Np. 413 przy przekroczeniu MAX_CONTENT_LENGTH — status ustawia
+                # globalny handler błędów, nie zamieniamy go na 500.
+                raise
             except Exception as e:
                 current_app.logger.exception(f"Unexpected validation error: {e}")
                 return jsonify({"error": "Internal validation error"}), 500
