@@ -6,16 +6,16 @@ def compute_benefits_value(
 ) -> dict[str, float]:
     company_benefits = b2b_data.get("companyBenefits") or {}
     annual_company_benefits_value = 0.0
-    sick_leave_payment = config["regulatory_rates"]["sick_leave_payment"]
 
     for key, benefit in company_benefits.items():
         if benefit.get("enabled", False):
             if key == "paidVacationDays":
                 annual_company_benefits_value += float(benefit.get("days", 0)) * daily_rate
             elif key == "paidSickDays":
-                annual_company_benefits_value += (
-                    float(benefit.get("days", 0)) * daily_rate * sick_leave_payment
-                )
+                # Chory dzień opłacony przez kontrahenta = brak utraty przychodu,
+                # więc wartość benefitu to pełna stawka dzienna (spójnie z modelem
+                # utraconego przychodu, gdzie niepłatny chory dzień kosztuje 100%).
+                annual_company_benefits_value += float(benefit.get("days", 0)) * daily_rate
             else:
                 annual_company_benefits_value += float(benefit.get("value", 0))
 
