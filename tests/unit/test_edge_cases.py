@@ -2,6 +2,22 @@ import pytest
 from backend.calculations import calculate_b2b_results, calculate_uop_results
 
 
+def test_ppk_zero_salary_grants_no_state_subsidy_negative():
+    # Dopłata roczna państwa wymaga faktycznych wpłat pracownika — przy zerowej
+    # pensji kapitał PPK ma być zerowy, bez "darmowych" 240 zł.
+    results = calculate_uop_results(
+        {
+            "monthly_gross_salary": 0,
+            "deductible_cost_settings": {"type": "standard", "creative_work_percentage": 0},
+            "youth_relief": False,
+            "selected_benefits": ["ppk"],
+        }
+    )
+
+    assert results["steps"]["annual_ppk_state_subsidy"] == 0
+    assert results["annual_ppk_capital"] == 0
+
+
 def test_author_costs_no_div_by_zero():
     # monthly_gross_salary = 0 + creative_work_percentage > 0
     results = calculate_uop_results(

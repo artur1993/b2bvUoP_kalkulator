@@ -180,7 +180,7 @@ class TestCalculations(unittest.TestCase):
 
         results = calculate_b2b_results(data)
 
-        self.assertEqual(results["annual_tax"], 4928)
+        self.assertEqual(results["annual_tax"], 4927)
 
     def test_ip_box_60_percent_qualified_flat_base(self):
         data = self._b2b_lump_sum_data(10000)
@@ -194,7 +194,7 @@ class TestCalculations(unittest.TestCase):
 
         results = calculate_b2b_results(data)
 
-        self.assertEqual(results["annual_tax"], 10447)
+        self.assertEqual(results["annual_tax"], 10445)
 
     def test_ip_box_60_percent_qualified_scale_base(self):
         data = self._b2b_lump_sum_data(10000)
@@ -208,7 +208,7 @@ class TestCalculations(unittest.TestCase):
 
         results = calculate_b2b_results(data)
 
-        self.assertEqual(results["annual_tax"], 4087)
+        self.assertEqual(results["annual_tax"], 4086)
 
     def test_uop_total_value_without_double_vacation(self):
         results = calculate_uop_results(

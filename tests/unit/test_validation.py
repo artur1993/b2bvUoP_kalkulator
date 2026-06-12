@@ -48,6 +48,40 @@ def test_benefit_model_defaults():
     assert benefit.value == 0.0
 
 
+def test_benefit_model_negative_days_rejected_negative():
+    with pytest.raises(ValidationError):
+        BenefitModel(enabled=True, days=-5)
+
+
+def test_benefit_model_negative_value_rejected_negative():
+    with pytest.raises(ValidationError):
+        BenefitModel(enabled=True, value=-1000.0)
+
+
+def test_uop_model_extra_field_rejected_negative():
+    data = _valid_uop_data()
+    data["unexpected_field"] = 1
+    with pytest.raises(ValidationError):
+        UoPDataModel(**data)
+
+
+def test_calculation_request_invalid_language_rejected_negative():
+    request = _valid_calculation_request()
+    request["language"] = "de'); DROP TABLE--"
+    with pytest.raises(ValidationError):
+        CalculationRequestModel(**request)
+
+
+def test_excel_export_formula_string_rejected_negative():
+    from backend.validation import ExcelExportRequest
+
+    with pytest.raises(ValidationError):
+        ExcelExportRequest(
+            b2b_results={"total_annual_value": '=HYPERLINK("http://evil")'},
+            uop_results={"total_annual_value": 100000},
+        )
+
+
 # --- B2BDataModel Tests ---
 
 

@@ -9,8 +9,8 @@ from werkzeug.exceptions import HTTPException
 
 class BenefitModel(BaseModel):
     enabled: bool = False
-    days: int | None = 0
-    value: float | None = 0.0
+    days: int | None = Field(0, ge=0, le=365)
+    value: float | None = Field(0.0, ge=0, le=10_000_000)
 
 
 class B2BDataModel(BaseModel):
@@ -38,6 +38,8 @@ class DeductibleCostSettingsModel(BaseModel):
 
 
 class UoPDataModel(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     monthly_gross_salary: float = Field(..., ge=0, le=10_000_000)
     deductible_cost_settings: DeductibleCostSettingsModel
     selected_benefits: list[str] = []
@@ -57,7 +59,7 @@ class CalculationRequestModel(BaseModel):
     b2b: B2BDataModel
     uop: UoPDataModel
     calculation_mode: str = Field(..., pattern="^(uop_to_b2b|b2b_to_uop|employer_budget)$")
-    language: str | None = "pl"
+    language: str | None = Field("pl", pattern="^(pl|en)$")
 
 
 class BreakEvenAnalysisRequest(BaseModel):
@@ -65,9 +67,17 @@ class BreakEvenAnalysisRequest(BaseModel):
     uop: UoPDataModel
 
 
+class ExportResultsModel(BaseModel):
+    # Eksport używa wyłącznie total_annual_value; wymuszenie typu liczbowego
+    # odcina wstrzykiwanie formuł (np. "=HYPERLINK(...)") do komórek Excela.
+    model_config = ConfigDict(extra="ignore")
+
+    total_annual_value: float = 0.0
+
+
 class ExcelExportRequest(BaseModel):
-    b2b_results: dict[str, Any]
-    uop_results: dict[str, Any]
+    b2b_results: ExportResultsModel
+    uop_results: ExportResultsModel
 
 
 def validate(model_class: type[BaseModel]) -> Callable[[Callable[..., Any]], Callable[..., Any]]:

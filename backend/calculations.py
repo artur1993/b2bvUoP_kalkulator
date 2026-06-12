@@ -1,19 +1,23 @@
-import math
 from typing import Any, cast
 
 from backend.config import config_manager
 from backend.domain.b2b.aggregate import assemble_b2b_results
+from backend.domain.rounding import round_tax
 
 
 def _calculate_progressive_tax(taxable_base: float, config: dict[str, Any]) -> float:
-    tax_threshold = cast(float, config["tax_thresholds"]["tax_scale"][0]["income"])
+    tax_scale = config["tax_thresholds"]["tax_scale"]
+    tax_threshold = cast(float, tax_scale[0]["income"])
+    rate_first = cast(float, tax_scale[0]["rate"])
+    rate_second = cast(float, tax_scale[1]["rate"])
     tax_reducing = cast(float, config["tax_thresholds"]["tax_reducing_amount"])
 
-    if taxable_base <= tax_threshold:
-        return float(max(0, math.ceil(taxable_base * 0.12) - tax_reducing))
+    base = round_tax(max(0.0, taxable_base))
+    if base <= tax_threshold:
+        return float(max(0.0, round_tax(base * rate_first) - tax_reducing))
 
-    return float(
-        math.ceil((tax_threshold * 0.12) - tax_reducing + (taxable_base - tax_threshold) * 0.32)
+    return round_tax(
+        (tax_threshold * rate_first) - tax_reducing + (base - tax_threshold) * rate_second
     )
 
 
@@ -181,12 +185,15 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
     annual_tax += annual_solidarity_tax
     annual_tax_without_ppk_employer += annual_solidarity_tax_without_ppk_employer
 
-    _tax_threshold = float(config["tax_thresholds"]["tax_scale"][0]["income"])
+    _tax_scale = config["tax_thresholds"]["tax_scale"]
+    _tax_threshold = float(_tax_scale[0]["income"])
+    _rate_first = float(_tax_scale[0]["rate"])
+    _rate_second = float(_tax_scale[1]["rate"])
     _tax_reducing = float(config["tax_thresholds"]["tax_reducing_amount"])
     _base_first = min(annual_tax_base, _tax_threshold)
     _base_second = max(0.0, annual_tax_base - _tax_threshold)
-    _tax_first_raw = math.ceil(_base_first * 0.12)
-    _tax_second_raw = math.ceil(_base_second * 0.32)
+    _tax_first_raw = round_tax(_base_first * _rate_first)
+    _tax_second_raw = round_tax(_base_second * _rate_second)
     _tax_reducing_applied = min(float(_tax_first_raw), _tax_reducing)
 
     annual_net = (
@@ -249,8 +256,10 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         ppk_employer_tax = max(0.0, annual_tax - annual_tax_without_ppk_employer)
         annual_ppk_employer_net = max(0.0, annual_ppk_employer_contribution - ppk_employer_tax)
         # Dopłata roczna państwa (nieopodatkowana). Założenie: pełna eligibility —
-        # roczne wpłaty podstawowe pracownika spełnione przez cały rok.
-        annual_ppk_state_subsidy = float(ppk_rates.get("state_annual_subsidy", 0))
+        # roczne wpłaty podstawowe pracownika spełnione przez cały rok. Bez
+        # faktycznych wpłat pracownika (np. zerowa pensja) dopłata nie przysługuje.
+        if annual_ppk_employee_contribution > 0:
+            annual_ppk_state_subsidy = float(ppk_rates.get("state_annual_subsidy", 0))
         # Kapitał PPK = środki realnie na koncie po podatku:
         # wpłata pracownika (2%) + wpłata pracodawcy netto po PIT (1,5% minus podatek)
         # + dopłata państwa (nieopodatkowana).
@@ -280,6 +289,8 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
         "total_annual_value": total_uop_value,
         "monthly_net_income": total_uop_value / 12,
         "steps": {
+            "annual_social_contributions": annual_social_contributions,
+            "annual_health_contribution": annual_health_contribution,
             "annual_deductible_costs": annual_deductible_costs,
             "annual_ppk_employee_contribution": annual_ppk_employee_contribution,
             "annual_ppk_employer_contribution": annual_ppk_employer_contribution,
@@ -307,6 +318,8 @@ def calculate_uop_results(uop_data: dict[str, Any]) -> dict[str, Any]:
                 "annual_taxable_base": annual_tax_base,
                 "base_first_bracket": _base_first,
                 "base_second_bracket": _base_second,
+                "rate_first_bracket": _rate_first,
+                "rate_second_bracket": _rate_second,
                 "tax_first_bracket": float(_tax_first_raw),
                 "tax_second_bracket": float(_tax_second_raw),
                 "tax_reducing_applied": _tax_reducing_applied,

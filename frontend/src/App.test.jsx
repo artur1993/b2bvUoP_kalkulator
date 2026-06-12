@@ -3,7 +3,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import App from "./App";
 import React from "react";
 import * as api from "./services/api";
-import { saveAs } from "file-saver";
 
 // Mock API calls
 vi.mock("./services/api", () => ({
@@ -12,95 +11,73 @@ vi.mock("./services/api", () => ({
   calculateBreakEvenAnalysis: vi.fn(),
 }));
 
-// Mock file-saver
-vi.mock("file-saver", () => ({
-  saveAs: vi.fn(),
-}));
-
-// Mock react-chartjs-2 components
-vi.mock("react-chartjs-2", () => ({
-  Chart: vi.fn(() => null),
-  Line: vi.fn(() => null),
-  Bar: vi.fn(() => null),
-  Pie: vi.fn(() => null),
-}));
-
-describe("App Phase 2", () => {
+describe("App", () => {
   beforeEach(() => {
     api.calculateResults.mockReset();
-    api.exportToExcel.mockReset();
-    saveAs.mockReset();
-    vi.spyOn(window, "alert").mockImplementation(() => {});
+    localStorage.clear();
+    document.documentElement.setAttribute("data-theme", "light");
+    window.history.replaceState({}, "", "/");
 
     api.calculateResults.mockResolvedValue({
       b2b_results: {
         total_annual_value: 120000,
         annual_revenue: 150000,
+        annual_net_income: 110000,
         annual_zus: 10000,
         annual_tax: 10000,
+        monthly_net_income: 10000,
+        steps: {},
       },
       uop_results: {
         total_annual_value: 100000,
         annual_gross_salary: 120000,
+        annual_net_income: 90000,
         annual_zus: 10000,
         annual_tax: 10000,
+        monthly_net_income: 8333,
+        steps: {},
       },
       break_even_invoice_amount: 11000,
-      analysis: {
-        summary: { recommendation: "Test recommendation" },
-        risk: { point1: "Risk point 1" },
-        methodology: "Test methodology",
-        checklist: { title: "Test Checklist", items: ["Item 1"] },
-      },
+      config_rates: { uop_employer_overhead: 0.2048, ppk_employer_rate: 0.015 },
     });
-
-    api.calculateBreakEvenAnalysis.mockResolvedValue([]);
-    api.exportToExcel.mockResolvedValue(
-      new Blob(["excel"], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      }),
-    );
   });
 
-  it("renders dark mode toggle and responds to clicks", () => {
+  it("renders dark mode toggle and applies data-theme on click", () => {
     render(<App />);
     const toggle = screen.getByTestId("theme-toggle");
     expect(toggle).toBeInTheDocument();
 
     fireEvent.click(toggle);
-    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });
 
-  it("updates the URL when calculation is performed", async () => {
+  it("auto-calculates on mount and displays results", async () => {
     render(<App />);
-    const calculateButton = screen.getByRole("button", { name: /calculate/i });
-
-    fireEvent.click(calculateButton);
 
     await waitFor(() => {
-      // Use current default value from App.jsx (10000)
-      expect(window.location.search).toContain("b2b_invoice=10000");
-      expect(window.location.search).toContain("mode=uop_to_b2b");
+      expect(api.calculateResults).toHaveBeenCalled();
+      expect(screen.getByTestId("detail-table")).toBeInTheDocument();
     });
   });
 
-  it("calls calculateResults and displays results", async () => {
+  it("updates the URL when share button is clicked", async () => {
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: /calculate/i }));
-
     await waitFor(() => {
-      expect(screen.getByTestId("results-display")).toBeInTheDocument();
-      expect(screen.getByText(/Test recommendation/i)).toBeInTheDocument();
+      expect(screen.getByTestId("detail-table")).toBeInTheDocument();
     });
+
+    fireEvent.click(screen.getByRole("button", { name: /share|udostępnij/i }));
+
+    expect(window.location.search).toContain("mode=uop_to_b2b");
+    expect(window.location.search).toContain("inv=18000");
   });
 
   it("displays error message if calculateResults fails", async () => {
     api.calculateResults.mockRejectedValue(new Error("API Error"));
     render(<App />);
-    fireEvent.click(screen.getByRole("button", { name: /calculate/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Failed to fetch results/i)).toBeInTheDocument();
+      expect(screen.getByText("Błąd obliczenia")).toBeInTheDocument();
     });
   });
 });
