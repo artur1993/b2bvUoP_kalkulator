@@ -80,4 +80,34 @@ describe("App", () => {
       expect(screen.getByText("Błąd obliczenia")).toBeInTheDocument();
     });
   });
+
+  it("restores state from URL params on mount (valid params)", async () => {
+    window.history.replaceState({}, "", "/?inv=20000&mode=b2b_to_uop");
+    render(<App />);
+
+    await waitFor(() => {
+      expect(api.calculateResults).toHaveBeenCalled();
+    });
+
+    const lastCall = api.calculateResults.mock.calls.at(-1)[0];
+    expect(lastCall.calculation_mode).toBe("b2b_to_uop");
+    expect(lastCall.b2b.monthly_invoice_amount).toBe(20000);
+  });
+
+  it("falls back to defaults for garbage URL params", async () => {
+    window.history.replaceState({}, "", "/?inv=abc&mode=evil&sal=-999&age=NaN");
+    render(<App />);
+
+    await waitFor(() => {
+      expect(api.calculateResults).toHaveBeenCalled();
+    });
+
+    const lastCall = api.calculateResults.mock.calls.at(-1)[0];
+    // Falls back to default mode
+    expect(lastCall.calculation_mode).toBe("uop_to_b2b");
+    // Falls back to default monthlyInvoice
+    expect(lastCall.b2b.monthly_invoice_amount).toBe(18000);
+    // Falls back to default grossSalary
+    expect(lastCall.uop.monthly_gross_salary).toBe(14500);
+  });
 });
