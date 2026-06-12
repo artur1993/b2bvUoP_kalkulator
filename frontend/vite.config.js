@@ -25,6 +25,6 @@ export default defineConfig({
         resources: "usable",
       },
     },
-    threads: false, // Required for canvas to work
+    threads: false,
   },
 });
