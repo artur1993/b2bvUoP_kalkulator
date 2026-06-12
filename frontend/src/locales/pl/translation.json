@@ -1,4 +1,9 @@
 {
+  "aria": {
+    "theme_toggle": "Przełącz motyw (jasny/ciemny)",
+    "lang_pl": "Przełącz na język polski",
+    "lang_en": "Switch to English"
+  },
   "header": {
     "title": "Kalkulator B2B vs UoP {{year}}",
     "subtitle": "Porównaj swoje zarobki i wybierz najlepszą opcję"
@@ -80,6 +85,7 @@
   },
   "results": {
     "title": "Wyniki Kalkulacji",
+    "empty_hint": "Wypełnij formularz aby zobaczyć wyniki",
     "annual_revenue": "Roczny Przychód",
     "annual_costs": "Roczne Koszty Firmowe",
     "annual_zus": "Roczny ZUS",
@@ -202,7 +208,9 @@
     "uop_sub": "Wynagrodzenie, składki, benefity",
     "timeoff": "Czas wolny i przestoje",
     "timeoff_sub": "Dni bez przychodu liczone jako utrata",
-    "benefits_custom": "Wartość benefitów B2B"
+    "benefits_custom": "Wartość benefitów B2B",
+    "subsec_financials": "Finanse",
+    "subsec_taxation": "Opodatkowanie"
   },
   "field_help": {
     "employer_budget": "Kwota którą firma jest w stanie przeznaczyć na to stanowisko. Dla B2B = kwota faktury (firma płaci netto, VAT odlicza). Dla UoP = super-brutto (brutto + ZUS pracodawcy ~20.5%: emerytalny 9.76%, rentowy 6.50%, wypadkowy 1.67%, FP/FS 2.45%, FGŚP 0.10%). Duże firmy IT ≥10 os. mają wypadkowe 0.67% (≈19.5%). Jeśli PPK włączone: +1.5%. Pozostałe ustawienia B2B i UoP obowiązują bez zmian.",
@@ -217,7 +225,8 @@
     "holidays_paid": "Zaznacz jeśli Twój kontrakt ma stałą stawkę miesięczną — polskie święta (~13 dni/rok) nie zmniejszają Twojego przychodu. Odznacz jeśli nie wystawiasz faktury w dni wolne ustawowe.",
     "paid_vacation": "Dni urlopu które płaci zleceniodawca — nie zmniejszają Twojego przychodu. Dla stałej stawki miesięcznej wpisz tu tyle samo co łącznie.",
     "uop_custom_benefits": "Roczna wartość benefitów pozapłacowych (opieka medyczna, karta sportowa, szkolenia itp.) — wpisz wartość jeśli chcesz ją uwzględnić własnoręcznie.",
-    "stoppage_months": "Miesiące bez klientów/projektów, brak przychodu B2B"
+    "stoppage_months": "Miesiące bez klientów/projektów, brak przychodu B2B",
+    "creative_kup_cap": "Limit roczny KUP autorskich: 120 000 zł"
   },
   "tooltip": {
     "effective_rate": "Podatek dochodowy podzielony przez przychód brutto. Nie uwzględnia ZUS ani kosztów firmowych.",

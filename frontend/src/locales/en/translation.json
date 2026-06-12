@@ -1,4 +1,9 @@
 {
+  "aria": {
+    "theme_toggle": "Toggle theme (light/dark)",
+    "lang_pl": "Przełącz na język polski",
+    "lang_en": "Switch to English"
+  },
   "header": {
     "title": "B2B vs UoP Calculator {{year}}",
     "subtitle": "Compare your earnings and choose the best option"
@@ -80,6 +85,7 @@
   },
   "results": {
     "title": "Calculation Results",
+    "empty_hint": "Fill in the form to see results",
     "annual_revenue": "Annual Revenue",
     "annual_costs": "Annual Business Costs",
     "annual_zus": "Annual ZUS",
@@ -202,7 +208,9 @@
     "uop_sub": "Salary, contributions, benefits",
     "timeoff": "Time Off & Stoppage",
     "timeoff_sub": "Days without income counted as loss",
-    "benefits_custom": "B2B Benefits Value"
+    "benefits_custom": "B2B Benefits Value",
+    "subsec_financials": "Financials",
+    "subsec_taxation": "Taxation"
   },
   "field_help": {
     "employer_budget": "Total amount the company is willing to spend on this position. For B2B = invoice amount (company pays net; they reclaim VAT). For UoP = total employer cost / super-gross (gross + employer ZUS ~20.5%: pension 9.76%, disability 6.50%, accident 1.67%, FP/FS 2.45%, FGŚP 0.10%). Large IT firms ≥10 employees have 0.67% accident rate (≈19.5%). If PPK selected: +1.5%. All other B2B and UoP settings still apply.",
@@ -217,7 +225,8 @@
     "holidays_paid": "Check if your contract has a fixed monthly rate — Polish public holidays (~13 days/year) do not reduce your income. Uncheck if you don't invoice on public holidays.",
     "paid_vacation": "Days paid by your client/employer — do not reduce your revenue. For a fixed monthly rate, enter the same number as total vacation days.",
     "uop_custom_benefits": "Annual value of non-wage benefits (healthcare, sport card, training, etc.) — enter a value to include them manually.",
-    "stoppage_months": "Months without clients/projects, no B2B income"
+    "stoppage_months": "Months without clients/projects, no B2B income",
+    "creative_kup_cap": "Annual KUP cap: 120,000 PLN"
   },
   "tooltip": {
     "effective_rate": "Income tax divided by gross revenue. Does not include ZUS contributions or business costs.",

@@ -13,7 +13,7 @@
     --border-strong: oklch(86% 0.005 250);
     --text: oklch(18% 0.012 250);
     --text-muted: oklch(48% 0.008 250);
-    --text-subtle: oklch(65% 0.005 250);
+    --text-subtle: oklch(48% 0.005 250);
     --input-bg: oklch(99% 0.003 250);
     --accent-h: 155;
     --accent-c: 0.12;
@@ -21,8 +21,8 @@
     --accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
     --accent-soft: oklch(96% 0.02 var(--accent-h));
     --accent-soft-border: oklch(88% 0.05 var(--accent-h));
-    --positive: oklch(58% 0.13 155);
-    --negative: oklch(60% 0.18 25);
+    --positive: oklch(48% 0.13 155);
+    --negative: oklch(45% 0.18 25);
     --shadow-card: 0 1px 2px oklch(20% 0.02 250 / 0.04), 0 0 0 1px oklch(20% 0.02 250 / 0.02);
     --shadow-pop: 0 6px 24px oklch(20% 0.02 250 / 0.08), 0 1px 2px oklch(20% 0.02 250 / 0.04);
     --radius-sm: 6px;
@@ -40,7 +40,7 @@
     --border-strong: oklch(34% 0.012 250);
     --text: oklch(96% 0.005 250);
     --text-muted: oklch(70% 0.008 250);
-    --text-subtle: oklch(50% 0.005 250);
+    --text-subtle: oklch(62% 0.005 250);
     --input-bg: oklch(22% 0.012 250);
     --shadow-card: 0 1px 2px oklch(0% 0 0 / 0.3), 0 0 0 1px oklch(100% 0 0 / 0.04);
   }
@@ -760,11 +760,11 @@
   }
 
   .bar-seg.net { background: var(--positive); }
-  .bar-seg.zus { background: oklch(68% 0.13 240); }
-  .bar-seg.tax { background: oklch(60% 0.13 35); }
-  .bar-seg.costs { background: oklch(65% 0.04 250); }
-  .bar-seg.lost { background: oklch(55% 0.11 15); }
-  .bar-seg.benefits { background: oklch(72% 0.11 305); }
+  .bar-seg.zus { background: oklch(44% 0.13 240); }
+  .bar-seg.tax { background: oklch(48% 0.13 35); }
+  .bar-seg.costs { background: oklch(49% 0.04 250); }
+  .bar-seg.lost { background: oklch(49% 0.11 15); }
+  .bar-seg.benefits { background: oklch(49% 0.11 305); }
 
   .comp-legend {
     display: flex;
@@ -791,11 +791,11 @@
   }
 
   .legend-item.net .legend-dot { background: var(--positive); }
-  .legend-item.zus .legend-dot { background: oklch(68% 0.13 240); }
-  .legend-item.tax .legend-dot { background: oklch(60% 0.13 35); }
-  .legend-item.costs .legend-dot { background: oklch(65% 0.04 250); }
-  .legend-item.lost .legend-dot { background: oklch(55% 0.11 15); }
-  .legend-item.benefits .legend-dot { background: oklch(72% 0.11 305); }
+  .legend-item.zus .legend-dot { background: oklch(44% 0.13 240); }
+  .legend-item.tax .legend-dot { background: oklch(48% 0.13 35); }
+  .legend-item.costs .legend-dot { background: oklch(49% 0.04 250); }
+  .legend-item.lost .legend-dot { background: oklch(49% 0.11 15); }
+  .legend-item.benefits .legend-dot { background: oklch(49% 0.11 305); }
 
   /* Breakeven bar */
   .breakeven {
@@ -1059,6 +1059,14 @@
 
   .btn.primary:hover {
     opacity: 0.9;
+  }
+
+  /* Results section heading — visible to Playwright and screen readers */
+  .results-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 0;
   }
 
   /* Empty/loading state */
